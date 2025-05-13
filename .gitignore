@@ -1,0 +1,11 @@
+# Ignorar todos el contenido de las carpetas migrations
+**/migrations/*
+
+# Exceptuar el archivo __init__.py
+!**/migrations/__init__.py
+
+# Ignorar el archivo de base de datos SQLite
+db.sqlite3
+
+__pycache__/
+.venv
