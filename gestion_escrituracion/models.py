@@ -2,7 +2,7 @@ from django.db import models
 
 from gestion_clientes.models import Cliente
 from gestion_propiedad.models import Propiedade
-
+from utils_project.choices import VENTAS_CHOICES
 
 # Create your models here.
 
@@ -11,6 +11,7 @@ class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
     fecha_venta = models.DateField(auto_now=True)
     id_propiedad = models.ForeignKey(Propiedade, on_delete=models.CASCADE)
+    estado_venta = models.CharField(verbose_name='Estado Venta', choices=VENTAS_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
     fecha_promesa = models.DateField(verbose_name='Fecha de promesa')
     ejecutivo = models.CharField(verbose_name='Ejecutivo', max_length=50, blank=True, null=True)
     id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)

@@ -1,10 +1,11 @@
 from django.db import models
-
+from utils_project.choices import CLIENTES_CHOICES
 # Create your models here.
 
 
 class Cliente(models.Model):
     id_cliente = models.AutoField(primary_key=True)
+    tipo_cliente = models.CharField(choices=CLIENTES_CHOICES, max_length=50, default=CLIENTES_CHOICES[0][0])
     rut_cliente = models.CharField(verbose_name="Rut Cliente", max_length=50)
     nombres_cliente = models.CharField(verbose_name="Nombres", max_length=50)
     apellidos_cliente = models.CharField(verbose_name="Apellidos", max_length=50)

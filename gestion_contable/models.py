@@ -1,6 +1,6 @@
 from django.db import models
-
 from gestion_escrituracion.models import Venta
+from utils_project.choices import PAGOS_CHOICES
 
 
 # Create your models here.
@@ -53,12 +53,12 @@ class Pagos(models.Model):
     id_categoria_pago = models.ForeignKey(CategoriaPago, on_delete=models.CASCADE)
     id_banco = models.ForeignKey(Bancos, on_delete=models.CASCADE)
     id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
-    estado_pago = models.CharField(verbose_name="Estado Pago", max_length=50)
+    estado_pago = models.CharField(verbose_name="Estado Pago",choices=PAGOS_CHOICES, max_length=50, default=PAGOS_CHOICES[0][0])
     num_documento = models.CharField(verbose_name="Numero de Documento", max_length=50)
     fecha_registro_pago = models.DateField(verbose_name="Fecha de registro")
     fecha_real_pago = models.DateField(verbose_name="Fecha contable")
     monto_pago = models.IntegerField(verbose_name="Monto de pago")
-    observacion_pago = models.TextField(verbose_name="Observaciones de pago")
+    observacion_pago = models.CharField(verbose_name="Observaciones de pago", max_length=100)
 
     class Meta:
         db_table = 'pagos'
