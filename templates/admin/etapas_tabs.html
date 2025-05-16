@@ -1,0 +1,64 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<h1>Etapas de la venta #{{ venta.id_venta }}</h1>
+
+<!-- Tabs (navbar) -->
+<ul class="nav nav-tabs" id="etapasTabs" role="tablist">
+  {% for etapa in etapas %}
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {% if forloop.first %}active{% endif %}"
+              id="etapa-tab-{{ etapa.id_etapa.id_etapa }}"
+              data-coreui-toggle="tab"
+              data-coreui-target="#etapa-pane-{{ etapa.id_etapa.id_etapa }}"
+              type="button"
+              role="tab"
+              aria-controls="etapa-pane-{{ etapa.id_etapa.id_etapa }}"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+        {{ etapa.id_etapa.alias_etapa|default:etapa.id_etapa.nombre_etapa }}
+      </button>
+    </li>
+  {% endfor %}
+</ul>
+
+<!-- Tab content -->
+<div class="tab-content mt-3" id="etapasTabContent">
+  {% for etapa in etapas %}
+    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+         id="etapa-pane-{{ etapa.id_etapa.id_etapa }}"
+         role="tabpanel"
+         aria-labelledby="etapa-tab-{{ etapa.id_etapa.id_etapa }}"
+         tabindex="0">
+
+      <form method="post">
+        {% csrf_token %}
+        <h5 class="mb-3">Formulario de etapa: {{ etapa.id_etapa.nombre_etapa }}</h5>
+
+        {% with campos=campos_etapas|dict_get:etapa.id_etapa.id_etapa %}
+          {% for campo in campos %}
+            <div class="mb-3">
+              <label for="campo_{{ campo.id_campo_etapa }}" class="form-label">
+                {{ campo.nombre_campo }} {% if campo.obligatorio %}<span class="text-danger">*</span>{% endif %}
+              </label>
+              <input type="text"
+                     class="form-control"
+                     name="campo_{{ campo.id_campo_etapa }}"
+                     value="{{ valores_etapas|dict_get:etapa.id_etapa.id_etapa|get_valor:campo.id_campo_etapa|default:'' }}">
+            </div>
+          {% empty %}
+            <p>No hay campos definidos para esta etapa.</p>
+          {% endfor %}
+        {% endwith %}
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </form>
+
+    </div>
+  {% endfor %}
+</div>
+
+<!-- CoreUI JS (requerido para funcionamiento de pestañas) -->
+<script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5.0.0/dist/js/coreui.bundle.min.js"></script>
+{% endblock %}

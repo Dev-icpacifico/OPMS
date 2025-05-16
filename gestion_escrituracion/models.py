@@ -47,8 +47,8 @@ class VentaEtapa(models.Model):
     id_venta_etapa = models.AutoField(primary_key=True)
     id_etapa = models.ForeignKey(Etapas, on_delete=models.CASCADE)
     id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
-    fecha_inicio = models.DateField(verbose_name='Fecha de Inicio')
-    fecha_fin = models.DateField(verbose_name='Fecha de Fin')
+    fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', blank=True, null=True)
+    fecha_fin = models.DateField(verbose_name='Fecha de Fin', blank=True, null=True)
 
     class Meta:
         db_table = 'venta_etapas'

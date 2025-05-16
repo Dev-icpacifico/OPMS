@@ -1,0 +1,122 @@
+{% extends "admin/base_site.html" %}
+{% load custom_filters %}
+
+{% block content %}
+    <div class="container-fluid px-4">
+
+        <!-- Información de la venta -->
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-body">
+
+                <!-- Título separado arriba -->
+                <div class="mb-4">
+                    <h4 class="mb-0">Información de la Venta <span class="text-muted">#{{ venta.id_venta }}</span></h4>
+                </div>
+
+                <!-- Fila 1: Propiedad, Cliente, Contacto -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Propiedad:</strong><br>
+                        {{ venta.id_propiedad.alias_condominio }} - {{ venta.id_propiedad.etapa }} -
+                        N°{{ venta.id_propiedad.numero_propiedad }}<br>
+                        <small class="text-muted">Rol: {{ venta.id_propiedad.rol }}</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <strong>Cliente:</strong><br>
+                        {{ venta.id_cliente.nombres_cliente }} {{ venta.id_cliente.apellidos_cliente }}<br>
+                        <small class="text-muted">{{ venta.id_cliente.rut_cliente }}</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <strong>Contacto:</strong><br>
+                        {{ venta.id_cliente.telefono }}<br>
+                        {{ venta.id_cliente.correo }}
+                    </div>
+                </div>
+
+                <hr class="my-3">
+
+                <!-- Fila 2: Estado, Ejecutivo, Fechas -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Estado de venta:</strong><br>
+                        <span class="badge bg-info text-dark">{{ venta.estado_venta }}</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Ejecutivo:</strong><br>
+                        {{ venta.ejecutivo|default:"—" }}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Fecha promesa:</strong><br>
+                        {{ venta.fecha_promesa|date:"d/m/Y" }}
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Fecha venta (sistema):</strong><br>
+                        {{ venta.fecha_venta|date:"d/m/Y" }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Etapas con pestañas -->
+        <div class="card shadow-sm border">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="etapasTabs" role="tablist">
+                    {% for etapa in etapas %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if forloop.first %}active{% endif %}"
+                                    id="etapa-tab-{{ etapa.id_etapa.id_etapa }}"
+                                    data-coreui-toggle="tab"
+                                    data-coreui-target="#etapa-pane-{{ etapa.id_etapa.id_etapa }}"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="etapa-pane-{{ etapa.id_etapa.id_etapa }}"
+                                    aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+                                {{ etapa.id_etapa.alias_etapa|default:etapa.id_etapa.nombre_etapa }}
+                            </button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card-body">
+                <div class="tab-content mt-3" id="etapasTabContent">
+                    {% for etapa in etapas %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+                             id="etapa-pane-{{ etapa.id_etapa.id_etapa }}"
+                             role="tabpanel"
+                             aria-labelledby="etapa-tab-{{ etapa.id_etapa.id_etapa }}"
+                             tabindex="0">
+
+                            <form method="post">
+                                {% csrf_token %}
+                                <h5>{{ etapa.id_etapa.nombre_etapa }}</h5>
+
+                                {% with campos=campos_etapas|dict_get:etapa.id_etapa.id_etapa %}
+                                    {% for campo in campos %}
+                                        <div class="mb-3">
+                                            <label class="form-label">{{ campo.nombre_campo }}</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   name="campo_{{ campo.id_campo_etapa }}"
+                                                   value="{{ valores_etapas|dict_get:etapa.id_etapa.id_etapa|get_valor:campo.id_campo_etapa|default:'' }}">
+                                        </div>
+                                    {% endfor %}
+                                {% endwith %}
+
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CoreUI JS para funcionalidad de tabs -->
+    <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5.0.0/dist/js/coreui.bundle.min.js"></script>
+{% endblock %}
