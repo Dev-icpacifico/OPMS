@@ -104,7 +104,12 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
+
+        "gestion_clientes.Nacionalidade":"fa-solid fa-house-flag",
+        "gestion_clientes.AreaProfesion":"fa-solid fa-layer-group",
+        "gestion_clientes.Profesione": "fa-solid fa-user-tie",
         "gestion_clientes.Cliente":"fa-solid fa-users-between-lines",
+
         "gestion_contable.Bancos":"fa-solid fa-building-columns",
         "gestion_contable.CategoriaPago": "fa-solid fa-sliders",
         "gestion_contable.FormaPago": "fa-solid fa-sliders",
@@ -116,7 +121,12 @@ JAZZMIN_SETTINGS = {
         "gestion_escrituracion.CampoEtapa":"fa-solid fa-route",
         "gestion_escrituracion.ValoresEtapa":"fa-solid fa-route",
 
-        "gestion_propiedad.Propiedade": "fa-solid fa-building",
+        "gestion_propiedad.Condominio":"fa-solid fa-building-flag",
+        "gestion_propiedad.Etapa": "fa-solid fa-building",
+        "gestion_propiedad.SubEtapa": "fa-solid fa-building",
+        "gestion_propiedad.Torre": "fa-solid fa-building-un",
+        "gestion_propiedad.Modelo":"fa-solid fa-shapes",
+        "gestion_propiedad.Propiedade": "fa-solid fa-house",
 
         "Seguimiento.Partida": "fa-solid fa-trowel-bricks",
         "Seguimiento.DetalleBalance": "fa-solid fa-chart-line",
