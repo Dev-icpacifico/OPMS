@@ -6,15 +6,15 @@ from django.contrib import messages
 from django.contrib.admin.sites import site
 from .models import Venta, VentaEtapa, CampoEtapa, ValoresEtapa
 
+
 class ListaVentasView(TemplateView):
     template_name = 'ventas/listado_ventas.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(site.each_context(self.request))
-        context['ventas'] = Venta.objects.select_related('id_cliente', 'id_propiedad')
+        context['ventas'] = Venta.objects.select_related('id_cliente', 'id_propiedad').filter(estado_venta="Otro_1")
         return context
-
 
 
 class EtapasVentaView(View):
