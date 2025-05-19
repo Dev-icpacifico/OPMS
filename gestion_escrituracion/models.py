@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from gestion_clientes.models import Cliente
 # from gestion_contable.models import Bancos
@@ -5,22 +6,29 @@ from gestion_propiedad.models import Propiedade
 from utils_project.choices import *
 
 # Create your models here.
+def validar_positivo(value):
+    if value < 0:
+        raise ValidationError('El valor debe ser un número positivo mayor o igual a 0.')
 
 
 class Venta(models.Model):
-    id_venta = models.AutoField(primary_key=True)
-    fecha_venta = models.DateField(auto_now=True)
+    id_venta = models.AutoField(primary_key=True, verbose_name='ID')
+    fecha_venta = models.DateField(auto_now=True, verbose_name='F.Venta',help_text="Fecha de Venta")
     id_propiedad = models.ForeignKey(Propiedade, on_delete=models.CASCADE)
-    tipo_venta = models.CharField(verbose_name="Tipo de venta", choices=TIPO_VENTA_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
-    estado_venta = models.CharField(verbose_name='Estado Venta', choices=VENTAS_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
-    fecha_promesa = models.DateField(verbose_name='Fecha de promesa')
+    tipo_venta = models.CharField(verbose_name="Tipo",help_text="Tipo de venta", choices=TIPO_VENTA_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
+    descuento_campagna = models.CharField(verbose_name="Dcto Camp",choices=SI_NO_CHOICES, max_length=2, default=no)
+    uf_descuento_campagna = models.FloatField(verbose_name="Dcts Cam", help_text="Campaña dscto",
+                                       validators=[validar_positivo])
+    bono_pie = models.FloatField(verbose_name='Bon Pie', blank=True, null=True,  validators=[validar_positivo])
+    aplicacion_bono = models.CharField(verbose_name="Aplicación Bono", choices=APLICACION_DSCTO_CHOICES, max_length=10, default='No Aplica')
+    estado_venta = models.CharField(verbose_name='Estado',help_text="Estado Vent" , choices=VENTAS_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
+    fecha_promesa = models.DateField(verbose_name='F.Promesa',help_text="Fecha de promesa")
     ejecutivo = models.CharField(verbose_name='Ejecutivo', max_length=50, blank=True, null=True)
     id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    bono_pie = models.FloatField(verbose_name='Bon Pie', blank=True, null=True)
     uf_por_m2 = models.FloatField(verbose_name='UF Por M2', blank=True, null=True)
     motivo_compra = models.TextField(verbose_name='Motivo Compra', blank=True, null=True)
     atributos = models.TextField(verbose_name='Atributos', blank=True, null=True)
-    ggoo = models.IntegerField(verbose_name='Gastos Operacionales', blank=True, null=True)
+    ggoo = models.IntegerField(verbose_name='GGOO',help_text="Gastos Operacionales" ,  blank=True, null=True)
 
 
     class Meta:

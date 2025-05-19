@@ -51,8 +51,10 @@ class Cliente(models.Model):
     fecha_nacimiento = models.DateField(verbose_name="Fecha nacimiento")
     genero = models.CharField(verbose_name="Género", max_length=30, choices=SEXO_CHOICES, default=sin_definir)
     region = models.CharField(verbose_name="Región", max_length=31, choices=REGIONES_CHOICES, default=iv_reg_coquimbo)
-    nombres_cliente = models.CharField(verbose_name="Nombres", max_length=50)
-    apellidos_cliente = models.CharField(verbose_name="Apellidos", max_length=50)
+    nombres_1 = models.CharField(verbose_name="1er Nombre", max_length=50)
+    nombres_2 = models.CharField(verbose_name="2do Nombre", max_length=50)
+    apellidos_1 = models.CharField(verbose_name="1er Apellido", max_length=50)
+    apellidos_2 = models.CharField(verbose_name="2do Apellido", max_length=50)
     correo = models.EmailField(verbose_name="Correo")
     telefono = models.CharField(verbose_name="Teléfono", max_length=9)
     renta = models.IntegerField(verbose_name="Renta")
@@ -67,4 +69,4 @@ class Cliente(models.Model):
         #unique_together = (('partida', 'id'),)
         ordering = ['id_cliente']
     def __str__(self):
-        return str(self.rut_cliente)+ " - " +str(self.nombres_cliente)+ " - " +str(self.apellidos_cliente)
+        return str(self.nombres_1)+ " " +str(self.apellidos_1)+  " (" +str(self.rut_cliente) +  ")"

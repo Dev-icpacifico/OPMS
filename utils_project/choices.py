@@ -3,6 +3,12 @@ CLIENTES_CHOICES = [
     ('Empresa', 'Empresa'),
 ]
 
+APLICACION_DSCTO_CHOICES = [
+    ('No Aplica', 'No Aplica'),
+    ('Precio', 'Precio'),
+    ('Pie', 'Pie'),
+]
+
 TIPO_VENTA_CHOICES = [
     ('Credito', 'Credito'),
     ('Contado', 'Contado'),
@@ -60,7 +66,6 @@ ENSENAGSA_CHOICES = [(ens_basica, 'Enseñanza Básica'),
                      (tec_prof, 'Técnico Profesional'),
                      (tec_nvl_sup, 'Técnico Nivel Superior'),
                      (profesional, 'Profesional'), ]
-
 
 ############################################################################################
 i_reg_tarapaca = 'I REGIÓN DE TARAPACÁ'
@@ -129,8 +134,8 @@ pendiente = 'Pendiente'
 protestado = 'Protestado'
 # pago_estado_pago
 EST_PAGO_CHOICES = [(realizado, 'Realizado'),
-                          (pendiente, 'Pendiente'),
-                          (protestado, 'Protestado'), ]
+                    (pendiente, 'Pendiente'),
+                    (protestado, 'Protestado'), ]
 
 activa = 'Activa'
 inactiva = 'Inactiva'
@@ -141,12 +146,12 @@ en_escritura = 'En Escritura'
 escriturada = 'Escriturada'
 # venta_estado_venta
 EST_VENTA_CHOICES = [(activa, 'Activa'),
-                          (inactiva, 'Inactiva'),
-                          (desistimiento, 'Desestimiento'),
-                          (promesa, 'Promesa'),
-                          (venta_comisionada, 'Venta Comisionada'),
-                          (en_escritura, 'En Escritura'),
-                          (escriturada, 'Escriturada'), ]
+                     (inactiva, 'Inactiva'),
+                     (desistimiento, 'Desestimiento'),
+                     (promesa, 'Promesa'),
+                     (venta_comisionada, 'Venta Comisionada'),
+                     (en_escritura, 'En Escritura'),
+                     (escriturada, 'Escriturada'), ]
 
 si = 'Si'
 no = 'No'
@@ -196,7 +201,6 @@ ORIENTACION_VIVIENDA = [(norte, 'Norte'),
                         (sur_poniente, 'SUR PONIENTE'),
                         (nor_poniente, 'NOR PONIENTE'),
                         (sur_oriente, 'SUR ORIENTE')]
-
 
 # piso
 uno = '1'

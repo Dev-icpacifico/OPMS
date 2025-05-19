@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import (
     Condominio, Etapa, SubEtapa, Torre, Modelo, Propiedade
 )
+from django.utils.html import format_html
 
 
 # Inline: Etapa dentro de Condominio
@@ -12,7 +13,7 @@ class EtapaInline(admin.TabularInline):
 
 @admin.register(Condominio)
 class CondominioAdmin(admin.ModelAdmin):
-    list_display = ('id_condominio', 'nombre_condominio', 'alias_condominio', 'fecha_venta_condominio', 'estado_condominio')
+    list_display = ('id_condominio', 'nombre_condominio', 'alias_condominio', 'direccion_proyecto', 'fecha_venta_condominio', 'estado_condominio')
     search_fields = ('nombre_condominio', 'alias_condominio', 'direccion_proyecto')
     list_filter = ('estado_condominio',)
     ordering = ('id_condominio',)
@@ -67,9 +68,28 @@ class ModeloAdmin(admin.ModelAdmin):
 class PropiedadeAdmin(admin.ModelAdmin):
     list_display = (
         'id_propiedad', 'condominio', 'etapa', 'numero_propiedad',
-        'estado_propiedad', 'modelo', 'metros_total_vivienda',
-        'valor_inicial_final', 'valor_dscto'
+        'estado_propiedad', 'modelo', 'piso', 'format_vip',
+        'format_vfp', 'estacionamiento', 'bodega',
+        'metros_vivienda', 'metros_terraza_propiedad','metros_total_propiedad'
     )
     search_fields = ('numero_propiedad', 'rol')
-    list_filter = ('estado_propiedad', 'estado_vivienda', 'condominio', 'etapa', 'modelo')
+    list_filter = ('estado_propiedad', 'condominio', 'etapa', 'modelo')
     ordering = ('id_propiedad',)
+
+    def format_vip(self, obj):
+        if obj.valor_inicial_propiedad is None:
+            return "-"
+        return format_html("UF {:,}".format(obj.valor_inicial_propiedad).replace(",", "."))
+
+    format_vip.short_description = 'Precio Ini'
+    format_vip.admin_order_field = 'valor_inicial_propiedad'
+
+
+
+    def format_vfp(self, obj):
+        if obj.valor_final_propiedad is None:
+            return "-"
+        return format_html("UF {:,}".format(obj.valor_final_propiedad).replace(",", "."))
+
+    format_vfp.short_description = 'Precio Fin'
+    format_vfp.admin_order_field = 'valor_final_propiedad'

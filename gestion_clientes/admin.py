@@ -27,9 +27,9 @@ class ProfesioneAdmin(admin.ModelAdmin):
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
     list_display = (
-        'rut_cliente', 'nombres_cliente', 'apellidos_cliente', 'correo', 'telefono',
+        'rut_cliente', 'nombres_1', 'apellidos_1', 'apellidos_2', 'correo', 'telefono',
         'region', 'genero', 'id_profesion', 'renta'
     )
-    search_fields = ('rut_cliente', 'nombres_cliente', 'apellidos_cliente', 'correo')
+    search_fields = ('rut_cliente', 'nombres_1', 'apellidos_1', 'correo')
     list_filter = ('genero', 'region', 'id_nacionalidad', 'id_profesion')
     ordering = ('id_cliente',)
