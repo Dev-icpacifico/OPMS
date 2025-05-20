@@ -67,7 +67,7 @@ class ModeloAdmin(admin.ModelAdmin):
 @admin.register(Propiedade)
 class PropiedadeAdmin(admin.ModelAdmin):
     list_display = (
-        'id_propiedad', 'condominio', 'etapa', 'numero_propiedad',
+         'numero_propiedad','condominio', 'etapa',
         'estado_propiedad', 'modelo', 'piso', 'format_vip',
         'format_vfp', 'estacionamiento', 'bodega',
         'metros_vivienda', 'metros_terraza_propiedad','metros_total_propiedad'
