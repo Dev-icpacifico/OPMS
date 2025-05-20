@@ -128,12 +128,8 @@ JAZZMIN_SETTINGS = {
         "gestion_propiedad.Modelo":"fa-solid fa-shapes",
         "gestion_propiedad.Propiedade": "fa-solid fa-house",
 
-        "Seguimiento.Partida": "fa-solid fa-trowel-bricks",
-        "Seguimiento.DetalleBalance": "fa-solid fa-chart-line",
-        "Seguimiento.Proyecto": "fa-duotone fa-solid fa-building-wheat",
-        "Seguimiento.Periodo": "fa-regular fa-calendar-days",
-        "Seguimiento.Balance": "fa-solid fa-check-to-slot",
-        "Seguimiento.Fase": "fa-solid fa-landmark",
+
+        "gestion_postventa.RequerimientoPostVenta": "fa-solid fa-paint-roller"
 
     },
     # Custom links to append to app groups, keyed on app name

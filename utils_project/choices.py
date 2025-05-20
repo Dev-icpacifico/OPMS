@@ -10,7 +10,6 @@ POSTVENTA_CHOICES = [
     ('Cerrado', 'Cerrado'),
     ('Pendiente', 'Pendiente'),
     ('No Aplica', 'No Aplica'),
-
     ('Pospuesto', 'Pospuesto'),
     ('Propietario rechaza trabajos ', 'Propietario rechaza trabajos '),
     ('Observación', 'Observación'),

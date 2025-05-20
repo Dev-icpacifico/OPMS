@@ -14,7 +14,7 @@ def validar_positivo(value):
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True, verbose_name='ID')
     fecha_venta = models.DateField(auto_now=True, verbose_name='F.Venta',help_text="Fecha de Venta")
-    id_propiedad = models.ForeignKey(Propiedade, on_delete=models.CASCADE)
+    id_propiedad = models.ForeignKey(Propiedade, on_delete=models.CASCADE, limit_choices_to={'estado_propiedad': 'Libre'})
     tipo_venta = models.CharField(verbose_name="Tipo",help_text="Tipo de venta", choices=TIPO_VENTA_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
     descuento_campagna = models.CharField(verbose_name="Dcto Camp",choices=SI_NO_CHOICES, max_length=2, default=no)
     uf_descuento_campagna = models.FloatField(verbose_name="Dcts Cam", help_text="Campaña dscto",
