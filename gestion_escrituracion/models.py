@@ -21,6 +21,7 @@ class Venta(models.Model):
                                        validators=[validar_positivo])
     bono_pie = models.FloatField(verbose_name='Bon Pie', blank=True, null=True,  validators=[validar_positivo])
     aplicacion_bono = models.CharField(verbose_name="Aplicación Bono", choices=APLICACION_DSCTO_CHOICES, max_length=10, default='No Aplica')
+    precio_venta = models.FloatField(verbose_name="P.Venta", help_text="Precio venta", default=0)
     estado_venta = models.CharField(verbose_name='Estado',help_text="Estado Vent" , choices=VENTAS_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
     fecha_promesa = models.DateField(verbose_name='F.Promesa',help_text="Fecha de promesa")
     ejecutivo = models.CharField(verbose_name='Ejecutivo', max_length=50, blank=True, null=True)
@@ -39,6 +40,33 @@ class Venta(models.Model):
         ordering = ['id_venta']
     def __str__(self):
         return str(self.id_venta)+ " - " +str(self.id_propiedad.numero_propiedad)
+
+    def save(self, *args, **kwargs):
+        propiedad = self.id_propiedad  # la propiedad relacionada
+
+        # Asegurar que haya un valor base válido
+        valor_inicial = propiedad.valor_inicial_propiedad or 0
+        descuento = self.uf_descuento_campagna or 0
+        bono = self.bono_pie or 0
+
+        # Calcular nuevo valor final de la propiedad
+        valor_final = valor_inicial - descuento - bono
+        propiedad.valor_final_propiedad = valor_final
+
+        # Calcular UF por metro cuadrado si hay metros disponibles
+        if propiedad.metros_total_propiedad:
+            self.uf_por_m2 = round(valor_final / propiedad.metros_total_propiedad, 2)
+        else:
+            self.uf_por_m2 = None
+
+        # Registrar el precio final de venta en esta venta
+        self.precio_venta = valor_final
+
+        # Guardar los cambios en la propiedad asociada
+        propiedad.save()
+
+        # Guardar normalmente la venta
+        super().save(*args, **kwargs)
 
 
 class Etapas(models.Model):

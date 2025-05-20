@@ -93,3 +93,5 @@ class PropiedadeAdmin(admin.ModelAdmin):
 
     format_vfp.short_description = 'Precio Fin'
     format_vfp.admin_order_field = 'valor_final_propiedad'
+
+

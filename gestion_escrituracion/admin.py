@@ -45,7 +45,7 @@ class VentaEtapaInline(admin.TabularInline):
 class VentaAdmin(admin.ModelAdmin):
     list_display = (
         'id_venta', 'get_condominio', 'get_etapa', 'get_numero_propiedad', 'id_cliente', 'estado_venta', 'tipo_venta',
-        'fecha_venta', 'fecha_promesa', 'ejecutivo','get_precio_ini_propiedad', 'get_precio_fin_propiedad','descuento_campagna','format_ufdsctocam',
+        'fecha_venta', 'fecha_promesa', 'ejecutivo','get_precio_ini_propiedad', 'format_pventa','descuento_campagna','format_ufdsctocam',
         'bono_pie', 'aplicacion_bono','uf_por_m2', 'format_ggoo'
     )
     """list_filter = ('fecha_venta', 'estado_venta', 'ejecutivo',
@@ -91,16 +91,13 @@ class VentaAdmin(admin.ModelAdmin):
     get_numero_propiedad.admin_order_field = 'id_propiedad__numero_propiedad'
 
     def get_precio_ini_propiedad(self, obj):
-        return obj.id_propiedad.valor_inicial_propiedad
+        if obj.id_propiedad.valor_inicial_propiedad is not None:
+            return f"UF {obj.id_propiedad.valor_inicial_propiedad:,.0f}".replace(",", ".")
+        return "-"
 
     get_precio_ini_propiedad.short_description = 'P.Ini'
     get_precio_ini_propiedad.admin_order_field = 'valor_inicial_propiedad'
 
-    def get_precio_fin_propiedad(self, obj):
-        return obj.id_propiedad.valor_final_propiedad
-
-    get_precio_fin_propiedad.short_description = 'P.Fin'
-    get_precio_fin_propiedad.admin_order_field = 'valor_final_propiedad'
 
     def format_ggoo(self, obj):
         if obj.ggoo is None:
@@ -117,3 +114,11 @@ class VentaAdmin(admin.ModelAdmin):
 
     format_ufdsctocam.short_description = 'Dcts Cam'
     format_ufdsctocam.admin_order_field = 'uf_descuento_campagna'
+
+    def format_pventa(self, obj):
+        if obj.precio_venta is None:
+            return "-"
+        return format_html("UF {:,}".format(obj.precio_venta).replace(",", "."))
+
+    format_pventa.short_description = 'P.Venta'
+    format_pventa.admin_order_field = 'precio_venta'  # 👈 Esto habilita la ordenación por ese campo

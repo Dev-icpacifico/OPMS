@@ -116,9 +116,9 @@ class Propiedade(models.Model):
     estacionamiento = models.CharField(verbose_name="Est", help_text="N° Estacionamiento", max_length=5)
     bodega = models.CharField(verbose_name="Bdg", help_text="N° Bodega", max_length=5)
     m2_bodega = models.CharField(verbose_name="M^2 Bdg", help_text="Metros^2 Bodega", max_length=5)
-    valor_inicial_propiedad = models.FloatField(verbose_name="Precio Ini", help_text="Precio Incial", validators=[validar_positivo])
-    valor_final_propiedad = models.FloatField(verbose_name="Precio Fin", help_text="Precio Final", validators=[validar_positivo])
-    valor_cchc = models.FloatField(verbose_name="P$.CCHC", help_text="recio CCHC", validators=[validar_positivo])
+    valor_inicial_propiedad = models.FloatField(verbose_name="Precio Ini", help_text="Precio Incial", null=True, blank=True)
+    valor_final_propiedad = models.FloatField(verbose_name="Precio Fin", help_text="Precio Final", null=True, blank=True)
+    valor_cchc = models.FloatField(verbose_name="P$.CCHC", help_text="recio CCHC", validators=[validar_positivo], null=True, blank=True)
 
 
     class Meta:
@@ -130,3 +130,4 @@ class Propiedade(models.Model):
 
     def __str__(self):
         return str(self.id_propiedad)+ " - " +str(self.numero_propiedad)+ " - " +str(self.condominio.alias_condominio)+ " - " +str(self.etapa.nombre_etapa)
+
