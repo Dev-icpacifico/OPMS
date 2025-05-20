@@ -1,9 +1,8 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.utils.html import format_html
+from gestion_contable.admin import PagosInline  # Si mantienes Pagos relacionados a Venta
 from utils_project.filters import CondominioFilter
 from .models import Venta, Etapas, VentaEtapa, CampoEtapa, ValoresEtapa
-from gestion_contable.admin import PagosInline  # Si mantienes Pagos relacionados a Venta
-from django.contrib.admin import RelatedOnlyFieldListFilter
 
 
 # Inline: ValoresEtapa dentro de VentaEtapa
@@ -29,7 +28,7 @@ class CampoEtapaInline(admin.TabularInline):
 
 @admin.register(Etapas)
 class EtapasAdmin(admin.ModelAdmin):
-    list_display = ('id_etapa', 'alias_etapa', 'nombre_etapa')
+    list_display = ('id_etapa', 'tipo_venta_asociado','alias_etapa', 'nombre_etapa')
     search_fields = ('nombre_etapa', 'alias_etapa')
     ordering = ('id_etapa',)
     inlines = [CampoEtapaInline]
@@ -122,3 +121,27 @@ class VentaAdmin(admin.ModelAdmin):
 
     format_pventa.short_description = 'P.Venta'
     format_pventa.admin_order_field = 'precio_venta'  # 👈 Esto habilita la ordenación por ese campo
+
+    def save_model(self, request, obj, form, change):
+        tipo_venta_anterior = None
+
+        # Detectar si estamos editando y hubo cambio en tipo_venta
+        if change:
+            old_obj = Venta.objects.get(pk=obj.pk)
+            tipo_venta_anterior = old_obj.tipo_venta
+
+        super().save_model(request, obj, form, change)
+
+        if change and tipo_venta_anterior != obj.tipo_venta:
+            self.message_user(
+                request,
+                f"Las etapas fueron actualizadas automáticamente por cambio en tipo de venta a: {obj.tipo_venta}",
+                level=messages.INFO
+            )
+
+        elif not change:
+            self.message_user(
+                request,
+                "La venta fue registrada exitosamente con sus etapas asignadas automáticamente.",
+                level=messages.SUCCESS
+            )

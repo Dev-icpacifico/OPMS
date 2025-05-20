@@ -5,6 +5,7 @@ from gestion_clientes.models import Cliente
 from gestion_propiedad.models import Propiedade
 from utils_project.choices import *
 
+
 # Create your models here.
 def validar_positivo(value):
     if value < 0:
@@ -13,66 +14,90 @@ def validar_positivo(value):
 
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True, verbose_name='ID')
-    fecha_venta = models.DateField(auto_now=True, verbose_name='F.Venta',help_text="Fecha de Venta")
-    id_propiedad = models.ForeignKey(Propiedade, on_delete=models.CASCADE, limit_choices_to={'estado_propiedad': 'Libre'})
-    tipo_venta = models.CharField(verbose_name="Tipo",help_text="Tipo de venta", choices=TIPO_VENTA_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
-    descuento_campagna = models.CharField(verbose_name="Dcto Camp",choices=SI_NO_CHOICES, max_length=2, default=no)
+    fecha_venta = models.DateField(auto_now=True, verbose_name='F.Venta', help_text="Fecha de Venta")
+    id_propiedad = models.ForeignKey(Propiedade, on_delete=models.CASCADE,
+                                     limit_choices_to={'estado_propiedad': 'Libre'})
+    tipo_venta = models.CharField(verbose_name="Tipo", help_text="Tipo de venta", choices=TIPO_VENTA_CHOICES,
+                                  max_length=50, default=VENTAS_CHOICES[0][0])
+    descuento_campagna = models.CharField(verbose_name="Dcto Camp", choices=SI_NO_CHOICES, max_length=2, default=no)
     uf_descuento_campagna = models.FloatField(verbose_name="Dcts Cam", help_text="Campaña dscto",
-                                       validators=[validar_positivo])
-    bono_pie = models.FloatField(verbose_name='Bon Pie', blank=True, null=True,  validators=[validar_positivo])
-    aplicacion_bono = models.CharField(verbose_name="Aplicación Bono", choices=APLICACION_DSCTO_CHOICES, max_length=10, default='No Aplica')
+                                              validators=[validar_positivo])
+    bono_pie = models.FloatField(verbose_name='Bon Pie', blank=True, null=True, validators=[validar_positivo])
+    aplicacion_bono = models.CharField(verbose_name="Aplicación Bono", choices=APLICACION_DSCTO_CHOICES, max_length=10,
+                                       default='No Aplica')
     precio_venta = models.FloatField(verbose_name="P.Venta", help_text="Precio venta", default=0)
-    estado_venta = models.CharField(verbose_name='Estado',help_text="Estado Vent" , choices=VENTAS_CHOICES, max_length=50, default=VENTAS_CHOICES[0][0])
-    fecha_promesa = models.DateField(verbose_name='F.Promesa',help_text="Fecha de promesa")
+    estado_venta = models.CharField(verbose_name='Estado', help_text="Estado Vent", choices=VENTAS_CHOICES,
+                                    max_length=50, default=VENTAS_CHOICES[0][0])
+    fecha_promesa = models.DateField(verbose_name='F.Promesa', help_text="Fecha de promesa")
     ejecutivo = models.CharField(verbose_name='Ejecutivo', max_length=50, blank=True, null=True)
     id_cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     uf_por_m2 = models.FloatField(verbose_name='UF Por M2', blank=True, null=True)
     motivo_compra = models.TextField(verbose_name='Motivo Compra', blank=True, null=True)
     atributos = models.TextField(verbose_name='Atributos', blank=True, null=True)
-    ggoo = models.IntegerField(verbose_name='GGOO',help_text="Gastos Operacionales" ,  blank=True, null=True)
-
+    ggoo = models.IntegerField(verbose_name='GGOO', help_text="Gastos Operacionales", blank=True, null=True)
 
     class Meta:
         db_table = 'venta'
         verbose_name = 'Venta'
         verbose_name_plural = 'Ventas'
-        #unique_together = (('partida', 'id'),)
+        # unique_together = (('partida', 'id'),)
         ordering = ['id_venta']
+
     def __str__(self):
-        return str(self.id_venta)+ " - " +str(self.id_propiedad.numero_propiedad)
+        return str(self.id_venta) + " - " + str(self.id_propiedad.numero_propiedad)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._tipo_venta_original = self.tipo_venta
 
     def save(self, *args, **kwargs):
-        propiedad = self.id_propiedad  # la propiedad relacionada
-
-        # Asegurar que haya un valor base válido
+        propiedad = self.id_propiedad
         valor_inicial = propiedad.valor_inicial_propiedad or 0
         descuento = self.uf_descuento_campagna or 0
         bono = self.bono_pie or 0
 
-        # Calcular nuevo valor final de la propiedad
         valor_final = valor_inicial - descuento - bono
         propiedad.valor_final_propiedad = valor_final
 
-        # Calcular UF por metro cuadrado si hay metros disponibles
         if propiedad.metros_total_propiedad:
             self.uf_por_m2 = round(valor_final / propiedad.metros_total_propiedad, 2)
         else:
             self.uf_por_m2 = None
 
-        # Registrar el precio final de venta en esta venta
         self.precio_venta = valor_final
-
-        # Guardar los cambios en la propiedad asociada
         propiedad.save()
 
-        # Guardar normalmente la venta
+        es_nueva = self._state.adding
         super().save(*args, **kwargs)
+
+        if es_nueva:
+            etapas = Etapas.objects.filter(tipo_venta_asociado=self.tipo_venta)
+            for etapa in etapas:
+                VentaEtapa.objects.create(id_venta=self, id_etapa=etapa)
+
+        elif self.tipo_venta != self._tipo_venta_original:
+            self.ventaetapa_set.all().delete()
+            nuevas_etapas = Etapas.objects.filter(tipo_venta_asociado=self.tipo_venta)
+            for etapa in nuevas_etapas:
+                VentaEtapa.objects.create(id_venta=self, id_etapa=etapa)
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self._state.adding and not Etapas.objects.filter(tipo_venta_asociado=self.tipo_venta).exists():
+            raise ValidationError(f"No hay etapas configuradas para el tipo de venta: {self.tipo_venta}")
 
 
 class Etapas(models.Model):
     id_etapa = models.AutoField(primary_key=True)
     nombre_etapa = models.CharField(verbose_name='Nombre Etapa', max_length=50, blank=True, null=True)
     alias_etapa = models.CharField(verbose_name='Alias Etapa', max_length=50, blank=True, null=True)
+    tipo_venta_asociado = models.CharField(
+        verbose_name='Tipo de Venta',
+        choices=TIPO_VENTA_CHOICES,
+        max_length=50,
+        null=True, blank=True,
+        help_text="Tipo de venta al que pertenece esta etapa"
+    )
     descripcion_etapa = models.TextField(verbose_name='Descripcion Etapa', blank=True, null=True)
 
     class Meta:
@@ -92,8 +117,6 @@ class VentaEtapa(models.Model):
     id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', blank=True, null=True)
     fecha_fin = models.DateField(verbose_name='Fecha de Fin', blank=True, null=True)
-
-
 
     class Meta:
         db_table = 'venta_etapas'
@@ -126,7 +149,7 @@ class CampoEtapa(models.Model):
 
 
 class ValoresEtapa(models.Model):
-    id_valores_etapa= models.AutoField(primary_key=True)
+    id_valores_etapa = models.AutoField(primary_key=True)
     id_venta_etapa = models.ForeignKey(VentaEtapa, on_delete=models.CASCADE)
     id_campo_etapa = models.ForeignKey(CampoEtapa, on_delete=models.CASCADE)
     valor_campo = models.CharField(verbose_name='Valor Campo', max_length=50, blank=True, null=True)

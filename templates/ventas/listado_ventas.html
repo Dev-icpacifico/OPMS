@@ -11,8 +11,13 @@
             <th>ID</th>
             <th>Propiedad</th>
             <th>Cliente</th>
+            <th>Estado</th>
+            <th>Tipo</th>
+            <th>F.Venta</th>
+            <th>F.Promesa</th>
+            <th>P.Ini</th>
+            <th>P.Venta</th>
             <th>Ejecutivo</th>
-            <th>Fecha Promesa</th>
             <th>Acciones</th>
         </tr>
         </thead>
@@ -21,9 +26,14 @@
             <tr>
                 <td>{{ venta.id_venta }}</td>
                 <td>{{ venta.id_propiedad }}</td>
-                <td>{{ venta.id_cliente.nombres_cliente }} {{ venta.id_cliente.apellidos_cliente }}</td>
-                <td>{{ venta.ejecutivo }}</td>
+                <td>{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.rut_cliente }}</td>
+                <td>{{ venta.estado_venta }}</td>
+                <td>{{ venta.tipo_venta }}</td>
+                <td>{{ venta.fecha_venta }}</td>
                 <td>{{ venta.fecha_promesa }}</td>
+                <td>{{ venta.id_propiedad.valor_final_propiedad }}</td>
+                <td>{{ venta.precio_venta }}</td>
+                <td>{{ venta.ejecutivo }}</td>
                 <td>
                     <a href="{% url 'editar_etapas' venta.id_venta %}" class="btn btn-sm btn-outline-primary">
                         Modificar etapas
