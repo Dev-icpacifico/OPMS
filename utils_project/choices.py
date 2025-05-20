@@ -3,6 +3,22 @@ CLIENTES_CHOICES = [
     ('Empresa', 'Empresa'),
 ]
 
+POSTVENTA_CHOICES = [
+    ('Resuelto', 'Resuelto'),
+    ('Trabajos', 'Trabajos'),
+    ('Visita', 'Visita'),
+    ('Cerrado', 'Cerrado'),
+    ('Pendiente', 'Pendiente'),
+    ('No Aplica', 'No Aplica'),
+
+    ('Pospuesto', 'Pospuesto'),
+    ('Propietario rechaza trabajos ', 'Propietario rechaza trabajos '),
+    ('Observación', 'Observación'),
+    ('Observación Entrega', 'Observación Entrega'),
+    ('Terminado', 'Terminado'),
+
+]
+
 APLICACION_DSCTO_CHOICES = [
     ('No Aplica', 'No Aplica'),
     ('Precio', 'Precio'),
@@ -29,6 +45,7 @@ PAGOS_CHOICES = [
 PROPIEDAD_CHOICES = [
     ('Libre', 'Libre'),
     ('Tomada', 'Tomada'),
+    ('Entregada', 'Entregada'),
 ]
 
 is_active = 'Activo'
