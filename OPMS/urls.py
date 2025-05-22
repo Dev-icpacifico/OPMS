@@ -17,10 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from gestion_escrituracion import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ventas/', include('gestion_escrituracion.urls')),
+    path('test_datatables/', views.test_datatables, name='test_datatables'),
+
+
 
 
 ]

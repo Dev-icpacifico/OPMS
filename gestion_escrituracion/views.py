@@ -66,3 +66,9 @@ class EtapasVentaView(View):
 
         messages.success(request, "Los datos fueron guardados correctamente.")
         return redirect('editar_etapas', venta_id=venta.id_venta)
+
+
+from django.shortcuts import render
+
+def test_datatables(request):
+    return render(request, 'ventas/test_datatable.html')

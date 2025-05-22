@@ -1,11 +1,34 @@
 {% extends "admin/base_site.html" %}
+{% load static %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block extrahead %}
+    {{ block.super }}
+    <!-- CSS DataTables -->
+    <link rel="stylesheet" href="{% static 'vendor/datatables/datatables.css' %}">
+
+    <style>
+        #tabla-ventas_wrapper {
+            width: 100%;
+        }
+
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_paginate {
+            padding: 0 1rem;
+        }
+
+        table.dataTable {
+            width: 100% !important;
+        }
+    </style>
+
+{% endblock %}
 
 {% block content %}
     <h1 class="mb-4">Listado de Ventas</h1>
 
-    <table class="table table-hover">
+    <table id="tabla-ventas" class="display table table-hover" style="width:100%">
         <thead>
         <tr>
             <th>ID</th>
@@ -15,7 +38,6 @@
             <th>Tipo</th>
             <th>F.Venta</th>
             <th>F.Promesa</th>
-            <th>P.Ini</th>
             <th>P.Venta</th>
             <th>Ejecutivo</th>
             <th>Acciones</th>
@@ -26,25 +48,41 @@
             <tr>
                 <td>{{ venta.id_venta }}</td>
                 <td>{{ venta.id_propiedad }}</td>
-                <td>{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.rut_cliente }}</td>
+                <td>{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }}</td>
                 <td>{{ venta.estado_venta }}</td>
                 <td>{{ venta.tipo_venta }}</td>
                 <td>{{ venta.fecha_venta }}</td>
                 <td>{{ venta.fecha_promesa }}</td>
-                <td>{{ venta.id_propiedad.valor_final_propiedad }}</td>
-                <td>{{ venta.precio_venta }}</td>
+                <td>{{ venta.precio_venta }} UF</td>
                 <td>{{ venta.ejecutivo }}</td>
                 <td>
-                    <a href="{% url 'editar_etapas' venta.id_venta %}" class="btn btn-sm btn-outline-primary">
-                        Modificar etapas
-                    </a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">Modificar</a>
                 </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="6">No hay ventas registradas.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <script>
+        window.addEventListener('load', function () {
+            // Esperar que el admin cargue jQuery, luego cargar DataTables manualmente
+            var script = document.createElement('script');
+            script.src = "{% static 'vendor/datatables/datatables.min.js' %}";
+            script.onload = function () {
+                console.log("DataTable cargado:", typeof $.fn.DataTable !== 'undefined');
+                $('#tabla-ventas').DataTable({
+                    scrollX: true,
+                    autoWidth: false,
+                    pageLength: 10,
+                    order: [[0, 'desc']],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-CL.json'
+                    }
+                });
+            };
+            document.body.appendChild(script);
+        });
+    </script>
+
 {% endblock %}
