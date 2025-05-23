@@ -1,0 +1,42 @@
+<td>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">Modificar</a>
+                </td>
+
+
+                <td class="d-flex flex-column gap-1">
+    <a href="{% url 'editar_etapas' venta.id_venta %}" class="btn btn-sm btn-outline-primary">Modificar</a>
+
+    <a href="{% url 'imprimir_carta_cierre' venta.id_venta %}" class="btn btn-sm btn-outline-secondary">CN</a>
+    <a href="{% url 'imprimir_memo_doc' venta.id_venta %}" class="btn btn-sm btn-outline-secondary">M.DOC</a>
+    <a href="{% url 'imprimir_carta_oferta' venta.id_venta %}" class="btn btn-sm btn-outline-secondary">CO</a>
+    <a href="{% url 'imprimir_carta_fpm' venta.id_venta %}" class="btn btn-sm btn-outline-secondary">FPM</a>
+    <a href="{% url 'imprimir_memo_ggoo' venta.id_venta %}" class="btn btn-sm btn-outline-secondary">M.GGOO</a>
+</td>
+
+
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-left show" id="jazzy-usermenu" style="left: inherit; right: 0px;">
+
+                    <a href="{% url 'editar_etapas' venta.id_venta %}">Modificar</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}">CN</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}">CO</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}">FPM</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}">MM DOC</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}">MM GGOO</a>
+                    </div>
+
+
+
+
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">Modificar</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">CN</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">CO</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">FPM</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">MM DOC</a>
+                    <a href="{% url 'editar_etapas' venta.id_venta %}"
+                       class="btn btn-sm btn-outline-primary">MM GGOO</a>

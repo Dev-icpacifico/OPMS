@@ -159,7 +159,7 @@ JAZZMIN_SETTINGS = {
     # Whether to link font from fonts.googleapis.com (use custom_css to supply font otherwise)
     "use_google_fonts_cdn": True,
     # Whether to show the UI customizer on the sidebar
-    "show_ui_builder": False,
+    "show_ui_builder": True,
 
     ###############
     # Change view #
@@ -195,15 +195,18 @@ JAZZMIN_UI_TWEAKS = {
     "footer_small_text": False,
     "body_small_text": True,
     "brand_small_text": False,
-    "brand_colour": False,
+    #"brand_colour": False,
+    "brand_colour": "navbar-info",
     "accent": "accent-primary",
-    "navbar": "navbar-white navbar-light",
+    #"navbar": "navbar-white navbar-light",
+    "navbar": "navbar-info navbar-dark",
     "no_navbar_border": False,
     "navbar_fixed": False,
     "layout_boxed": False,
     "footer_fixed": True,
     "sidebar_fixed": True,
-    "sidebar": "sidebar-dark-primary",
+    # "sidebar": "sidebar-dark-primary",
+    "sidebar": "sidebar-light-warning",
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
     "sidebar_nav_child_indent": False,
@@ -221,4 +224,5 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     },
     "actions_sticky_top": False
+
 }
