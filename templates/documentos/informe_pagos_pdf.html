@@ -1,0 +1,359 @@
+{% load humanize %}
+{% load format_utils %}
+{% load dict_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% for venta in datos_venta %}
+        <title>Informe de Pagos - {{ venta.id_venta }}
+            -{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }}</title>
+    {% endfor %}
+    <style>
+        .tabla1 {
+            width: 50%;
+            margin: auto; /* Esto centrará la tabla en el contenedor */
+            border-collapse: collapse;
+        }
+
+        .tabla1 th, .tabla1 td {
+            border: 1px solid #ddd;
+            padding: 2px;
+            text-align: center; /* Esto centrará el contenido */
+        }
+
+        .tabla1 th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+
+<div>
+    <!-- Invoice -->
+
+    <div>
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <img src="{{ icon }}" width="150" height="75">
+                    </div>
+                    <br>
+                </div>
+
+                <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td>
+                            <tr>
+                        <td>Inmobiliaria Costanera Pacífico</td>
+                        <td>Venta Nro: {{ id_venta }}</td>
+                        </tr>
+                        <tr>
+                            <td>Dirección: Rue Emilio Apey #405</td>
+                            <td>Fecha de venta: 04 de marzo 2024</td>
+                        </tr>
+                        <tr>
+                            <td>RUT: 77.753.258-6</td>
+                            <td>Fecha Emisión: 04 de marzo 2024</td>
+                        </tr>
+                        <tr>
+                            <td>Ejecutivo(a): Elba Lazo</td>
+                        </tr>
+                        <tr>
+                            <td>Jefe de Operaciones:Sara Araya Bugueño</td>
+                            <!-- Invoice<td>Asistente de Operaciones:Andrea Moya Moya</td> -->
+                        </tr>
+                        </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr class="my-0">
+        <div>
+            <div>
+                <div>
+                    <table>
+                        <thead>
+                        <th><h6>Datos departamento:</h6></th>
+                        <th><h6>Datos cliente:</h6></th>
+                        </thead>
+                        <tbody>
+                        <td>
+                            {% for venta in datos_venta %}
+
+                                <p class="mb-1">N° Departamento: {{ venta.id_propiedad.numero_propiedad }}</p>
+                                <p class="mb-1">Mdelo: A (2H-2B)</p>
+                                <p class="mb-1">N° Torre: {{ venta.id_propiedad.torre.nombre_torre }}</p>
+                                <p class="mb-1">Piso: {{ venta.id_propiedad.piso }}</p>
+                            {% endfor %}
+
+                        </td>
+                        <td>
+
+                            {% for venta in datos_venta %}
+                                <p class="mb-1">
+                                    Nombre: {{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }}</p>
+                                <p class="mb-1">Rut: {{ venta.id_cliente.rut_cliente }}</p>
+                                <p class="mb-1">Correo: {{ venta.id_cliente.correo }}</p>
+                                <p class="mb-1">Teléfono: (+56) {{ venta.id_cliente.telefono }}</p>
+                            {% endfor %}
+                        </td>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <h3>Arqueo contable</h3>
+        </div>
+        <!-- Bootstrap Table with Header - Dark -->
+        <div>
+            {% if datos %}
+                <table class="tabla1">
+                    <tr>
+                        <th>Abono $CLP</th>
+                        <th>Abono UF</th>
+                        <th>Fecha Cobro</th>
+                        <th>Estado Cobro</th>
+                        <th>Valor UF pago efectivo</th>
+                    </tr>
+                    <tbody>
+                    {% for dato in datos %}
+                        <tr>
+                            <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
+                                {{ dato.monto_pago|clp_format }}
+                            </td>
+                            <td style="text-align: center; padding: 2px; font-size: 8pt;">
+                                {{ dato.uf_pago|uf_format }}
+                            </td>
+                            <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
+                                {{ dato.fecha_real_pago|date:"d-m-Y" }}</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">
+                                {{ dato.estado_pago }}</td>
+                            {% if dato.estado_pago == "Contabilizado" %}
+                                <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
+                                    {{ valores_uf_por_pago|dict_get:dato.id_pago|floatformat:2|uf_format }}
+                                </td>
+                            {% else %}
+                                <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">—</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                       <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
+                           {{ total_pagado|clp_format }}</td>
+                        <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
+                            {{ total_pagado_uf|uf_format }}</td>
+                        <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">-</td>
+                        <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">-</td>
+                        <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">-</td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% else %}
+            {% endif %}
+        </div>
+        <hr class="my-0">
+        <div>
+            <div>
+                <table class="tabla1">
+                    <tbody>
+                    <td>
+                        <div>
+                            <h6>Fondo Puesta en Marcha (FPM):</h6>
+                            <div>
+                                {% if datos_venta %}
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>Monto $CLP</th>
+                                            <th>Fecha Pago</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for venta in datos_venta %}
+                                            <tr>
+                                                <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ venta.id_propiedad.fpm|clp_format }}</td>
+                                                <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ venta.id_propiedad.fpm }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <table class="tabla1">
+                                        <thead>
+                                        <tr>
+                                            <th>Monto $CLP</th>
+                                            <th>Fecha Pago</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td colspan='4' align='center'><span class="border-info me-1"><i
+                                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div>
+                            <h6>Fondo gastos OOPP Contado:</h6>
+                            <div>
+                                {% if datos_venta %}
+                                    <table class="tabla1">
+                                        <thead>
+                                        <tr>
+                                            <th>Monto $CLP</th>
+                                            <th>Fecha Pago</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for venta in datos_venta %}
+                                            <tr>
+                                                <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ venta.ggoo|clp_format }}</td>
+                                                <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ venta.ggoo }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <table class="tabla1">
+                                        <thead>
+                                        <tr>
+                                            <th>Monto $CLP</th>
+                                            <th>Fecha Pago</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td colspan='4' align='center'><span class="border-info me-1"><i
+                                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+        <hr class="my-0">
+        <h3>Resumen</h3>
+        <div>
+            <div>
+                <div>
+                    <table class="tabla1">
+                        <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Valor en UF</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Valor Depto.</td>
+                        <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ valor_inicial_propiedad|uf_format }}</td>
+                        <tr>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Abono Inmobiliario</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ bono_pie|uf_format }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Pie Cancelado</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ pie_cancelado|uf_format }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Saldo Pie</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ saldo_pie|uf_format }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Crédito Hipotecario</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ credito_hipotecario|uf_format }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Total</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;"><strong>{{ total|uf_format }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Valor Final Inmobiliaria</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;"><strong>{{ precio_final|uf_format }}</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="my-0">
+    <h3>Datos de transferencia.</h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <td>
+                        <tr>
+                    <td>Nombre: Inmobiliaria Costanera Pacífico SPA</td>
+                    </tr>
+                    <tr>
+                        <td>RUT: 76.866.075-1</td>
+                    </tr>
+                    <tr>
+                        <td>Tipo Cuenta: Cuenta Corriente</td>
+                    </tr>
+                    <tr>
+                        <td>N° Cuenta: 1202275608</td>
+                    </tr>
+                    <tr>
+                        <td>Correo: saraya@icpacifico.cl</td>
+                    </tr>
+                    </td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="font-style: italic; font-size: 14px;">
+            Gracias por su preferencia. Para consultas, contáctenos a <a href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
+        </p>
+    </div>
+</div>
+</div>
+<!-- /Invoice -->
+
+</body>
+
+</html>

@@ -101,6 +101,7 @@ class Propiedade(models.Model):
     estado_propiedad = models.CharField(verbose_name="Estado", help_text="Estado Propiedad", choices=PROPIEDAD_CHOICES, max_length=50, default=PROPIEDAD_CHOICES[0][0])
     condominio = models.ForeignKey(Condominio, verbose_name="Condominio" , help_text="Nombre del Condominio", on_delete=models.CASCADE)
     etapa = models.ForeignKey(Etapa, verbose_name="Etapa", help_text="Etapa del proyecto", on_delete=models.CASCADE )
+    torre = models.ForeignKey(Torre, verbose_name="Torre", help_text="Nombre del Torre", on_delete=models.CASCADE)
     rol = models.CharField(verbose_name="Rol", help_text="Rol Propiedad", max_length=50)
     numero_propiedad = models.CharField(verbose_name="N°", help_text="N° Depto", max_length=3)
     modelo = models.ForeignKey(Modelo, verbose_name="Modelo", help_text="Modelo Depto", on_delete=models.CASCADE)
@@ -119,6 +120,7 @@ class Propiedade(models.Model):
     valor_inicial_propiedad = models.FloatField(verbose_name="Precio Ini", help_text="Precio Incial", null=True, blank=True)
     valor_final_propiedad = models.FloatField(verbose_name="Precio Fin", help_text="Precio Final", null=True, blank=True)
     valor_cchc = models.FloatField(verbose_name="P$.CCHC", help_text="recio CCHC", validators=[validar_positivo], null=True, blank=True)
+    fpm = models.IntegerField(verbose_name="Fondo Puesta en Marcha", validators=[validar_positivo], null=True, blank=True )
 
 
     class Meta:

@@ -1,10 +1,19 @@
 # Create your views here.
+import os
+from unittest.mock import right
+
 from django.views.generic import TemplateView
 from django.views import View
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.admin.sites import site
+from xhtml2pdf import pisa
+from OPMS import settings
+from gestion_propiedad.models import Propiedade
 from .models import Venta, VentaEtapa, CampoEtapa, ValoresEtapa
+from gestion_contable.models import Pagos, ValorUf
+from django.template.loader import get_template
+from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
 
 
 class ListaVentasView(TemplateView):
@@ -70,5 +79,160 @@ class EtapasVentaView(View):
 
 from django.shortcuts import render
 
+
 def test_datatables(request):
     return render(request, 'ventas/test_datatable.html')
+
+
+from django.db.models import Sum
+
+
+def informe_pagos_venta(request, id_venta):
+    datos = Pagos.objects.filter(id_venta=id_venta)
+    datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    total_pagado = datos.aggregate(total=Sum('monto_pago'))['total'] or 0
+    total_pagado_uf = datos.filter(estado_pago="Contabilizado") \
+                          .aggregate(total=Sum('uf_pago'))['total'] or 0
+
+    # ✅ Total pagado en categoría "Detalle Pie"
+    total_detalle_pie = datos.filter(id_categoria_pago__nombre_categoria_pago="Detalle Pie") \
+                            .aggregate(total=Sum('uf_pago'))['total'] or 0
+    # Obtener valor UF por cada pago
+    valores_uf_por_pago = {}
+    for pago in datos:
+        if pago.estado_pago == "Contabilizado":
+            try:
+                valor_uf = ValorUf.objects.get(fecha_registro=pago.fecha_real_pago)
+                valores_uf_por_pago[pago.id_pago] = valor_uf.valor_uf
+            except ValorUf.DoesNotExist:
+                valores_uf_por_pago[pago.id_pago] = None
+        else:
+            valores_uf_por_pago[pago.id_pago] = None
+
+    # ✅ Extraer el valor inicial de la propiedad (asumiendo 1 resultado)
+    valor_inicial_propiedad = None
+    if datos_venta.exists():
+        valor_inicial_propiedad = datos_venta[0].id_propiedad.valor_inicial_propiedad
+        bono_pie = datos_venta[0].bono_pie
+        precio_final = datos_venta[0].precio_venta
+        credito_hipotecario = datos_venta[0].credito_hipotecario
+        total = valor_inicial_propiedad - bono_pie
+        saldo_pie = valor_inicial_propiedad - bono_pie - credito_hipotecario - total_detalle_pie
+
+    context = {
+        'datos': datos,
+        'id_venta': id_venta,
+        'datos_venta': datos_venta,
+        'total_pagado': total_pagado,
+        'total_pagado_uf': total_pagado_uf,
+        'valor_inicial_propiedad': valor_inicial_propiedad,
+        'bono_pie': bono_pie,
+        'precio_final': precio_final,
+        'credito_hipotecario': credito_hipotecario,
+        'total': total,
+        'saldo_pie': saldo_pie,
+        'pie_cancelado': total_detalle_pie,
+        'valores_uf_por_pago': valores_uf_por_pago,
+        **site.each_context(request),
+    }
+    print(total_pagado)
+
+    return render(request, 'documentos/informe_pagos.html', context)
+
+
+class PagosInvoicePdf(View):
+
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_URL  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise RuntimeError(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            id_venta = self.kwargs['id_venta']
+            datos = Pagos.objects.filter(id_venta=id_venta)
+            datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+            # Totales
+            total_pagado = datos.aggregate(total=Sum('monto_pago'))['total'] or 0
+            total_pagado_uf = datos.filter(estado_pago="Contabilizado") \
+                                   .aggregate(total=Sum('uf_pago'))['total'] or 0
+
+            total_detalle_pie = datos.filter(id_categoria_pago__nombre_categoria_pago="Detalle Pie") \
+                                     .aggregate(total=Sum('uf_pago'))['total'] or 0
+
+            # Valores UF por fecha contable
+            valores_uf_por_pago = {}
+            for pago in datos:
+                if pago.estado_pago == "Contabilizado":
+                    try:
+                        valor_uf = ValorUf.objects.get(fecha_registro=pago.fecha_real_pago)
+                        valores_uf_por_pago[pago.id_pago] = valor_uf.valor_uf
+                    except ValorUf.DoesNotExist:
+                        valores_uf_por_pago[pago.id_pago] = None
+                else:
+                    valores_uf_por_pago[pago.id_pago] = None
+
+            # Información de la propiedad
+            valor_inicial_propiedad = bono_pie = precio_final = credito_hipotecario = total = saldo_pie = None
+
+            if datos_venta.exists():
+                venta = datos_venta[0]
+                valor_inicial_propiedad = venta.id_propiedad.valor_inicial_propiedad
+                bono_pie = venta.bono_pie
+                precio_final = venta.precio_venta
+                credito_hipotecario = venta.credito_hipotecario
+                total = valor_inicial_propiedad - bono_pie
+                saldo_pie = valor_inicial_propiedad - bono_pie - credito_hipotecario - total_detalle_pie
+
+            context = {
+                'datos': datos,
+                'id_venta': id_venta,
+                'datos_venta': datos_venta,
+                'total_pagado': total_pagado,
+                'total_pagado_uf': total_pagado_uf,
+                'valor_inicial_propiedad': valor_inicial_propiedad,
+                'bono_pie': bono_pie,
+                'precio_final': precio_final,
+                'credito_hipotecario': credito_hipotecario,
+                'total': total,
+                'saldo_pie': saldo_pie,
+                'pie_cancelado': total_detalle_pie,
+                'valores_uf_por_pago': valores_uf_por_pago,
+                'icon': 'static/assets/img/illustrations/logo-horizontal.gif',
+            }
+
+            template = get_template('documentos/informe_pagos_pdf.html')
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            pisa_status = pisa.CreatePDF(html, dest=response, link_callback=self.link_callback)
+
+            if pisa_status.err:
+                raise Exception("Error al generar PDF con xhtml2pdf")
+
+            return response
+
+        except Exception as e:
+            print("❌ Error generando PDF:", e)
+            messages.error(request, "Ocurrió un error al generar el PDF.")
+            return redirect('lista_ventas')

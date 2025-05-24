@@ -1,8 +1,12 @@
 from django.urls import path
-from .views import ListaVentasView, EtapasVentaView
+from .views import *
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('ventas/', ListaVentasView.as_view(), name='lista_ventas'),
     # El endpoint para modificar etapas lo haremos luego:
     path('ventas/<int:venta_id>/etapas/', EtapasVentaView.as_view(), name='editar_etapas'),
+    path('informe_pagos/<int:id_venta>/', informe_pagos_venta, name='informe_pagos'),
+    # path('informe_pagos_print/<int:id_venta>/', login_required(informe_pagos_venta_print), name='informe_pagos_print'),
+    path('pagos_invoice_pdf/<int:id_venta>/', login_required(PagosInvoicePdf.as_view()), name='pagos_invoice_pdf'),
 ]
