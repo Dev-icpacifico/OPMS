@@ -361,3 +361,73 @@ class EntregaDocumentoPdf(View):
             pass
         return redirect('lista_ventas')
 
+def carta_cierre_negocios_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
+    datos_venta = Venta.objects.filter(id_venta=id_venta)
+    datos_cierre_negocio = Pagos.objects.filter(id_venta=id_venta,
+                                               id_categoria_pago__nombre_categoria_pago="Cierre Negocio")
+    # Datos de Detalle Pie
+    datos_detalle_pie = Pagos.objects.filter(id_venta=id_venta, id_categoria_pago__nombre_categoria_pago="Detalle Pie")
+
+    context = {
+        'datos_detalle_pie': datos_detalle_pie,
+        'id_venta': id_venta,
+        'datos_venta': datos_venta,
+        **site.each_context(request),
+    }
+
+    return render(request, 'documentos/carta_cierre_negocio.html', context)
+
+
+class CierreNegociopdf(View):
+    # datos = Pago.objects.filter(id_venta=id_venta)
+    # datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_URL  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise RuntimeError(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # Datos de cierre de negocio
+            datos_cierre_negocio = Pagos.objects.filter(id_venta=self.kwargs['id_venta'],
+                                                       id_categoria_pago__nombre_categoria_pago="Cierre Negocio")
+            # Datos de Detalle Pie
+            datos_detalle_pie = Pagos.objects.filter(id_venta=self.kwargs['id_venta'], id_categoria_pago__nombre_categoria_pago="Detalle Pie")
+
+            datos_venta = Venta.objects.filter(id_venta=self.kwargs['id_venta'])
+            template = get_template('documentos/carta_cierre_negocio_pdf.html')
+            context = {'datos_cierre_negocio': datos_cierre_negocio, 'datos_detalle_pie': datos_detalle_pie,
+                       'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
+                       'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            # create a pdf
+            pisa_status = pisa.CreatePDF(
+                html, dest=response,
+                link_callback=self.link_callback)
+            return response
+        except:
+            pass
+        return redirect('lista_ventas')
+

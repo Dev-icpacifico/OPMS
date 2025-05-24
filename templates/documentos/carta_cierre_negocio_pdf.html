@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Cierre Negocio</title>
+    <style>
+        .tabla1 {
+            width: 50%;
+            margin: auto; /* Esto centrará la tabla en el contenedor */
+            border-collapse: collapse;
+        }
+
+        .tabla1 th,.tabla1 td {
+            border: 1px solid #ddd;
+            padding: 2px;
+            text-align: center; /* Esto centrará el contenido */
+        }
+
+        .tabla1 th {
+            background-color: #f2f2f2;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div>
+    <!-- Invoice -->
+    <div>
+        <div>
+            <div>
+                <div>
+                    <div>
+                        <img src="{{ icon }}" width="150" height="75">
+                    </div>
+                    <br>
+                </div>
+
+                <div>
+                    <!-- Titulo -->
+                    <table>
+                        <thead>
+                        <tr>
+                            <th><!-- La columna no tiene titulo --></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td>
+                            <tr>
+                                <td style="text-align: center">Inmobiliaria Costanera Pacífico</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center">Condominio Distrito Verde ETAPA XX</td>
+                            </tr>
+                        </td>
+                        </tbody>
+                    </table>
+                    <!-- Fin Titulo -->
+
+                    <!-- Encabezado carta -->
+                    {% for venta in datos_venta %}
+                    <p>Fecha de la carta</p>
+                    <p>Señor(a): {{ venta.id_cotizacion.id_cliente.nombre_cliente }}</p>
+                    <p>RUT: {{ venta.id_cotizacion.id_cliente.id_cliente}}</p>
+                    {% endfor %}
+                    <!-- Fin Encabezado carta -->
+
+                    <!-- Saludo y datos depto carta -->
+                    <p>De nuestra consideración:</p>
+                    <p>Por la presentenos es grato saludarlo(a) y a la vez informarle las condiciones del cierre de
+                        negocio:</p>
+                    {% for venta in datos_venta %}
+                    <p>Departamento N°{{ venta.id_cotizacion.id_vivienda.nombre_vivienda }}, BODEGA N° {},
+                        ESTACIONAMIENTO N° {}, por un valor de {{ venta.id_cotizacion.id_vivienda.valor_vivienda }}
+                        UF.</p>
+                    <p>Condominio </p>
+                    {% endfor %}
+                    <!-- Saludo y datos depto carta -->
+                    <hr>
+                    <div>
+                        <h3>Forma de pago UF</h3>
+                    </div>
+                    <!-- Forma de pago -->
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td>
+                            <tr>
+                                <td>Reserva</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Pie Contado</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Saldo a pagar Contado</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>0</td>
+                            </tr>
+                        </td>
+                        </tbody>
+                    </table>
+                    <!-- Fin Forma de pago -->
+                    <hr>
+                    <div>
+                        <h3>Cierre de Negocio</h3>
+                    </div>
+                    <!-- Cierre de Negocio -->
+                    {% if datos_cierre_negocio %}
+                    <table class="tabla1">
+                        <tr>
+                            <th>Banco</th>
+                            <th>Forma de pago</th>
+                            <th>N° DOcumento</th>
+                            <th>Fecha</th>
+                            <th>UF</th>
+                            <th>$</th>
+                        </tr>
+                        <tbody>
+                        {% for dato in datos_cierre_negocio %}
+                        <tr>
+                            <td style="text-align: center">{{dato.id_banco}}</td>
+                            <td style="text-align: center">{{dato.forma_pago}}</td>
+                            <td style="text-align: center">{{dato.numero_documento}}</td>
+                            <td style="text-align: center">{{dato.fecha_pago}}</td>
+                            <td style="text-align: center">{{dato.monto_pago}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <table class="table" style="min-height:200px">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Banco</th>
+                            <th>Forma de pago</th>
+                            <th>N° DOcumento</th>
+                            <th>Fecha</th>
+                            <th>UF</th>
+                            <th>$</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        <tr>
+                            <td colspan='4' align='center'><span class="border-info me-1"><i
+                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    {% endif%}
+                    <!-- Fin Cierre de Negocio -->
+                    <hr>
+                    <div>
+                        <h3>Detalle Pie</h3>
+                    </div>
+                    <!-- Detalle Pie-->
+                    {% if datos_detalle_pie %}
+                    <table class="tabla1">
+                        <tr>
+                            <th>Banco</th>
+                            <th>Forma de pago</th>
+                            <th>N° DOcumento</th>
+                            <th>Fecha</th>
+                            <th>UF</th>
+                            <th>$</th>
+                        </tr>
+                        <tbody>
+                        {% for dato in datos_detalle_pie  %}
+                        <tr>
+                            <td style="text-align: center">{{dato.id_banco}}</td>
+                            <td style="text-align: center">{{dato.forma_pago}}</td>
+                            <td style="text-align: center">{{dato.numero_documento}}</td>
+                            <td style="text-align: center">{{dato.fecha_pago}}</td>
+                            <td style="text-align: center">{{dato.monto_pago}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <table class="table" style="min-height:200px">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Banco</th>
+                            <th>Forma de pago</th>
+                            <th>N° DOcumento</th>
+                            <th>Fecha</th>
+                            <th>UF</th>
+                            <th>$</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        <tr>
+                            <td colspan='4' align='center'><span class="border-info me-1"><i
+                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    {% endif%}
+                    <!-- Fin Detalle Pie-->
+                    <hr>
+                    <p>Los valores señalados en recuadro son referenciales y calculados a valor UF de hoy.
+                        Los pagos se imputan contablemente según se indica en clausula número CUARTA de la Promesa de
+                        Compraventa:
+                    </p>
+                    <p>“ …. Las sumas entregadas por el Promitente Comprador, referidas en los literales a) referente a
+                        “reserva”,
+                        b) referente a “Pie” y c) referente a “saldo restante”, de la presente cláusula, se imputarán al
+                        precio total,
+                        tomándose como criterio de la mencionada imputación, las sumas convertidas a Unidades de Fomento
+                        según valor de ésta al momento del COBRO EFECTIVO de los documentos entregados por el Promitente
+                        Comprador.</p>
+                    <p>En concordancia con lo anterior, se le informa que será de su exclusiva responsabilidad el
+                        cumplimiento y
+                        mantención de los requisitos necesarios para materializar la compra de su Departamento, poseer
+                        capacidad financiera suficiente para su adquisición y/o cumplir de modo adecuado las exigencias
+                        para
+                        acceder a créditos comerciales, de cualquier naturaleza, que permitan financiar la compra
+                        ofrecida.
+                    </p>
+                    <p>Una vez iniciado el proceso de Escrituración deberá pagar los Gastos Operacionales al banco o
+                        institución
+                        que financiará la adquisición de su departamento.</p>
+                    <p>En señal de aceptación y conocimiento de la información contenida en la presente, agradeceremos a
+                        usted
+                        firmar este documento en dos ejemplares, quedando uno en su poder y otro en su carpeta.</p>
+                </div>
+            </div>
+        </div>
+        <hr class="my-0">
+    </div>
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="font-style: italic; font-size: 14px;">
+            Gracias por su preferencia. Para consultas, contáctenos a <a href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
+        </p>
+    </div>
+</div>
+<!-- /Invoice -->
+</body>
+</html>

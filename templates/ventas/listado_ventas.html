@@ -65,7 +65,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{% url 'editar_etapas' venta.id_venta %}">Editar Etapas</a>
                             <a class="dropdown-item" href="{% url 'informe_pagos' venta.id_venta %}">Informe Pagos</a>
-                            <a class="dropdown-item" href="#">Carta CN</a>
+                            <a class="dropdown-item" href="{% url 'ccn' venta.id_venta %}">Carta CN</a>
                             <a class="dropdown-item" href="#">Carta Oferta</a>
                             <a class="dropdown-item" href="{% url 'fpm_venta' venta.id_venta %}">Carta FPM</a>
                             <a class="dropdown-item" href="{% url 'entrega_docven' venta.id_venta %}">Memo Doc</a>

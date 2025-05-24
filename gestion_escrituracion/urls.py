@@ -15,5 +15,7 @@ urlpatterns = [
     path('entrega_docven/<int:id_venta>/', login_required(entrega_documentos_venta), name='entrega_docven'),
     path('entrega_docven_print/<int:id_venta>/', login_required(EntregaDocumentoPdf.as_view()),
          name='entrega_docven_print'),
+    path('ccn/<int:id_venta>/', login_required(carta_cierre_negocios_venta), name='ccn'),
+    path('ccn_print/<int:id_venta>/', login_required(CierreNegociopdf.as_view()), name='ccn_print'),
 
 ]
