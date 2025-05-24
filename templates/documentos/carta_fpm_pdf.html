@@ -1,0 +1,142 @@
+{% load format_utils %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% for venta in datos_venta %}
+    <title>FPM - {{ venta.id_cliente}} - {{ venta.id_cliente.nombres_1 }}
+        {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</title>
+    {% endfor%}
+    <style>
+        .contenido {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11px;
+            text-align: justify;
+            margin: 0 auto;
+            max-width: 1200px; /* ajusta el ancho según tus necesidades */
+            padding: 20px;
+        }
+        .contenido p {
+            margin-bottom: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div>
+    <div>
+        <div>
+            <img src="{{ icon }}" width="150" height="75">
+        </div>
+        <br>
+    </div>
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row invoice-preview">
+            <!-- Invoice -->
+            <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
+                <div class="card invoice-preview-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column">
+                            <div class="mb-xl-0 pb-3">
+                                <div class="d-flex svg-illustration align-items-center gap-2 mb-4">
+                                    {% for venta in datos_venta %}
+                                    <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br>{{ venta.id_propiedad.condominio.nombre_condominio }} {{ venta.id_propiedad.etapa.nombre_etapa }}</span>
+                                    {% endfor%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-wrap">
+                            <div class="contenido">
+                                <!-- Encabezado carta -->
+                                <p style="text-align: center">Lugar y fecha de la carta</p>
+                                {% for venta in datos_venta %}
+                                <p>Estimado(a): {{ venta.id_cliente.nombres_1 }}
+                                    {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}
+                                    {% endfor%}
+                                    <br>
+                                    <br>
+                                    Junto con saludar y según lo informado en el Cierre de Negocios firmado
+                                    por usted
+                                    al momento de promesar su departamento, Ud. debe cancelar por concepto
+                                    de “Fondo
+                                    de puesta en Marcha” un valor de {{ datos_venta.0.id_propiedad.fpm|clp_format }} Dicho monto se debe pagar
+                                    antes de la
+                                    entrega y está definido según la ley N° 19.537 de Copropiedad
+                                    Inmobiliaria
+                                    referida en Reglamento de Copropiedad.<br>
+                                    <br>
+                                    Reglamento de Copropiedad indica:<br>
+                                    ARTÍCULO VIGÉSIMO PRIMERO: Sin perjuicio de los pagos a que se refieren
+                                    los
+                                    artículos anteriores, los propietarios erogarán a prorrata de sus
+                                    cuotas, los
+                                    dineros necesarios para la formación de los siguientes fondos:<br>
+                                    <br>
+                                    A) "Fondo Común de Reserva", que se integrará según se establece en el
+                                    artículo
+                                    tercero transitorio del presente reglamento y servirá para atender las
+                                    reparaciones de los bienes de dominio común o a gastos comunes urgentes
+                                    o
+                                    imprevistos, el que se formará e incrementará con el porcentaje de
+                                    recargo sobre
+                                    los gastos comunes que en sesión extraordinaria fije la asamblea de
+                                    copropietarios, con el producto de las multas e intereses que deben
+                                    pagar los
+                                    copropietarios. Los recursos de este fondo se mantendrán en depósito en
+                                    una
+                                    cuenta corriente bancaria o en una cuenta de ahorro, o se invertirán en
+                                    instrumentos financieros que operen en el mercado de capitales, previo
+                                    acuerdo
+                                    del Comité de Administración.<br>
+                                    <br>
+                                    B) “Fondo de Puesta en Marcha”, que se integrará según se establece en el
+                                    artículo tercero transitorio del presente reglamento y servirá para
+                                    atender los
+                                    gastos iniciales de habilitación y puesta en marcha de la Comunidad,
+                                    tales como
+                                    alhajamiento del hall de acceso, compra de activos básicos y capital de
+                                    trabajo.
+                                    Este aporte, corresponderá y deberá ser pagado por el primer adquirente
+                                    de la
+                                    Unidad respectiva.<br>
+                                    <br>
+                                    ARTÍCULO TERCERO TRANSITORIO: Mientras la asamblea de copropietarios de
+                                    la
+                                    Comunidad, en sesión extraordinaria, no determine el porcentaje de
+                                    recargo sobre
+                                    los gastos comunes para el fondo de reserva establecido en el artículo
+                                    vigésimo
+                                    tercero del presente Reglamento, dicho porcentaje se fija en el
+                                    equivalente al
+                                    10 % por ciento del total de los gastos comunes que mensualmente
+                                    corresponda.
+                                    <br>
+                                    <br>
+                                    Respecto del Fondo de Puesta en Marcha, este se constituirá mediante el
+                                    aporte
+                                    por parte del adquirente de la unidad equivalente a 2 gastos comunes
+                                    mensuales
+                                    del edificio.
+                                    <br>
+                                    <br>
+                                    Agradeceré tener contemplado este pago en el momento indicado.
+                                    <br></br>
+                                    Atenta a sus consultas,<br>Marta Olivares Castro.<br>Subgerente de Ventas y OO.PP.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Invoice -->
+        </div>
+    </div>
+</div>
+<!-- /Invoice -->
+</body>
+</html>

@@ -236,3 +236,64 @@ class PagosInvoicePdf(View):
             print("❌ Error generando PDF:", e)
             messages.error(request, "Ocurrió un error al generar el PDF.")
             return redirect('lista_ventas')
+
+def fpm_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
+
+    datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    context = {
+        'id_venta': id_venta,
+        'datos_venta': datos_venta,
+        **site.each_context(request),
+    }
+
+    return render(request, 'documentos/carta_fpm.html', context)
+
+
+class Fpm_VentaPdf(View):
+    # datos = Pago.objects.filter(id_venta=id_venta)
+    # datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_URL  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise RuntimeError(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            datos = Pagos.objects.filter(id_venta=self.kwargs['id_venta'])
+            datos_venta = Venta.objects.filter(id_venta=self.kwargs['id_venta'])
+
+            template = get_template('documentos/carta_fpm_pdf.html')
+            context = {'datos': datos, 'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
+                       'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            # create a pdf
+            pisa_status = pisa.CreatePDF(
+                html, dest=response,
+                link_callback=self.link_callback)
+            return response
+        except:
+            pass
+        return redirect('lista_ventas')
