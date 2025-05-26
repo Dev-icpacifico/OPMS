@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'gestion_recuperacion',
     'gestion_escrituracion',
     'gestion_postventa',
+    'gestion_empresa',
 ]
 
 MIDDLEWARE = [

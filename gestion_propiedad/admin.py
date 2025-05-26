@@ -13,9 +13,9 @@ class EtapaInline(admin.TabularInline):
 
 @admin.register(Condominio)
 class CondominioAdmin(admin.ModelAdmin):
-    list_display = ('id_condominio', 'nombre_condominio', 'alias_condominio', 'direccion_proyecto', 'fecha_venta_condominio', 'estado_condominio')
-    search_fields = ('nombre_condominio', 'alias_condominio', 'direccion_proyecto')
-    list_filter = ('estado_condominio',)
+    list_display = ('id_condominio', 'empresa_vende','nombre_condominio', 'alias_condominio', 'direccion_proyecto', 'fecha_venta_condominio', 'estado_condominio')
+    search_fields = ('nombre_condominio', 'alias_condominio', 'direccion_proyecto','empresa_vende')
+    list_filter = ('estado_condominio','empresa_vende')
     ordering = ('id_condominio',)
     inlines = [EtapaInline]
 

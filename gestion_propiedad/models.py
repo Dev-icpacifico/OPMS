@@ -1,4 +1,6 @@
 from django.db import models
+
+from gestion_empresa.models import Empresa
 from utils_project.choices import *
 from django.core.exceptions import ValidationError
 
@@ -15,7 +17,9 @@ class Condominio(models.Model):
     alias_condominio = models.CharField(verbose_name="Alias Condominio", max_length=50)
     fecha_venta_condominio = models.DateField(verbose_name="Fecha Venta Condominio", null=True, blank=True)
     direccion_proyecto = models.CharField(verbose_name="Dirección", max_length=100)
+    empresa_vende = models.ForeignKey(Empresa, on_delete=models.CASCADE, verbose_name="Empresa", null=True, blank=True)
     estado_condominio = models.CharField(verbose_name="Estado",max_length=30, choices=IS_DISPONIBLE_CHOICES, default=IS_DISPONIBLE_CHOICES[0][0])
+
 
     # vivienda_social = models.CharField(verbose_name="Estado",max_length=30, choices=SI_NO_CHOICES, default=no)
 
