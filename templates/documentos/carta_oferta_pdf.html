@@ -46,41 +46,42 @@
                     <p style="text-align: center"><strong style="font-size: x-large">Carta Oferta</strong>
                         <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
                     <!-- Información Carta Oferta-->
+                    {% for venta in datos_venta %}
                     <table class="tabla1">
                         <tr>
                         </tr>
                         <tbody>
                         <tr>
                             <td colspan="3">Nombre Titular</td>
-                            <td colspan="3">Luis Pizarro</td>
+                            <td colspan="3">{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Rut Titular</td>
-                            <td colspan="3">19.257.284-3</td>
+                            <td colspan="3">{{ venta.id_cliente.rut_cliente }}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Proyecto</td>
-                            <td colspan="3">Condominio Distrito verde EI</td>
+                            <td colspan="3">{{ venta.id_propiedad.condominio.nombre_condominio}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Etapa</td>
-                            <td colspan="3">-</td>
+                            <td colspan="3">{{ venta.id_propiedad.etapa.nombre_etapa }}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Dirección Inmueble</td>
-                            <td colspan="3">Rue Emilio Apey 409, La Serena</td>
+                            <td colspan="3">{{venta.id_propiedad.condominio.direccion_proyecto}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Razón Social Inmobiliaria</td>
-                            <td colspan="3">Inmobiliaria Costanera Pacífico SpA</td>
+                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.razon_social}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">RUT</td>
-                            <td colspan="3">76.715.233-7</td>
+                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.rut_empresa}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Banco Alzante</td>
-                            <td colspan="3">Banco Security</td>
+                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.banco_alzante}}</td>
                         </tr>
                         <tr>
                             <td colspan="6">De no haber Banco Acreedor informar donde se debe efecturar el
@@ -90,37 +91,37 @@
                         </tr>
                         <tr>
                             <td>N° Depto o Casa</td>
-                            <td><strong>303</strong></td>
+                            <td><strong>{{venta.id_propiedad.numero_propiedad}}</strong></td>
                             <td>UF Depto o Casa</td>
-                            <td><strong>2.500.0UF</strong></td>
+                            <td><strong>{{venta.id_propiedad.valor_final_propiedad}}</strong></td>
                             <td>ROL Depto o Casa</td>
-                            <td>1234-1233</td>
+                            <td>{{venta.id_propiedad.rol}}</td>
                         </tr>
                         <tr>
                             <td>N° Estacionamiento</td>
-                            <td><strong>28</strong></td>
+                            <td><strong>{{venta.id_propiedad.estacionamiento}}</strong></td>
                             <td>UF Estacionamiento</td>
-                            <td><strong>150.0UF</strong></td>
+                            <td><strong>{{venta.id_propiedad.estacionamiento}}</strong></td>
                             <td>Rol Estacionamiento</td>
-                            <td>5858-8596</td>
+                            <td><strong>{{venta.id_propiedad.estacionamiento}}</strong></td>
                         </tr>
                         <tr>
                             <td>N° Bodega</td>
-                            <td><strong>01</strong></td>
+                            <td><strong>{{venta.id_propiedad.bodega}}</strong></td>
                             <td>UF Bodega</td>
-                            <td><strong>150.0UF</strong></td>
+                            <td><strong>{{venta.id_propiedad.bodega}}</strong></td>
                             <td>Rol Bodega</td>
-                            <td>6956-8574</td>
+                            <td><strong>{{venta.id_propiedad.bodega}}</strong></td>
                         </tr>
                         <tr>
                             <td colspan="3"  style="background-color: #f0f0f0;">Precio Venta</td>
-                            <td style="background-color: #f0f0f0;"><strong>2.800.0UF</strong></td>
+                            <td><strong>{{venta.id_propiedad.valor_final_propiedad}}</strong></td>
                             <td> - </td>
                             <td> - </td>
                         </tr>
                         <tr>
                             <td >Precio Venta</td>
-                            <td>2.800.0UF</td>
+                            <td><strong>{{venta.id_propiedad.valor_final_propiedad}}</strong></td>
                             <td>Recursos Propios (Pie)</td>
                             <td>100.0UF</td>
                             <td>Subsidio</td>
@@ -136,11 +137,11 @@
                         </tr>
                         <tr>
                             <td colspan="3">Quien cancela los Gastos Operacionales</td>
-                            <td colspan="3">Luis Pizarro</td>
+                            <td colspan="3">{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</td>
                         </tr>
                         <tr>
                             <td colspan="3">En que notaria firma escritura</td>
-                            <td colspan="3">Luis Pizarro</td>
+                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.notaria}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Observaciones</td>
@@ -149,6 +150,7 @@
 
                         </tbody>
                     </table>
+                    {% endfor %}
                 </div>
             </div>
         </div>
