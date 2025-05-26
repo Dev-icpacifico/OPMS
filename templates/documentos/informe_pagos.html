@@ -38,8 +38,14 @@
                             <div>
                                 <img src="{% static 'assets/img/illustrations/logo-horizontal.gif' %}" class="logo-mini"
                                      alt="logo">
-                                <h5 class="mt-2 mb-0">Inmobiliaria Costanera Pacífico</h5>
-                                <small class="text-muted">Arqueo Contable</small>
+
+                            </div>
+                            <div><h5 class="mt-2 mb-0">Inmobiliaria Costanera Pacífico</h5>
+                                <p style="text-align: center"><strong style="font-size: x-large">Informe de
+                                    Pagos</strong> <br>La
+                                    Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
+                                <p style="text-align: center"><strong style="font-size: x-large">Arqueo
+                                    Contable</strong></p>
                             </div>
                             <div>
                                 <p class="mb-1">
@@ -84,12 +90,13 @@
                                     </tr>
                                 {% endfor %}
                                 <tr>
-                                    <td>{{ total_pagado|clp_format }}</td>
-                                    <td style="text-align: center;">
-                                        {{ total_pagado_uf|uf_format }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        <strong>{{ total_pagado|clp_format }}</strong></td>
+                                    <td>
+                                        <strong>{{ total_pagado_uf|uf_format }}</strong></td>
+                                    <td><strong>Total</strong></td>
+                                    <td>-</td>
+                                    <td>-</td>
                                 </tr>
 
                                 </tbody>

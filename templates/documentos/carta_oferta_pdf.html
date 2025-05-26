@@ -20,6 +20,7 @@
             border: 1px solid #ddd;
             padding: 2px;
             text-align: center; /* Esto centrará el contenido */
+            font-size: large;
         }
 
         .tabla1 th {
@@ -41,25 +42,12 @@
                     </div>
                     <br>
                 </div>
-
                 <div>
-                    <p>Estimado Gonzalo, según referencia le hago entrega de los
-                        siguientes documentos:
-
-                        {% for venta in datos_venta %}
-                            <br>
-                            Sr(a):{{ datos_venta.0.id_cliente.nombres_1 }}
-                            {{ datos_venta.0.id_cliente.apellidos_1 }}
-                            - {{ datos_venta.0.id_cliente.rut_cliente }}
-                            Depto: {{ datos_venta.0.id_propiedad.numero_propiedad }}</p>
-                        {% endfor %}
-                    <div>
-                        <h3>Información Carta Oferta</h3>
-                    </div>
+                    <p style="text-align: center"><strong style="font-size: x-large">Carta Oferta</strong>
+                        <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
                     <!-- Información Carta Oferta-->
                     <table class="tabla1">
                         <tr>
-                            
                         </tr>
                         <tbody>
                         <tr>
@@ -101,52 +89,50 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="1">Banco a Depositar</td>
-                            <td colspan="2">Banco Feliz</td>
-                            <td>Cta Corriente</td>
-                            <td colspan="2">123-1234-5858-8</td>
-                        </tr>
-                        <tr>
                             <td>N° Depto o Casa</td>
-                            <td>303</td>
+                            <td><strong>303</strong></td>
                             <td>UF Depto o Casa</td>
-                            <td>2578.0UF</td>
+                            <td><strong>2.500.0UF</strong></td>
                             <td>ROL Depto o Casa</td>
                             <td>1234-1233</td>
                         </tr>
                         <tr>
                             <td>N° Estacionamiento</td>
-                            <td>28</td>
+                            <td><strong>28</strong></td>
                             <td>UF Estacionamiento</td>
-                            <td>150.0UF</td>
+                            <td><strong>150.0UF</strong></td>
                             <td>Rol Estacionamiento</td>
                             <td>5858-8596</td>
                         </tr>
                         <tr>
                             <td>N° Bodega</td>
-                            <td>01</td>
+                            <td><strong>01</strong></td>
                             <td>UF Bodega</td>
-                            <td>150.0UF</td>
+                            <td><strong>150.0UF</strong></td>
                             <td>Rol Bodega</td>
                             <td>6956-8574</td>
                         </tr>
                         <tr>
-                            <td>Precio Venta</td>
-                            <td>2.500.0UF</td>
+                            <td colspan="3"  style="background-color: #f0f0f0;">Precio Venta</td>
+                            <td style="background-color: #f0f0f0;"><strong>2.800.0UF</strong></td>
+                            <td> - </td>
+                            <td> - </td>
+                        </tr>
+                        <tr>
+                            <td >Precio Venta</td>
+                            <td>2.800.0UF</td>
                             <td>Recursos Propios (Pie)</td>
                             <td>100.0UF</td>
                             <td>Subsidio</td>
                             <td>0.0UF</td>
                         </tr>
                         <tr>
-                            <td colspan="2"><strong>Ahorro Previo</strong></td>
+                            <td>Ahorro Previo</td>
                             <td>0.0UF</td>
-                            <td colspan="2"><strong>Monto Credito</strong></td>
+                            <td>Monto Credito</td>
                             <td>0.0UF</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"><strong>Vivienda Social</strong></td>
-                            <td colspan="3">No</td>
+                            <td>Vivienda Social</td>
+                            <td>No</td>
                         </tr>
                         <tr>
                             <td colspan="3">Quien cancela los Gastos Operacionales</td>
@@ -163,10 +149,6 @@
 
                         </tbody>
                     </table>
-                    <!-- Fin Detalle Pie-->
-                    <p>Atte.,</p>
-                    <p>Marta Olivares Castro.</p>
-                    <p>Subgerente de Ventas y OO.PP.</p>
                 </div>
             </div>
         </div>

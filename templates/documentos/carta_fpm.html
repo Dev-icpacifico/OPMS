@@ -40,7 +40,8 @@
                         <div class="d-flex justify-content-between flex-wrap">
                             <div class="contenido">
                                 <!-- Encabezado carta -->
-                                <p style="text-align: center">Lugar y fecha de la carta</p>
+                                <p style="text-align: center"><strong style="font-size: x-large">Carta Fondo Puesta en
+                                    Marcha</strong> <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
                                 {% for venta in datos_venta %}
                                     <p>
                                         Estimado(a):{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</p>

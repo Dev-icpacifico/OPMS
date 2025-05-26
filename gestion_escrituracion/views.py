@@ -1,7 +1,6 @@
 # Create your views here.
 import os
 from unittest.mock import right
-
 from django.views.generic import TemplateView
 from django.views import View
 from django.shortcuts import render, get_object_or_404, redirect
@@ -14,6 +13,9 @@ from .models import Venta, VentaEtapa, CampoEtapa, ValoresEtapa
 from gestion_contable.models import Pagos, ValorUf
 from django.template.loader import get_template
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
+from datetime import datetime
+
+fecha_hoy = datetime.now()
 
 
 class ListaVentasView(TemplateView):
@@ -134,6 +136,7 @@ def informe_pagos_venta(request, id_venta):
         'saldo_pie': saldo_pie,
         'pie_cancelado': total_detalle_pie,
         'valores_uf_por_pago': valores_uf_por_pago,
+        'fecha_hoy': fecha_hoy,
         **site.each_context(request),
     }
     print(total_pagado)
@@ -219,6 +222,7 @@ class PagosInvoicePdf(View):
                 'saldo_pie': saldo_pie,
                 'pie_cancelado': total_detalle_pie,
                 'valores_uf_por_pago': valores_uf_por_pago,
+                'fecha_hoy': fecha_hoy,
                 'icon': 'static/assets/img/illustrations/logo-horizontal.gif',
             }
 
@@ -245,6 +249,7 @@ def fpm_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
     context = {
         'id_venta': id_venta,
         'datos_venta': datos_venta,
+        'fecha_hoy': fecha_hoy,
         **site.each_context(request),
     }
 
@@ -283,9 +288,9 @@ class Fpm_VentaPdf(View):
         try:
             datos = Pagos.objects.filter(id_venta=self.kwargs['id_venta'])
             datos_venta = Venta.objects.filter(id_venta=self.kwargs['id_venta'])
-
             template = get_template('documentos/carta_fpm_pdf.html')
             context = {'datos': datos, 'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
+                       'fecha_hoy': fecha_hoy,
                        'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')
@@ -308,6 +313,7 @@ def entrega_documentos_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR U
         'datos': datos,
         'id_venta': id_venta,
         'datos_venta': datos_venta,
+        'fecha_hoy': fecha_hoy,
         **site.each_context(request),
     }
 
@@ -349,6 +355,7 @@ class EntregaDocumentoPdf(View):
 
             template = get_template('documentos/memo_entrega_documentos_pdf.html')
             context = {'datos': datos, 'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
+                       'fecha_hoy': fecha_hoy,
                        'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')
@@ -383,6 +390,7 @@ def carta_cierre_negocios_venta(request, id_venta):  # ESTA VISTA ES PARA GENERA
         'datos_venta': datos_venta,
         'datos': datos,
         'valores_uf_por_pago': valores_uf_por_pago,
+        'fecha_hoy': fecha_hoy,
         **site.each_context(request),
     }
 
@@ -440,6 +448,7 @@ class CierreNegociopdf(View):
                 'datos_venta': datos_venta,
                 'datos': datos,
                 'valores_uf_por_pago': valores_uf_por_pago,
+                'fecha_hoy': fecha_hoy,
                 'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
 
             html = template.render(context)
@@ -526,6 +535,7 @@ def carta_oferta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
         'datos': datos,
         'id_venta': id_venta,
         'datos_venta': datos_venta,
+        'fecha_hoy': fecha_hoy,
         **site.each_context(request),
     }
 
@@ -567,6 +577,7 @@ class CartaOfertaPdf(View):
 
             template = get_template('documentos/carta_oferta_pdf.html')
             context = {'datos': datos, 'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
+                       'fecha_hoy': fecha_hoy,
                        'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')

@@ -44,12 +44,12 @@
 
                 <div>
                     <!-- Encabezado carta -->
-                    <p>Estimado (a),
+                    <p style="font-size: large">Estimado (a),
                         <br>{{ datos_venta.0.id_cliente.nombres_1 }}
                         {{ datos_venta.0.id_cliente.apellidos_1 }}
                         - {{ datos_venta.0.id_cliente.rut_cliente }}:
                     </p>
-                    <p>Presente:
+                    <p style="font-size: large">Presente:
                         <br>Junto con saludar, Inmobiliaria Costanera Pacifico S.P.A, tiene el agrado de
                         saludarle y hacer entrega de Escritura de Compra Venta, debidamente inscrita en
                         Conservador de Bienes Raíces La Serena Sr. Jaime Morande Miranda, certificado de
@@ -71,27 +71,30 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for dato in datos %}
-                                <tr>
-                                    {% if dato.id_categoria_pago.id_categoria_pago == 2 %}
-                                        <td>{{ dato.id_banco }}</td>
-                                        <td>{{ dato.id_forma_pago.nombre_forma_pago }}</td>
-                                        <td>{{ dato.num_documento }}</td>
-                                        <td>{{ dato.fecha_real_pago }}</td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
+                            <tr>
+                                <td>$0.-</td>
+                                <td>Estudio de titulo y confección de escritura</td>
+                                <td>-</td>
+                                <td>$0.-</td>
+                            </tr>
+                            <tr>
+                                <td>$0.-</td>
+                                <td>Inscripcción CBR</td>
+                                <td>-</td>
+                                <td>$0.-</td>
+                            </tr>
+
                             <tr>
                                 <td>Total</td>
                                 <td style="text-align: center;"> -</td>
                                 <td> -</td>
-                                <td>$Monto</td>
+                                <td>$0.-</td>
                             </tr>
                             <tr>
                                 <td>Saldo a Reembolsar</td>
                                 <td style="text-align: center;"> -</td>
                                 <td> -</td>
-                                <td>$Monto</td>
+                                <td>$0.-</td>
                             </tr>
                             </tbody>
                         </table>
@@ -113,11 +116,11 @@
                         </table>
                     {% endif %}
                     <!-- Fin Memo ggoo-->
-                    <p>Este saldo será reeembolsado en su cuenta corriente
+                    <p style="font-size: large">Este saldo será reeembolsado en su cuenta corriente
                         <br> Agradeciendo su elección se despide cordialmente </p>
-                    <p>Atte.,</p>
-                    <p>Marta Olivares Castro.</p>
-                    <p>Subgerente de Ventas y OO.PP.</p>
+                    <p style="font-size: large">Atte.,</p>
+                    <p style="font-size: large">Marta Olivares Castro.</p>
+                    <p style="font-size: large">Subgerente de Ventas y OO.PP.</p>
                 </div>
             </div>
         </div>

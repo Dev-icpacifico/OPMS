@@ -44,14 +44,14 @@
 
                 <div>
                     <!-- Encabezado carta -->
-                    <p>A: Gonzalo Valdes, Depto de Contabilidad
+                    <p style="font-size: large">A: Gonzalo Valdes, Depto de Contabilidad
                         <br>De: Marta Olivares Castro
                         <br>Ref: Entrega
                         documentos, {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}
-                        <br>Fecha: - </p>
+                        <br>Fecha: {{ fecha_hoy|date:"d-M-Y" }} </p>
                     <!-- Fin Encabezado carta -->
-                    
-                    <p>Estimado Gonzalo, según referencia le hago entrega de los
+
+                    <p style="font-size: large">Estimado Gonzalo, según referencia le hago entrega de los
                         siguientes documentos:
 
                         {% for venta in datos_venta %}
@@ -79,12 +79,20 @@
                             <tbody>
                             {% for dato in datos %}
                                 <tr>
+                                    {% if dato.id_categoria_pago.id_categoria_pago == 1 %}
+                                        <td>{{ dato.id_banco }}</td>
+                                        <td>{{ dato.id_forma_pago.nombre_forma_pago }}</td>
+                                        <td>{{ dato.num_documento }}</td>
+                                        <td>{{ dato.fecha_real_pago }}</td>
+                                        <td>{{ dato.monto_pago|clp_format }}</td>
+                                        <td>-</td>
+                                    {% endif %}
                                     {% if dato.id_categoria_pago.id_categoria_pago == 2 %}
                                         <td>{{ dato.id_banco }}</td>
                                         <td>{{ dato.id_forma_pago.nombre_forma_pago }}</td>
                                         <td>{{ dato.num_documento }}</td>
                                         <td>{{ dato.fecha_real_pago }}</td>
-                                        <td>{{ dato.uf_pago|uf_format }}</td>
+                                        <td>-</td>
                                         <td>{{ dato.monto_pago|clp_format }}</td>
                                     {% endif %}
                                 </tr>
@@ -119,11 +127,6 @@
             </div>
         </div>
         <hr class="my-0">
-    </div>
-    <div style="margin-top: 20px; text-align: center;">
-        <p style="font-style: italic; font-size: 14px;">
-            Gracias por su preferencia. Para consultas, contáctenos a <a href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
-        </p>
     </div>
 </div>
 <!-- /Invoice -->

@@ -45,44 +45,10 @@
                     </div>
                     <br>
                 </div>
-
-                <div>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>
-                            </th>
-                            <th>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <td>
-                            <tr>
-                        <td>Inmobiliaria Costanera Pacífico</td>
-                        <td>Venta Nro: {{ id_venta }}</td>
-                        </tr>
-                        <tr>
-                            <td>Dirección: Rue Emilio Apey #405</td>
-                            <td>Fecha de venta: 04 de marzo 2024</td>
-                        </tr>
-                        <tr>
-                            <td>RUT: 77.753.258-6</td>
-                            <td>Fecha Emisión: 04 de marzo 2024</td>
-                        </tr>
-                        <tr>
-                            <td>Ejecutivo(a): Elba Lazo</td>
-                        </tr>
-                        <tr>
-                            <td>Jefe de Operaciones:Sara Araya Bugueño</td>
-                            <!-- Invoice<td>Asistente de Operaciones:Andrea Moya Moya</td> -->
-                        </tr>
-                        </td>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
+        <p style="text-align: center"><strong style="font-size: x-large">Informe de Pagos</strong> <br>La
+            Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
         <hr class="my-0">
         <div>
             <div>
@@ -98,8 +64,6 @@
 
                                 <p class="mb-1">N° Departamento: {{ venta.id_propiedad.numero_propiedad }}</p>
                                 <p class="mb-1">Mdelo: A (2H-2B)</p>
-                                <p class="mb-1">N° Torre: {{ venta.id_propiedad.torre.nombre_torre }}</p>
-                                <p class="mb-1">Piso: {{ venta.id_propiedad.piso }}</p>
                             {% endfor %}
 
                         </td>
@@ -109,8 +73,6 @@
                                 <p class="mb-1">
                                     Nombre: {{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }}</p>
                                 <p class="mb-1">Rut: {{ venta.id_cliente.rut_cliente }}</p>
-                                <p class="mb-1">Correo: {{ venta.id_cliente.correo }}</p>
-                                <p class="mb-1">Teléfono: (+56) {{ venta.id_cliente.telefono }}</p>
                             {% endfor %}
                         </td>
                         </tbody>
@@ -157,11 +119,11 @@
                         </tr>
                     {% endfor %}
                     <tr>
-                       <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
-                           {{ total_pagado|clp_format }}</td>
                         <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
-                            {{ total_pagado_uf|uf_format }}</td>
-                        <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">-</td>
+                            <strong>{{ total_pagado|clp_format }}</strong></td>
+                        <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">
+                            <strong>{{ total_pagado_uf|uf_format }}</strong></td>
+                        <td style="text-align: center; padding: 2px 4px; font-size: 8pt;"><strong>Total</strong></td>
                         <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">-</td>
                         <td style="text-align: center; padding: 2px 4px; font-size: 8pt;">-</td>
                     </tr>
@@ -277,31 +239,43 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Valor Depto.</td>
+                        <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Valor Depto.
+                        </td>
                         <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ valor_inicial_propiedad|uf_format }}</td>
                         <tr>
-                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Abono Inmobiliario</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Abono
+                                Inmobiliario
+                            </td>
                             <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ bono_pie|uf_format }}</td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Pie Cancelado</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Pie
+                                Cancelado
+                            </td>
                             <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ pie_cancelado|uf_format }}</td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Saldo Pie</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Saldo Pie
+                            </td>
                             <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ saldo_pie|uf_format }}</td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Crédito Hipotecario</td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Crédito
+                                Hipotecario
+                            </td>
                             <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">{{ credito_hipotecario|uf_format }}</td>
                         </tr>
                         <tr>
                             <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Total</td>
-                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;"><strong>{{ total|uf_format }}</strong></td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">
+                                <strong>{{ total|uf_format }}</strong></td>
                         </tr>
                         <tr>
-                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Valor Final Inmobiliaria</td>
-                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;"><strong>{{ precio_final|uf_format }}</strong></td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">Valor Final
+                                Inmobiliaria
+                            </td>
+                            <td style="text-align: center; padding: 2px; line-height: 1.1; font-size: 8pt;">
+                                <strong>{{ precio_final|uf_format }}</strong></td>
                         </tr>
                         </tbody>
                     </table>

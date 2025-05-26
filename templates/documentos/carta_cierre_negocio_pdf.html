@@ -43,30 +43,19 @@
                 </div>
 
                 <div>
-                    <!-- Titulo -->
-                    <table>
-                        <thead>
-                        <tr>
-                            <th><!-- La columna no tiene titulo --></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <td>
-                            <tr>
-                        <td style="text-align: center">Inmobiliaria Costanera Pacífico</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: center">{{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}</td>
-                        </tr>
-                        </td>
-                        </tbody>
-                    </table>
+                    <div class="d-flex svg-illustration align-items-center gap-2 mb-4">
+                        {% for venta in datos_venta %}
+                            <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br>{{ venta.id_propiedad.condominio.nombre_condominio }} {{ venta.id_propiedad.etapa.nombre_etapa }}</span>
+                        {% endfor %}
+                    </div>
+                    <p style="text-align: center"><strong style="font-size: x-large">Carta Cierre de Negocio</strong>
+                        <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
+
                     <!-- Fin Titulo -->
 
                     <!-- Encabezado carta -->
                     {% for venta in datos_venta %}
-                        <p>Fecha de la carta</p>
-                        <p>
+                        <p style="font-size: large">
                             Señor(a): {{ datos_venta.0.id_cliente.nombres_1 }} {{ datos_venta.0.id_cliente.apellidos_1 }}
                             <br>
                             RUT: {{ datos_venta.0.id_cliente.rut_cliente }}</p>
@@ -74,7 +63,7 @@
                     <!-- Fin Encabezado carta -->
 
                     <!-- Saludo y datos depto carta -->
-                    <p>De nuestra consideración:
+                    <p style="font-size: large">De nuestra consideración:
                         <br>
                         Por la presentenos es grato saludarlo(a) y a la vez informarle las condiciones del cierre de
                         negocio:
@@ -232,31 +221,65 @@
                     {% endif %}
                     <!-- Fin Detalle Pie-->
                     <hr>
-                    <p>Los valores señalados en recuadro son referenciales y calculados a valor UF de hoy.
+                    <p style="font-size: large; text-align: justify">Los valores señalados en recuadro son referenciales
+                        y calculados a valor
+                        UF de hoy.
                         Los pagos se imputan contablemente según se indica en clausula número CUARTA de la Promesa de
                         Compraventa:
                     </p>
-                    <p>“ …. Las sumas entregadas por el Promitente Comprador, referidas en los literales a) referente a
-                        “reserva”,
-                        b) referente a “Pie” y c) referente a “saldo restante”, de la presente cláusula, se imputarán al
-                        precio total,
-                        tomándose como criterio de la mencionada imputación, las sumas convertidas a Unidades de Fomento
-                        según valor de ésta al momento del COBRO EFECTIVO de los documentos entregados por el Promitente
-                        Comprador.</p>
-                    <p>En concordancia con lo anterior, se le informa que será de su exclusiva responsabilidad el
-                        cumplimiento y
-                        mantención de los requisitos necesarios para materializar la compra de su Departamento, poseer
-                        capacidad financiera suficiente para su adquisición y/o cumplir de modo adecuado las exigencias
-                        para
-                        acceder a créditos comerciales, de cualquier naturaleza, que permitan financiar la compra
-                        ofrecida.
-                    </p>
-                    <p>Una vez iniciado el proceso de Escrituración deberá pagar los Gastos Operacionales al banco o
-                        institución
-                        que financiará la adquisición de su departamento.</p>
-                    <p>En señal de aceptación y conocimiento de la información contenida en la presente, agradeceremos a
-                        usted
-                        firmar este documento en dos ejemplares, quedando uno en su poder y otro en su carpeta.</p>
+                    <p style="font-size: large; text-align: justify">“... . Las sumas entregadas por el Promitente
+                        Comprador, referidas en
+                        los literales a) referente
+                        a
+                        “reserva”, b) referente a “Pie” y c) referente a “saldo restante”, de la presente cláusula, se
+                        imputarán al precio total, tomándose como criterio de la mencionada imputación, las sumas
+                        convertidas a Unidades de Fomento según valor de ésta al momento del COBRO EFECTIVO de los
+                        documentos entregados por el Promitente Comprador.</p>
+                    <p style="font-size: large; text-align: justify">En concordancia con lo anterior, se le informa que
+                    será de su exclusiva
+                    responsabilidad el
+                    cumplimiento y mantención de los requisitos necesarios para materializar la compra de su
+                    Departamento, poseer capacidad financiera suficiente para su adquisición y/o cumplir de modo
+                    adecuado las exigencias para acceder a créditos comerciales, de cualquier naturaleza, que
+                    permitan financiar la compra ofrecida.
+                </p>
+                    <p style="font-size: large; text-align: justify">Adicionalmente, se deberá abonar el Fondo de Puesta
+                        en Marcha (o de
+                        Explotación), el cual cubre
+                        los costos de operación necesarios para poner en funcionamiento el condominio y sus
+                        instalaciones. Este pago es único y se realiza en el momento de la compra del departamento. El
+                        monto es equivalente a dos meses de gastos comunes aproximadamente, pero no implica que haya
+                        pagado dos gastos comunes reales. Este fondo debe ser pagado a Inmobiliaria Costanera Pacífico
+                        III SpA antes de la firma de la escritura, y será transferido a la administración del condominio
+                        para su uso.</p>
+
+                    <p style="font-size: large; text-align: justify"><strong>Firma de la Escritura</strong>
+
+                        <br>La firma de la escritura debe llevarse a cabo exclusivamente en la ciudad de La Serena, ya
+                        que
+                        Inmobiliaria Costanera Pacífico III SpA no tiene representación en otras ciudades. Si no reside
+                        en La Serena, le solicitamos amablemente que organice su agenda para viajar y realizar la firma
+                        cuando llegue el momento. </p>
+                    <p style="font-size: large; text-align: justify"><strong>Entrega de la Propiedad
+                    </strong>
+
+                        <br>Inmobiliaria Costanera Pacífico III SpA no realiza pre-entregas ni permite visitas previas a
+                        la entrega formal de la propiedad, para garantizar que todas las instalaciones y detalles estén
+                        completamente listos antes de la recepción. Sin embargo, contamos con departamentos piloto
+                        idénticos al modelo adquirido, donde podrás conocer en detalle las características del inmueble.
+                        Es importante mencionar que los papeles murales con diseño presentados en algunas paredes de los
+                        departamentos piloto son solo decoración y no forman parte del equipamiento definitivo del
+                        departamento.
+                        La coordinación para la entrega se gestionará una vez firmada la escritura de compraventa y
+                        estará sujeta a la disponibilidad del calendario correspondiente.</p>
+                    <p style="font-size: large; text-align: justify"><strong>Aceptación de Condiciones</strong>
+
+                        <br>Como señal de aceptación y conocimiento de la información proporcionada en este documento,
+                        solicitamos su firma en dos ejemplares. Uno de ellos quedará en su poder y el otro será
+                        archivado en su carpeta correspondiente. </p>
+                    <p style="font-size: large">Atte.,</p>
+                    <p style="font-size: large">Marta Olivares Castro.</p>
+                    <p style="font-size: large">Subgerente de Ventas y OO.PP.</p>
                 </div>
             </div>
         </div>
