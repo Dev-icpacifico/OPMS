@@ -4,162 +4,146 @@
 {% load static %}
 
 {% block content %}
-<div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row invoice-preview">
-        <!-- Invoice -->
-        <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
-            <div class="card invoice-preview-card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column">
-                        <div class="mb-xl-0 pb-3">
-                            <div class="d-flex svg-illustration align-items-center gap-2 mb-4">
-                                <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br> Condominio Distrito Verde ETAPA XX</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between flex-wrap">
-                        <div>
-                            <!-- Invoice -->
-                            <div>
-                                <div>
-                                    <div>
-                                        <div>
-                                            <div>
-                                                <div>
-                                                    <!-- Encabezado carta -->
-                                                    <p>A: Gonzalo Valdes, Depto de Contabilidad</p>
-                                                    <p>De: Marta Olivares Castro</p>
-                                                    <p>Ref: Entrega documentos, Condominio Distrito Verde, Etapa
-                                                        XXXX</p>
-                                                    <p>Fecha: - </p>
-                                                    <!-- Fin Encabezado carta -->
-                                                    <hr>
-                                                    <p>Estimado Gonzalo, según referencia le hago entrega de los
-                                                        siguientes documentos:</p>
-
-                                                    {% for venta in datos_venta %}
-                                                    <p>Sr(a).{{ venta.id_cotizacion.id_cliente.nombre_cliente }} {{venta.id_cotizacion.id_cliente.apellido_paterno_cliente }}</p>
-                                                    <p>Depto {{ venta.id_cotizacion.id_vivienda.nombre_vivienda }}</p>
-                                                    {% endfor%}
-
-                                                    <!-- Saludo y datos depto carta -->
-                                                    <p>De nuestra consideración:</p>
-                                                    <p>Por la presentenos es grato saludarlo(a) y a la vez informarle
-                                                        las condiciones del cierre de
-                                                        negocio:</p>
-
-                                                    {% for venta in datos_venta %}
-                                                    <p>Departamento N°{{ venta.id_cotizacion.id_vivienda.nombre_vivienda }}, BODEGA N° {}, ESTACIONAMIENTO N° {}, por un
-                                                        valor de {{venta.id_cotizacion.id_vivienda.valor_vivienda }} UF.</p>
-                                                    <p>Condominio {}</p>
-                                                    {% endfor%}
-                                                    <!-- Saludo y datos depto carta -->
-                                                    <hr>
-                                                    <div>
-                                                        <h3>Detalle Pie</h3>
-                                                    </div>
-                                                    <!-- Detalle Pie-->
-                                                    {% if datos %}
-                                                    <table class="tabla1">
-                                                        <tr>
-                                                            <th>Banco</th>
-                                                            <th>Forma de pago</th>
-                                                            <th>N° DOcumento</th>
-                                                            <th>Fecha</th>
-                                                            <th>UF</th>
-                                                            <th>$</th>
-                                                        </tr>
-                                                        <tbody>
-                                                        {% for dato in datos %}
-                                                        <tr>
-                                                            <td style="text-align: center">{{dato.id_banco}}</td>
-                                                            <td style="text-align: center">{{dato.forma_pago}}</td>
-                                                            <td style="text-align: center">{{dato.numero_documento}}
-                                                            </td>
-                                                            <td style="text-align: center">{{dato.fecha_pago}}</td>
-                                                            <td style="text-align: center">{{dato.monto_pago}}</td>
-                                                        </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                    {% else %}
-                                                    <table class="table" style="min-height:200px">
-                                                        <thead class="table-light">
-                                                        <tr>
-                                                            <th>Banco</th>
-                                                            <th>Forma de pago</th>
-                                                            <th>N° DOcumento</th>
-                                                            <th>Fecha</th>
-                                                            <th>UF</th>
-                                                            <th>$</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody class="table-border-bottom-0">
-                                                        <tr>
-                                                            <td colspan='4' align='center'><span
-                                                                    class="border-info me-1"><i
-                                                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    {% endif%}
-                                                    <!-- Fin Detalle Pie-->
-
-                                                    <p>Atte.,</p>
-                                                    <p>Marta Olivares Castro.</p>
-                                                    <p>Subgerente de Ventas y OO.PP.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row invoice-preview">
+            <!-- Invoice -->
+            <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
+                <div class="card invoice-preview-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column">
+                            <div class="mb-xl-0 pb-3">
+                                <div class="d-flex svg-illustration align-items-center gap-2 mb-4">
+                                    <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br> Condominio Distrito Verde ETAPA XX</span>
                                 </div>
                             </div>
                         </div>
-                        <hr class="my-0">
                     </div>
-                    <div style="margin-top: 20px; text-align: center;">
-                        <p style="font-style: italic; font-size: 14px;">
-                            Gracias por su preferencia. Para consultas, contáctenos a <a
-                                href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
-                        </p>
+                    <hr class="my-0">
+                    <div class="card-body">
+                        <div>
+                            <div>
+                                <!-- Invoice -->
+
+                                <!-- Encabezado carta -->
+                                <p>A: Gonzalo Valdes, Depto de Contabilidad
+                                    <br>De: Marta Olivares Castro
+                                    <br>Ref: Entrega
+                                    documentos, {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}
+                                    <br>Fecha: - </p>
+                                <!-- Fin Encabezado carta -->
+                                <hr>
+                                <p>Estimado Gonzalo, según referencia le hago entrega de los
+                                    siguientes documentos:
+
+                                    {% for venta in datos_venta %}
+                                        <br>
+                                        Sr(a):{{ datos_venta.0.id_cliente.nombres_1 }}
+                                        {{ datos_venta.0.id_cliente.apellidos_1 }}
+                                        - {{ datos_venta.0.id_cliente.rut_cliente }}
+                                        Depto: {{ datos_venta.0.id_propiedad.numero_propiedad }}</p>
+                                    {% endfor %}
+                                <hr>
+                                <div>
+                                    <h3>Documentos</h3>
+                                </div>
+                                <!-- Documentos-->
+                                {% if datos %}
+                                    <table class="table table-sm table-bordered text-center align-middle">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th>Banco</th>
+                                            <th>Forma de pago</th>
+                                            <th>N° Documento</th>
+                                            <th>Fecha</th>
+                                            <th>Reserva</th>
+                                            <th>Pie</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for dato in datos %}
+                                            <tr>
+                                                {% if dato.id_categoria_pago.id_categoria_pago == 2 %}
+                                                    <td>{{ dato.id_banco }}</td>
+                                                    <td>{{ dato.id_forma_pago.nombre_forma_pago }}</td>
+                                                    <td>{{ dato.num_documento }}</td>
+                                                    <td>{{ dato.fecha_real_pago }}</td>
+                                                    <td>{{ dato.uf_pago|uf_format }}</td>
+                                                    <td>{{ dato.monto_pago|clp_format }}</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <table class="table" style="min-height:200px">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th>Banco</th>
+                                            <th>Forma de pago</th>
+                                            <th>N° DOcumento</th>
+                                            <th>Fecha</th>
+                                            <th>Reserva</th>
+                                            <th>Pie</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="table-border-bottom-0">
+                                        <tr>
+                                            <td colspan='4' align='center'><span
+                                                    class="border-info me-1"><i
+                                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                                <!-- Fin Detalle Pie-->
+
+                                <p>Atte.,</p>
+                                <p>Marta Olivares Castro.</p>
+                                <p>Subgerente de Ventas y OO.PP.</p>
+
+                            </div>
+                            <hr class="my-0">
+                        </div>
+                        <div style="margin-top: 20px; text-align: center;">
+                            <p style="font-style: italic; font-size: 14px;">
+                                Gracias por su preferencia. Para consultas, contáctenos a <a
+                                    href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
+                            </p>
+                        </div>
                     </div>
-                </div>
 
 
-                <hr class="my-0">
+                    <hr class="my-0">
 
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <span class="fw-medium">Note:</span>
-                            <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="fw-medium">Note:</span>
+                                <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
               projects. Thank You!</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- /Invoice -->
+            <!-- /Invoice -->
 
-        <!-- Invoice Actions -->
-        <div class="col-xl-3 col-md-4 col-12 invoice-actions">
-            <div class="card">
-                <div class="card-body">
-                    
-                    <a class="btn btn-info d-grid w-100 mb-3 waves-effect waves-light" target="_blank"
-                       href="{% url 'entrega_docven_print' id_venta=id_venta %}">
-                        DESCARGAR PDF
-                    </a>
+            <!-- Invoice Actions -->
+            <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                <div class="card">
+                    <div class="card-body">
+
+                        <a class="btn btn-info d-grid w-100 mb-3 waves-effect waves-light" target="_blank"
+                           href="{% url 'entrega_docven_print' id_venta=id_venta %}">
+                            DESCARGAR PDF
+                        </a>
+                    </div>
                 </div>
             </div>
+            <!-- /Invoice Actions -->
         </div>
-        <!-- /Invoice Actions -->
-    </div>
 
-    <!-- Offcanvas -->
-</div>
+        <!-- Offcanvas -->
+    </div>
 {% endblock %}

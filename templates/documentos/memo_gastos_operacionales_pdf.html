@@ -44,38 +44,32 @@
 
                 <div>
                     <!-- Encabezado carta -->
-                    <p>A: Gonzalo Valdes, Depto de Contabilidad
-                        <br>De: Marta Olivares Castro
-                        <br>Ref: Entrega
-                        documentos, {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}
-                        <br>Fecha: - </p>
-                    <!-- Fin Encabezado carta -->
-                    
-                    <p>Estimado Gonzalo, según referencia le hago entrega de los
-                        siguientes documentos:
-
-                        {% for venta in datos_venta %}
-                            <br>
-                            Sr(a):{{ datos_venta.0.id_cliente.nombres_1 }}
-                            {{ datos_venta.0.id_cliente.apellidos_1 }}
-                            - {{ datos_venta.0.id_cliente.rut_cliente }}
-                            Depto: {{ datos_venta.0.id_propiedad.numero_propiedad }}</p>
-                        {% endfor %}
-                    <hr>
+                    <p>Estimado (a),
+                        <br>{{ datos_venta.0.id_cliente.nombres_1 }}
+                        {{ datos_venta.0.id_cliente.apellidos_1 }}
+                        - {{ datos_venta.0.id_cliente.rut_cliente }}:
+                    </p>
+                    <p>Presente:
+                        <br>Junto con saludar, Inmobiliaria Costanera Pacifico S.P.A, tiene el agrado de
+                        saludarle y hacer entrega de Escritura de Compra Venta, debidamente inscrita en
+                        Conservador de Bienes Raíces La Serena Sr. Jaime Morande Miranda, certificado de
+                        Gravámenes y Prohibiciones, y Derecho de Uso y Goce de Estacionamiento y factura de
+                        venta del departamento.
+                    </p>
                     <div>
-                        <h3>Documentos</h3>
+                        <h3>Arqueo Fondo a rendir</h3>
                     </div>
-                    <!-- Detalle Pie-->
+                    <!-- Memo ggoo-->
                     {% if datos %}
                         <table class="tabla1">
+                            <thead class="table-light">
                             <tr>
-                                <th>Banco</th>
-                                <th>Forma de pago</th>
-                                <th>N° Documento</th>
-                                <th>Fecha</th>
-                                <th>Reserva</th>
-                                <th>Pie</th>
+                                <th>Ingreso Fondo a Rendir</th>
+                                <th>Egresos</th>
+                                <th>N° Boleta</th>
+                                <th>Monto</th>
                             </tr>
+                            </thead>
                             <tbody>
                             {% for dato in datos %}
                                 <tr>
@@ -84,22 +78,30 @@
                                         <td>{{ dato.id_forma_pago.nombre_forma_pago }}</td>
                                         <td>{{ dato.num_documento }}</td>
                                         <td>{{ dato.fecha_real_pago }}</td>
-                                        <td>{{ dato.uf_pago|uf_format }}</td>
-                                        <td>{{ dato.monto_pago|clp_format }}</td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}
+                            <tr>
+                                <td>Total</td>
+                                <td style="text-align: center;"> -</td>
+                                <td> -</td>
+                                <td>$Monto</td>
+                            </tr>
+                            <tr>
+                                <td>Saldo a Reembolsar</td>
+                                <td style="text-align: center;"> -</td>
+                                <td> -</td>
+                                <td>$Monto</td>
+                            </tr>
                             </tbody>
                         </table>
                     {% else %}
                         <table class="tabla1" style="min-height:200px">
                             <tr>
-                                <th>Banco</th>
-                                <th>Forma de pago</th>
-                                <th>N° DOcumento</th>
-                                <th>Fecha</th>
-                                <th>UF</th>
-                                <th>$</th>
+                                <th>Ingreso Fondo a Rendir</th>
+                                <th>Egresos</th>
+                                <th>N° Boleta</th>
+                                <th>Monto</th>
                             </tr>
                             <tbody class="table-border-bottom-0">
                             <tr>
@@ -110,8 +112,9 @@
                             </tbody>
                         </table>
                     {% endif %}
-                    <!-- Fin Detalle Pie-->
-
+                    <!-- Fin Memo ggoo-->
+                    <p>Este saldo será reeembolsado en su cuenta corriente
+                        <br> Agradeciendo su elección se despide cordialmente </p>
                     <p>Atte.,</p>
                     <p>Marta Olivares Castro.</p>
                     <p>Subgerente de Ventas y OO.PP.</p>

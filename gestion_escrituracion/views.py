@@ -176,10 +176,10 @@ class PagosInvoicePdf(View):
             # Totales
             total_pagado = datos.aggregate(total=Sum('monto_pago'))['total'] or 0
             total_pagado_uf = datos.filter(estado_pago="Contabilizado") \
-                                   .aggregate(total=Sum('uf_pago'))['total'] or 0
+                                  .aggregate(total=Sum('uf_pago'))['total'] or 0
 
             total_detalle_pie = datos.filter(id_categoria_pago__nombre_categoria_pago="Detalle Pie") \
-                                     .aggregate(total=Sum('uf_pago'))['total'] or 0
+                                    .aggregate(total=Sum('uf_pago'))['total'] or 0
 
             # Valores UF por fecha contable
             valores_uf_por_pago = {}
@@ -236,6 +236,7 @@ class PagosInvoicePdf(View):
             print("❌ Error generando PDF:", e)
             messages.error(request, "Ocurrió un error al generar el PDF.")
             return redirect('lista_ventas')
+
 
 def fpm_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
 
@@ -298,6 +299,7 @@ class Fpm_VentaPdf(View):
             pass
         return redirect('lista_ventas')
 
+
 def entrega_documentos_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
     datos = Pagos.objects.filter(id_venta=id_venta)
     datos_venta = Venta.objects.filter(id_venta=id_venta)
@@ -310,7 +312,6 @@ def entrega_documentos_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR U
     }
 
     return render(request, 'documentos/memo_entrega_documentos.html', context)
-
 
 
 class EntregaDocumentoPdf(View):
@@ -361,17 +362,27 @@ class EntregaDocumentoPdf(View):
             pass
         return redirect('lista_ventas')
 
+
 def carta_cierre_negocios_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
     datos_venta = Venta.objects.filter(id_venta=id_venta)
-    datos_cierre_negocio = Pagos.objects.filter(id_venta=id_venta,
-                                               id_categoria_pago__nombre_categoria_pago="Cierre Negocio")
-    # Datos de Detalle Pie
-    datos_detalle_pie = Pagos.objects.filter(id_venta=id_venta, id_categoria_pago__nombre_categoria_pago="Detalle Pie")
+    datos = Pagos.objects.filter(id_venta=id_venta, estado_pago="Contabilizado")
+    # Valores UF por fecha contable
+    valores_uf_por_pago = {}
+    for pago in datos:
+        if pago.estado_pago == "Contabilizado":
+            try:
+                valor_uf = ValorUf.objects.get(fecha_registro=pago.fecha_real_pago)
+                valores_uf_por_pago[pago.id_pago] = valor_uf.valor_uf
+            except ValorUf.DoesNotExist:
+                valores_uf_por_pago[pago.id_pago] = None
+        else:
+            valores_uf_por_pago[pago.id_pago] = None
 
     context = {
-        'datos_detalle_pie': datos_detalle_pie,
         'id_venta': id_venta,
         'datos_venta': datos_venta,
+        'datos': datos,
+        'valores_uf_por_pago': valores_uf_por_pago,
         **site.each_context(request),
     }
 
@@ -408,16 +419,91 @@ class CierreNegociopdf(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            # Datos de cierre de negocio
-            datos_cierre_negocio = Pagos.objects.filter(id_venta=self.kwargs['id_venta'],
-                                                       id_categoria_pago__nombre_categoria_pago="Cierre Negocio")
-            # Datos de Detalle Pie
-            datos_detalle_pie = Pagos.objects.filter(id_venta=self.kwargs['id_venta'], id_categoria_pago__nombre_categoria_pago="Detalle Pie")
-
-            datos_venta = Venta.objects.filter(id_venta=self.kwargs['id_venta'])
+            id_venta = self.kwargs['id_venta']
+            datos_venta = Venta.objects.filter(id_venta=id_venta)
+            datos = Pagos.objects.filter(id_venta=id_venta, estado_pago="Contabilizado")
+            # Valores UF por fecha contable
+            valores_uf_por_pago = {}
+            for pago in datos:
+                if pago.estado_pago == "Contabilizado":
+                    try:
+                        valor_uf = ValorUf.objects.get(fecha_registro=pago.fecha_real_pago)
+                        valores_uf_por_pago[pago.id_pago] = valor_uf.valor_uf
+                    except ValorUf.DoesNotExist:
+                        valores_uf_por_pago[pago.id_pago] = None
+                else:
+                    valores_uf_por_pago[pago.id_pago] = None
             template = get_template('documentos/carta_cierre_negocio_pdf.html')
-            context = {'datos_cierre_negocio': datos_cierre_negocio, 'datos_detalle_pie': datos_detalle_pie,
-                       'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
+
+            context = {
+                'id_venta': id_venta,
+                'datos_venta': datos_venta,
+                'datos': datos,
+                'valores_uf_por_pago': valores_uf_por_pago,
+                'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
+
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            # create a pdf
+            pisa_status = pisa.CreatePDF(
+                html, dest=response,
+                link_callback=self.link_callback)
+            return response
+        except:
+            pass
+        return redirect('lista_ventas')
+
+
+def memo_ggoo(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
+    datos = Pagos.objects.filter(id_venta=id_venta)
+    datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    context = {
+        'datos': datos,
+        'id_venta': id_venta,
+        'datos_venta': datos_venta,
+        **site.each_context(request),
+    }
+
+    return render(request, 'documentos/memo_gastos_operacionales.html', context)
+
+
+class MemoGgooPdf(View):
+    # datos = Pago.objects.filter(id_venta=id_venta)
+    # datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_URL  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise RuntimeError(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            datos = Pagos.objects.filter(id_venta=self.kwargs['id_venta'])
+            datos_venta = Venta.objects.filter(id_venta=self.kwargs['id_venta'])
+
+            template = get_template('documentos/memo_gastos_operacionales_pdf.html')
+            context = {'datos': datos, 'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
                        'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')
@@ -431,3 +517,65 @@ class CierreNegociopdf(View):
             pass
         return redirect('lista_ventas')
 
+
+def carta_oferta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
+    datos = Pagos.objects.filter(id_venta=id_venta)
+    datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    context = {
+        'datos': datos,
+        'id_venta': id_venta,
+        'datos_venta': datos_venta,
+        **site.each_context(request),
+    }
+
+    return render(request, 'documentos/carta_oferta.html', context)
+
+
+class CartaOfertaPdf(View):
+    # datos = Pago.objects.filter(id_venta=id_venta)
+    # datos_venta = Venta.objects.filter(id_venta=id_venta)
+
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        sUrl = settings.STATIC_URL  # Typically /static/
+        sRoot = settings.STATIC_URL  # Typically /home/userX/project_static/
+        mUrl = settings.MEDIA_URL  # Typically /media/
+        mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+        if uri.startswith(mUrl):
+            path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        elif uri.startswith(sUrl):
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            return uri
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise RuntimeError(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    def get(self, request, *args, **kwargs):
+        try:
+            datos = Pagos.objects.filter(id_venta=self.kwargs['id_venta'])
+            datos_venta = Venta.objects.filter(id_venta=self.kwargs['id_venta'])
+
+            template = get_template('documentos/carta_oferta_pdf.html')
+            context = {'datos': datos, 'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
+                       'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            # create a pdf
+            pisa_status = pisa.CreatePDF(
+                html, dest=response,
+                link_callback=self.link_callback)
+            return response
+        except:
+            pass
+        return redirect('lista_ventas')

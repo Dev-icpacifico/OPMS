@@ -18,4 +18,11 @@ urlpatterns = [
     path('ccn/<int:id_venta>/', login_required(carta_cierre_negocios_venta), name='ccn'),
     path('ccn_print/<int:id_venta>/', login_required(CierreNegociopdf.as_view()), name='ccn_print'),
 
+    path('memoggoo/<int:id_venta>/', login_required(memo_ggoo), name='memoggoo'),
+    path('memoggoo_print/<int:id_venta>/', login_required(MemoGgooPdf.as_view()),
+         name='memoggoo_print'),
+    path('cartaoferta/<int:id_venta>/', login_required(carta_oferta), name='cartaoferta'),
+    path('cartaoferta_print/<int:id_venta>/', login_required(CartaOfertaPdf.as_view()),
+         name='cartaoferta_print'),
+
 ]

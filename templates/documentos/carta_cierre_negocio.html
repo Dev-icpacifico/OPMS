@@ -2,7 +2,6 @@
 {% load format_utils %}
 {% load dict_filters %}
 {% load static %}
-
 {% block content %}
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row invoice-preview">
@@ -13,8 +12,9 @@
                         <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column">
                             <div class="mb-xl-0 pb-3">
                                 <div class="d-flex svg-illustration align-items-center gap-2 mb-4">
-                                    <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br> Condominio Distrito Verde ETAPA XX</span>
-                                </div>
+                                    {% for venta in datos_venta %}
+                                        <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br> {{ venta.id_propiedad.condominio.nombre_condominio }} {{ venta.id_propiedad.etapa.nombre_etapa }}</span>
+                                    {% endfor %}                                </div>
                             </div>
                         </div>
                     </div>
@@ -28,13 +28,12 @@
                                         <div>
                                             <div>
                                                 <!-- Encabezado carta -->
-                                                {% for venta in datos_venta %}
-                                                    <p>Fecha de la carta</p>
-                                                    <p>Señor(a): {{ venta.id_cotizacion.id_cliente.nombre_cliente }}</p>
-                                                    <p>RUT: {{ venta.id_cotizacion.id_cliente.id_cliente }}</p>
-                                                {% endfor %}
-                                                <!-- Fin Encabezado carta -->
+                                                <p>Fecha de la carta</p>
+                                                <p>
+                                                    Señor(a): {{ datos_venta.0.id_cliente.nombres_1 }} {{ datos_venta.0.id_cliente.apellidos_1 }}</p>
+                                                <p>RUT: {{ datos_venta.0.id_cliente.rut_cliente }}</p>
 
+                                                <!-- Fin Encabezado carta -->
                                                 <!-- Saludo y datos depto carta -->
                                                 <p>De nuestra consideración:</p>
                                                 <p>Por la presentenos es grato saludarlo(a) y a la vez informarle las
@@ -43,13 +42,14 @@
                                                     negocio:</p>
                                                 {% for venta in datos_venta %}
                                                     <p>Departamento
-                                                        N°{{ venta.id_cotizacion.id_vivienda.nombre_vivienda }},
-                                                        BODEGA N°
-                                                        {},
-                                                        ESTACIONAMIENTO N° {}, por un valor de
-                                                        {{ venta.id_cotizacion.id_vivienda.valor_vivienda }}
+                                                        N°{{ venta.id_propiedad.numero_propiedad }},
+                                                        BODEGA N° {{ venta.id_propiedad.bodega }},
+                                                        ESTACIONAMIENTO N° {{ venta.id_propiedad.estacionamiento }}, por
+                                                        un valor de
+                                                        {{ venta.id_propiedad.valor_final_propiedad }}
                                                         UF.</p>
-                                                    <p>Condominio </p>
+                                                    <p>
+                                                        Condominio: {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}</p>
                                                 {% endfor %}
                                                 <!-- Saludo y datos depto carta -->
                                                 <hr>
@@ -57,34 +57,30 @@
                                                     <h3>Forma de pago UF</h3>
                                                 </div>
                                                 <!-- Forma de pago -->
-                                                <table>
-                                                    <thead>
+                                                <table class="table table-sm table-bordered text-center align-middle">
+                                                    <thead class="table-light">
                                                     <tr>
-                                                        <th>
-                                                        </th>
-                                                        <th>
-                                                        </th>
+                                                        <th>Concepto</th>
+                                                        <th>Monto UF</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <td>
-                                                        <tr>
-                                                    <td>Reserva</td>
-                                                    <td>0</td>
+                                                    <tr>
+                                                        <td>Reserva</td>
+                                                        <td>aaa</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pie Contado</td>
-                                                        <td>0</td>
+                                                        <td>aaa</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Saldo a pagar Contado</td>
-                                                        <td>0</td>
+                                                        <td>aaa</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Total</td>
-                                                        <td>0</td>
+                                                        <td>aaa</td>
                                                     </tr>
-                                                    </td>
                                                     </tbody>
                                                 </table>
                                                 <!-- Fin Forma de pago -->
@@ -93,207 +89,225 @@
                                                     <h3>Cierre de Negocio</h3>
                                                 </div>
                                                 <!-- Cierre de Negocio -->
-                                                {% if datos_cierre_negocio %}
-                                                    <table class="tabla1">
-                                                        <tr>
-                                                            <th>Banco</th>
-                                                            <th>Forma de pago</th>
-                                                            <th>N° DOcumento</th>
-                                                            <th>Fecha</th>
-                                                            <th>UF</th>
-                                                            <th>$</th>
-                                                        </tr>
-                                                        <tbody>
-                                                        {% for dato in datos_cierre_negocio %}
+                                                <div class="table-responsive mb-4">
+                                                    {% if datos %}
+                                                        <table class="table table-sm table-bordered text-center align-middle">
+                                                            <thead class="table-light">
                                                             <tr>
-                                                                <td style="text-align: center">{{ dato.id_banco }}</td>
-                                                                <td style="text-align: center">{{ dato.forma_pago }}</td>
-                                                                <td style="text-align: center">{{ dato.numero_documento }}</td>
-                                                                <td style="text-align: center">{{ dato.fecha_pago }}</td>
-                                                                <td style="text-align: center">{{ dato.monto_pago }}</td>
+                                                                <th>Banco</th>
+                                                                <th>Forma de pago</th>
+                                                                <th>N° Documento</th>
+                                                                <th>Fecha</th>
+                                                                <th>UF</th>
+                                                                <th>$</th>
                                                             </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                {% else %}
-                                                    <table class="table" style="min-height:200px">
-                                                        <thead class="table-light">
-                                                        <tr>
-                                                            <th>Banco</th>
-                                                            <th>Forma de pago</th>
-                                                            <th>N° DOcumento</th>
-                                                            <th>Fecha</th>
-                                                            <th>UF</th>
-                                                            <th>$</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody class="table-border-bottom-0">
-                                                        <tr>
-                                                            <td colspan='4' align='center'><span
-                                                                    class="border-info me-1"><i
-                                                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                {% endif %}
-                                                <!-- Fin Cierre de Negocio -->
-                                                <hr>
-                                                <div>
-                                                    <h3>Detalle Pie</h3>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for dato in datos %}
+                                                                <tr>
+                                                                    {% if dato.id_categoria_pago.id_categoria_pago == 2 %}
+                                                                        <td>{{ dato.id_banco }}</td>
+                                                                        <td>{{ dato.id_forma_pago.nombre_forma_pago }}</td>
+                                                                        <td>{{ dato.num_documento }}</td>
+                                                                        <td>{{ dato.fecha_real_pago }}</td>
+                                                                        <td>{{ dato.uf_pago|uf_format }}</td>
+                                                                        <td>{{ dato.monto_pago|clp_format }}</td>
+                                                                    {% endif %}
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    {% else %}
+                                                        <table class="table" style="min-height:200px">
+                                                            <thead class="table-light">
+                                                            <tr>
+                                                                <th>Banco</th>
+                                                                <th>Forma de pago</th>
+                                                                <th>N° DOcumento</th>
+                                                                <th>Fecha</th>
+                                                                <th>UF</th>
+                                                                <th>$</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody class="table-border-bottom-0">
+                                                            <tr>
+                                                                <td colspan='4'><span
+                                                                        class="border-info me-1"><i
+                                                                        class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    {% endif %}
+                                                    <!-- Fin Cierre de Negocio -->
+                                                    <hr>
+                                                    <div>
+                                                        <h3>Detalle Pie</h3>
+                                                    </div>
+                                                    <!-- Detalle Pie-->
+                                                    {% if datos %}
+                                                        <table class="table table-sm table-bordered text-center align-middle">
+                                                            <thead class="table-light">
+                                                            <tr>
+                                                                <th>Banco</th>
+                                                                <th>Forma de pago</th>
+                                                                <th>N° DOcumento</th>
+                                                                <th>Fecha</th>
+                                                                <th>UF</th>
+                                                                <th>$</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for dato in datos %}
+                                                                <tr>
+                                                                    {% if dato.id_categoria_pago.id_categoria_pago == 2 %}
+                                                                        <td>{{ dato.id_banco }}</td>
+                                                                        <td>{{ dato.id_forma_pago.nombre_forma_pago }}</td>
+                                                                        <td>{{ dato.num_documento }}</td>
+                                                                        <td>{{ dato.fecha_real_pago }}</td>
+                                                                        <td>{{ dato.uf_pago|uf_format }}</td>
+                                                                        <td>{{ dato.monto_pago|clp_format }}</td>
+                                                                    {% endif %}
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    {% else %}
+                                                        <table class="table" style="min-height:200px">
+                                                            <thead class="table-light">
+                                                            <tr>
+                                                                <th>Banco</th>
+                                                                <th>Forma de pago</th>
+                                                                <th>N° DOcumento</th>
+                                                                <th>Fecha</th>
+                                                                <th>UF</th>
+                                                                <th>$</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody class="table-border-bottom-0">
+                                                            <tr>
+                                                                <td colspan='4'><span
+                                                                        class="border-info me-1"><i
+                                                                        class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    {% endif %}
+                                                    <!-- Fin Detalle Pie-->
+                                                    <hr>
+                                                    <p>Los valores señalados en recuadro son referenciales y calculados
+                                                        a
+                                                        valor
+                                                        UF de
+                                                        hoy.
+                                                        Los pagos se imputan contablemente según se indica en clausula
+                                                        número
+                                                        CUARTA de
+                                                        la Promesa de
+                                                        Compraventa:
+                                                    </p>
+                                                    <p>“ …. Las sumas entregadas por el Promitente Comprador, referidas
+                                                        en
+                                                        los
+                                                        literales
+                                                        a) referente a
+                                                        “reserva”,
+                                                        b) referente a “Pie” y c) referente a “saldo restante”, de la
+                                                        presente
+                                                        cláusula,
+                                                        se imputarán al
+                                                        precio total,
+                                                        tomándose como criterio de la mencionada imputación, las sumas
+                                                        convertidas a
+                                                        Unidades de Fomento
+                                                        según valor de ésta al momento del COBRO EFECTIVO de los
+                                                        documentos
+                                                        entregados
+                                                        por el Promitente
+                                                        Comprador.</p>
+                                                    <p>En concordancia con lo anterior, se le informa que será de su
+                                                        exclusiva
+                                                        responsabilidad el
+                                                        cumplimiento y
+                                                        mantención de los requisitos necesarios para materializar la
+                                                        compra
+                                                        de
+                                                        su
+                                                        Departamento, poseer
+                                                        capacidad financiera suficiente para su adquisición y/o cumplir
+                                                        de
+                                                        modo
+                                                        adecuado
+                                                        las exigencias
+                                                        para
+                                                        acceder a créditos comerciales, de cualquier naturaleza, que
+                                                        permitan
+                                                        financiar
+                                                        la compra
+                                                        ofrecida.
+                                                    </p>
+                                                    <p>Una vez iniciado el proceso de Escrituración deberá pagar los
+                                                        Gastos
+                                                        Operacionales al banco o
+                                                        institución
+                                                        que financiará la adquisición de su departamento.</p>
+                                                    <p>En señal de aceptación y conocimiento de la información contenida
+                                                        en
+                                                        la
+                                                        presente,
+                                                        agradeceremos a
+                                                        usted
+                                                        firmar este documento en dos ejemplares, quedando uno en su
+                                                        poder y
+                                                        otro
+                                                        en su
+                                                        carpeta.</p>
                                                 </div>
-                                                <!-- Detalle Pie-->
-                                                {% if datos_detalle_pie %}
-                                                    <table class="tabla1">
-                                                        <tr>
-                                                            <th>Banco</th>
-                                                            <th>Forma de pago</th>
-                                                            <th>N° DOcumento</th>
-                                                            <th>Fecha</th>
-                                                            <th>UF</th>
-                                                            <th>$</th>
-                                                        </tr>
-                                                        <tbody>
-                                                        {% for dato in datos_detalle_pie %}
-                                                            <tr>
-                                                                <td style="text-align: center">{{ dato.id_banco }}</td>
-                                                                <td style="text-align: center">{{ dato.forma_pago }}</td>
-                                                                <td style="text-align: center">{{ dato.numero_documento }}</td>
-                                                                <td style="text-align: center">{{ dato.fecha_pago }}</td>
-                                                                <td style="text-align: center">{{ dato.monto_pago }}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                {% else %}
-                                                    <table class="table" style="min-height:200px">
-                                                        <thead class="table-light">
-                                                        <tr>
-                                                            <th>Banco</th>
-                                                            <th>Forma de pago</th>
-                                                            <th>N° DOcumento</th>
-                                                            <th>Fecha</th>
-                                                            <th>UF</th>
-                                                            <th>$</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody class="table-border-bottom-0">
-                                                        <tr>
-                                                            <td colspan='4' align='center'><span
-                                                                    class="border-info me-1"><i
-                                                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                {% endif %}
-                                                <!-- Fin Detalle Pie-->
-                                                <hr>
-                                                <p>Los valores señalados en recuadro son referenciales y calculados a
-                                                    valor
-                                                    UF de
-                                                    hoy.
-                                                    Los pagos se imputan contablemente según se indica en clausula
-                                                    número
-                                                    CUARTA de
-                                                    la Promesa de
-                                                    Compraventa:
-                                                </p>
-                                                <p>“ …. Las sumas entregadas por el Promitente Comprador, referidas en
-                                                    los
-                                                    literales
-                                                    a) referente a
-                                                    “reserva”,
-                                                    b) referente a “Pie” y c) referente a “saldo restante”, de la
-                                                    presente
-                                                    cláusula,
-                                                    se imputarán al
-                                                    precio total,
-                                                    tomándose como criterio de la mencionada imputación, las sumas
-                                                    convertidas a
-                                                    Unidades de Fomento
-                                                    según valor de ésta al momento del COBRO EFECTIVO de los documentos
-                                                    entregados
-                                                    por el Promitente
-                                                    Comprador.</p>
-                                                <p>En concordancia con lo anterior, se le informa que será de su
-                                                    exclusiva
-                                                    responsabilidad el
-                                                    cumplimiento y
-                                                    mantención de los requisitos necesarios para materializar la compra
-                                                    de
-                                                    su
-                                                    Departamento, poseer
-                                                    capacidad financiera suficiente para su adquisición y/o cumplir de
-                                                    modo
-                                                    adecuado
-                                                    las exigencias
-                                                    para
-                                                    acceder a créditos comerciales, de cualquier naturaleza, que
-                                                    permitan
-                                                    financiar
-                                                    la compra
-                                                    ofrecida.
-                                                </p>
-                                                <p>Una vez iniciado el proceso de Escrituración deberá pagar los Gastos
-                                                    Operacionales al banco o
-                                                    institución
-                                                    que financiará la adquisición de su departamento.</p>
-                                                <p>En señal de aceptación y conocimiento de la información contenida en
-                                                    la
-                                                    presente,
-                                                    agradeceremos a
-                                                    usted
-                                                    firmar este documento en dos ejemplares, quedando uno en su poder y
-                                                    otro
-                                                    en su
-                                                    carpeta.</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <hr class="my-0">
                             </div>
-                            <hr class="my-0">
+                            <div style="margin-top: 20px; text-align: center;">
+                                <p style="font-style: italic; font-size: 14px;">
+                                    Gracias por su preferencia. Para consultas, contáctenos a <a
+                                        href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
+                                </p>
+                            </div>
                         </div>
-                        <div style="margin-top: 20px; text-align: center;">
-                            <p style="font-style: italic; font-size: 14px;">
-                                Gracias por su preferencia. Para consultas, contáctenos a <a
-                                    href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
-                            </p>
-                        </div>
-                    </div>
 
 
-                    <hr class="my-0">
+                        <hr class="my-0">
 
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="fw-medium">Note:</span>
-                                <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="fw-medium">Note:</span>
+                                    <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
               projects. Thank You!</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- /Invoice -->
+                <!-- /Invoice -->
 
-            <!-- Invoice Actions -->
-            <div class="col-xl-3 col-md-4 col-12 invoice-actions">
-                <div class="card">
-                    <div class="card-body">
-                        <a class="btn btn-info d-grid w-100 mb-3 waves-effect waves-light" target="_blank"
-                           href="{% url 'ccn_print' id_venta=id_venta %}">
-                            DESCARGAR PDF
-                        </a>
+                <!-- Invoice Actions -->
+                <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                    <div class="card">
+                        <div class="card-body">
+                            <a class="btn btn-info d-grid w-100 mb-3 waves-effect waves-light" target="_blank"
+                               href="{% url 'ccn_print' id_venta=id_venta %}">
+                                DESCARGAR PDF
+                            </a>
 
+                        </div>
                     </div>
                 </div>
+                <!-- /Invoice Actions -->
             </div>
-            <!-- /Invoice Actions -->
         </div>
-
-
     </div>
 {% endblock %}
