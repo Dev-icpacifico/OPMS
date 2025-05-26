@@ -288,33 +288,35 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <td>
+                {% for valor in datos_venta %}
+                    <table>
+                        <thead>
                         <tr>
-                    <td>Nombre: Inmobiliaria Costanera Pacífico SPA</td>
-                    </tr>
-                    <tr>
-                        <td>RUT: 76.866.075-1</td>
-                    </tr>
-                    <tr>
-                        <td>Tipo Cuenta: Cuenta Corriente</td>
-                    </tr>
-                    <tr>
-                        <td>N° Cuenta: 1202275608</td>
-                    </tr>
-                    <tr>
-                        <td>Correo: saraya@icpacifico.cl</td>
-                    </tr>
-                    </td>
-                    </tbody>
-                </table>
+                            <th>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td>
+                            <tr>
+                        <td>Nombre: {{valor.id_propiedad.condominio.empresa_vende.razon_social }}</td>
+                        </tr>
+                        <tr>
+                            <td>RUT: {{ valor.id_propiedad.condominio.empresa_vende.rut_empresa }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tipo Cuenta: {{ valor.id_propiedad.condominio.empresa_vende.tipo_cuenta_transf }}</td>
+                        </tr>
+                        <tr>
+                            <td>N° Cuenta: {{ valor.id_propiedad.condominio.empresa_vende.num_cuenta_transf }}</td>
+                        </tr>
+                        <tr>
+                            <td>Correo: {{ valor.id_propiedad.condominio.empresa_vende.correo_transf }}</td>
+                        </tr>
+                        </td>
+                        </tbody>
+                    </table>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -327,7 +329,5 @@
 </div>
 </div>
 <!-- /Invoice -->
-
 </body>
-
 </html>
