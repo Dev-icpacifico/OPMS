@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% for venta in datos_venta %}
-        <title>Memo Documentos - {{ venta.id_venta }}
+        <title>Memo ggoo - {{ venta.id_venta }}
             -{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }}</title>
     {% endfor %}
     <style>
@@ -85,16 +85,12 @@
                             </tr>
 
                             <tr>
-                                <td>Total</td>
-                                <td style="text-align: center;"> -</td>
-                                <td> -</td>
-                                <td>$0.-</td>
+                                <td colspan="3" style="background-color: #f0f0f0; text-align: right"><strong>Total</strong></td>
+                                <td style="background-color: #f0f0f0;"><strong>$0.-</strong></td>
                             </tr>
                             <tr>
-                                <td>Saldo a Reembolsar</td>
-                                <td style="text-align: center;"> -</td>
-                                <td> -</td>
-                                <td>$0.-</td>
+                                <td colspan="3" style="background-color: #f0f0f0; text-align: right"><strong>Saldo a Reembolsar</strong></td>
+                                <td style="background-color: #f0f0f0;"><strong>$0.-</strong></td>
                             </tr>
                             </tbody>
                         </table>
