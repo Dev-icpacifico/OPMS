@@ -22,7 +22,6 @@ routers.register(r'CamposEtapas', CampoEtapaViewSet)
 routers.register(r'ValoresEtapas', ValoresEtapaViewSet)
 
 urlpatterns = [
-    path('', include(routers.urls)),
     path('ventas/', ListaVentasView.as_view(), name='lista_ventas'),
     # El endpoint para modificar etapas lo haremos luego:
     path('ventas/<int:venta_id>/etapas/', EtapasVentaView.as_view(), name='editar_etapas'),
@@ -44,4 +43,5 @@ urlpatterns = [
     path('cartaoferta/<int:id_venta>/', login_required(carta_oferta), name='cartaoferta'),
     path('cartaoferta_print/<int:id_venta>/', login_required(CartaOfertaPdf.as_view()),
          name='cartaoferta_print'),
+    path('', include(routers.urls)),
 ]

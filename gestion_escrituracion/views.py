@@ -17,7 +17,7 @@ from datetime import datetime
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from .models import Venta, Etapas, VentaEtapa, CampoEtapa, ValoresEtapa
+from .models import (Venta, Etapas, VentaEtapa, CampoEtapa, ValoresEtapa)
 from .serializers import (
     VentaSerializer,
     EtapasSerializer,
