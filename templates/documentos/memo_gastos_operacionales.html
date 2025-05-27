@@ -102,11 +102,9 @@
                                 <!-- Fin Detalle Pie-->
                                 <p>Este saldo será reeembolsado en su cuenta corriente
                                     <br> Agradeciendo su elección se despide cordialmente </p>
-
                                 <p>Atte.,</p>
-                                <p>Marta Olivares Castro.</p>
+                                <p>{{ datos_venta.0.id_propiedad.condominio.empresa_vende.gerente_ventas }}</p>
                                 <p>Subgerente de Ventas y OO.PP.</p>
-
                             </div>
                             <hr class="my-0">
                         </div>
@@ -117,10 +115,7 @@
                             </p>
                         </div>
                     </div>
-
-
                     <hr class="my-0">
-
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
@@ -133,12 +128,10 @@
                 </div>
             </div>
             <!-- /Invoice -->
-
             <!-- Invoice Actions -->
             <div class="col-xl-3 col-md-4 col-12 invoice-actions">
                 <div class="card">
                     <div class="card-body">
-
                         <a class="btn btn-info d-grid w-100 mb-3 waves-effect waves-light" target="_blank"
                            href="{% url 'memoggoo_print' id_venta=id_venta %}">
                             DESCARGAR PDF
@@ -148,7 +141,6 @@
             </div>
             <!-- /Invoice Actions -->
         </div>
-
         <!-- Offcanvas -->
     </div>
 {% endblock %}
