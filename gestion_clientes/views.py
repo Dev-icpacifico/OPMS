@@ -11,32 +11,32 @@ from .serializers import (NacionalidadSerializer,AreaProfesionSerializer,Profesi
     list=extend_schema(
         description="Obtiene una lista de todos los proyectos registrados.",
         summary="Lista de Nacionalidades",
-        tags=["Nacionalidades"],
+        tags=["Clientes"],
     ),
     retrieve=extend_schema(
         description="Obtiene los detalles de un proyecto específico por su ID.",
         summary="Detalle de Nacionalidades",
-        tags=["Nacionalidades"]
+        tags=["Clientes"]
     ),
     create=extend_schema(
         description="Crea un nuevo proyecto con los datos proporcionados.",
         summary="Crear Nacionalidades",
-        tags=["Nacionalidades"]
+        tags=["Clientes"]
     ),
     update=extend_schema(
         description="Actualiza todos los campos de un proyecto existente.",
         summary="Actualizar Nacionalidades",
-        tags=["Nacionalidades"]
+        tags=["Clientes"]
     ),
     partial_update=extend_schema(
         description="Actualiza parcialmente los campos de un proyecto.",
         summary="Actualizar Parcialmente Nacionalidades",
-        tags=["Nacionalidades"]
+        tags=["Clientes"]
     ),
     destroy=extend_schema(
         description="Elimina un proyecto existente por su ID.",
         summary="Eliminar Nacionalidades",
-        tags=["Nacionalidades"]
+        tags=["Clientes"]
     ),
 )
 class NacionalidadeViewSet(viewsets.ModelViewSet):
@@ -49,32 +49,32 @@ class NacionalidadeViewSet(viewsets.ModelViewSet):
     list=extend_schema(
         description="Obtiene una lista de todos los proyectos registrados.",
         summary="Lista de Areas",
-        tags=["Areas"]
+        tags=["Clientes"]
     ),
     retrieve=extend_schema(
         description="Obtiene los detalles de un proyecto específico por su ID.",
         summary="Detalle de Areas",
-        tags=["Areas"]
+        tags=["Clientes"]
     ),
     create=extend_schema(
         description="Crea un nuevo proyecto con los datos proporcionados.",
         summary="Crear Areas",
-        tags=["Areas"]
+        tags=["Clientes"]
     ),
     update=extend_schema(
         description="Actualiza todos los campos de un proyecto existente.",
         summary="Actualizar Areas",
-        tags=["Areas"]
+        tags=["Clientes"]
     ),
     partial_update=extend_schema(
         description="Actualiza parcialmente los campos de un proyecto.",
         summary="Actualizar Parcialmente Areas",
-        tags=["Areas"]
+        tags=["Clientes"],
     ),
     destroy=extend_schema(
         description="Elimina un proyecto existente por su ID.",
         summary="Eliminar Areas",
-        tags=["Areas"]
+        tags=["Clientes"]
     ),
 )
 
@@ -88,32 +88,32 @@ class AreaProfesionViewSet(viewsets.ModelViewSet):
     list=extend_schema(
         description="Obtiene una lista de todos los proyectos registrados.",
         summary="Lista de Profesiones",
-        tags=["Profesiones"]
+        tags=["Clientes"]
     ),
     retrieve=extend_schema(
         description="Obtiene los detalles de un proyecto específico por su ID.",
         summary="Detalle de Profesiones",
-        tags=["Profesiones"]
+        tags=["Clientes"]
     ),
     create=extend_schema(
         description="Crea un nuevo proyecto con los datos proporcionados.",
         summary="Crear Profesiones",
-        tags=["Profesiones"]
+        tags=["Clientes"]
     ),
     update=extend_schema(
         description="Actualiza todos los campos de un proyecto existente.",
         summary="Actualizar Profesiones",
-        tags=["Profesiones"]
+        tags=["Clientes"]
     ),
     partial_update=extend_schema(
         description="Actualiza parcialmente los campos de un proyecto.",
         summary="Actualizar Parcialmente Profesiones",
-        tags=["Profesiones"]
+        tags=["Clientes"]
     ),
     destroy=extend_schema(
         description="Elimina un proyecto existente por su ID.",
         summary="Eliminar Profesiones",
-        tags=["Profesiones"]
+        tags=["Clientes"]
     ),
 )
 

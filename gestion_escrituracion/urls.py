@@ -12,17 +12,17 @@ from .views import (
     ValoresEtapaViewSet,
 )
 
-router = routers.DefaultRouter()
+routers = routers.DefaultRouter()
 
 # --- Registros para DRF ---
-router.register(r'ventas', VentaViewSet)
-router.register(r'etapas', EtapasViewSet)
-router.register(r'venta-etapas', VentaEtapaViewSet)
-router.register(r'campos-etapas', CampoEtapaViewSet)
-router.register(r'valores-etapas', ValoresEtapaViewSet)
+routers.register(r'Ventas', VentaViewSet)
+routers.register(r'Etapas', EtapasViewSet)
+routers.register(r'VentaEtapas', VentaEtapaViewSet)
+routers.register(r'CamposEtapas', CampoEtapaViewSet)
+routers.register(r'ValoresEtapas', ValoresEtapaViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', include(routers.urls)),
     path('ventas/', ListaVentasView.as_view(), name='lista_ventas'),
     # El endpoint para modificar etapas lo haremos luego:
     path('ventas/<int:venta_id>/etapas/', EtapasVentaView.as_view(), name='editar_etapas'),

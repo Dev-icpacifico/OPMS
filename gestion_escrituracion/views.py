@@ -650,12 +650,36 @@ class CartaOfertaPdf(View):
 
 # --- VENTA ---
 @extend_schema_view(
-    list=extend_schema(summary="Lista de Ventas", tags=["Ventas"]),
-    retrieve=extend_schema(summary="Detalle de Venta", tags=["Ventas"]),
-    create=extend_schema(summary="Crear Venta", tags=["Ventas"]),
-    update=extend_schema(summary="Actualizar Venta", tags=["Ventas"]),
-    partial_update=extend_schema(summary="Actualizar Parcialmente Venta", tags=["Ventas"]),
-    destroy=extend_schema(summary="Eliminar Venta", tags=["Ventas"]),
+    list=extend_schema(
+        description="Obtiene una lista de todas las ventas registradas.",
+        summary="Lista de Ventas",
+        tags=["Ventas"],
+    ),
+    retrieve=extend_schema(
+        description="Obtiene los detalles de una Venta específica por su ID.",
+        summary="Detalle de Ventas",
+        tags=["Ventas"]
+    ),
+    create=extend_schema(
+        description="Crea una nueva Ventas con los datos proporcionados.",
+        summary="Crear Ventas",
+        tags=["Ventas"]
+    ),
+    update=extend_schema(
+        description="Actualiza todos los campos de una Venta existente.",
+        summary="Actualizar Ventas",
+        tags=["Ventas"]
+    ),
+    partial_update=extend_schema(
+        description="Actualiza parcialmente los campos de una Venta existente.",
+        summary="Actualizar Parcialmente Ventas",
+        tags=["Ventas"]
+    ),
+    destroy=extend_schema(
+        description="Elimina una Venta existente por su ID.",
+        summary="Eliminar Ventas",
+        tags=["Ventas"]
+    ),
 )
 class VentaViewSet(viewsets.ModelViewSet):
     queryset = Venta.objects.all()
@@ -665,12 +689,36 @@ class VentaViewSet(viewsets.ModelViewSet):
 
 # --- ETAPAS ---
 @extend_schema_view(
-    list=extend_schema(summary="Lista de Etapas", tags=["Etapas"]),
-    retrieve=extend_schema(summary="Detalle de Etapa", tags=["Etapas"]),
-    create=extend_schema(summary="Crear Etapa", tags=["Etapas"]),
-    update=extend_schema(summary="Actualizar Etapa", tags=["Etapas"]),
-    partial_update=extend_schema(summary="Actualizar Parcialmente Etapa", tags=["Etapas"]),
-    destroy=extend_schema(summary="Eliminar Etapa", tags=["Etapas"]),
+    list=extend_schema(
+        description="Obtiene una lista de todas las Etapas registradas.",
+        summary="Lista de Etapas",
+        tags=["Ventas"],
+    ),
+    retrieve=extend_schema(
+        description="Obtiene los detalles de una Etapas específica por su ID.",
+        summary="Detalle de Etapas",
+        tags=["Ventas"]
+    ),
+    create=extend_schema(
+        description="Crea una nueva Etapas con los datos proporcionados.",
+        summary="Crear Etapas",
+        tags=["Ventas"]
+    ),
+    update=extend_schema(
+        description="Actualiza todos los campos de una Etapas existente.",
+        summary="Actualizar Etapas",
+        tags=["Ventas"]
+    ),
+    partial_update=extend_schema(
+        description="Actualiza parcialmente los campos de una Etapas existente.",
+        summary="Actualizar Parcialmente Etapas",
+        tags=["Ventas"]
+    ),
+    destroy=extend_schema(
+        description="Elimina una Etapas existente por su ID.",
+        summary="Eliminar Etapas",
+        tags=["Ventas"]
+    ),
 )
 class EtapasViewSet(viewsets.ModelViewSet):
     queryset = Etapas.objects.all()
@@ -680,12 +728,36 @@ class EtapasViewSet(viewsets.ModelViewSet):
 
 # --- VENTA ETAPA ---
 @extend_schema_view(
-    list=extend_schema(summary="Lista de Ventas Etapas", tags=["VentaEtapa"]),
-    retrieve=extend_schema(summary="Detalle de VentaEtapa", tags=["VentaEtapa"]),
-    create=extend_schema(summary="Crear VentaEtapa", tags=["VentaEtapa"]),
-    update=extend_schema(summary="Actualizar VentaEtapa", tags=["VentaEtapa"]),
-    partial_update=extend_schema(summary="Actualizar Parcialmente VentaEtapa", tags=["VentaEtapa"]),
-    destroy=extend_schema(summary="Eliminar VentaEtapa", tags=["VentaEtapa"]),
+    list=extend_schema(
+        description="Obtiene una lista de todas las VentasEtapa registradas.",
+        summary="Lista de VentasEtapa",
+        tags=["Ventas"],
+    ),
+    retrieve=extend_schema(
+        description="Obtiene los detalles de una VentasEtapa específica por su ID.",
+        summary="Detalle de VentasEtapa",
+        tags=["Ventas"]
+    ),
+    create=extend_schema(
+        description="Crea una nueva VentasEtapa con los datos proporcionados.",
+        summary="Crear VentasEtapa",
+        tags=["Ventas"]
+    ),
+    update=extend_schema(
+        description="Actualiza todos los campos de una VentasEtapa existente.",
+        summary="Actualizar VentasEtapa",
+        tags=["Ventas"]
+    ),
+    partial_update=extend_schema(
+        description="Actualiza parcialmente los campos de una VentasEtapa existente.",
+        summary="Actualizar Parcialmente VentasEtapa",
+        tags=["Ventas"]
+    ),
+    destroy=extend_schema(
+        description="Elimina una VentasEtapa existente por su ID.",
+        summary="Eliminar VentasEtapa",
+        tags=["Ventas"]
+    ),
 )
 class VentaEtapaViewSet(viewsets.ModelViewSet):
     queryset = VentaEtapa.objects.all()
@@ -695,12 +767,36 @@ class VentaEtapaViewSet(viewsets.ModelViewSet):
 
 # --- CAMPO ETAPA ---
 @extend_schema_view(
-    list=extend_schema(summary="Lista de Campos Etapas", tags=["CampoEtapa"]),
-    retrieve=extend_schema(summary="Detalle de CampoEtapa", tags=["CampoEtapa"]),
-    create=extend_schema(summary="Crear CampoEtapa", tags=["CampoEtapa"]),
-    update=extend_schema(summary="Actualizar CampoEtapa", tags=["CampoEtapa"]),
-    partial_update=extend_schema(summary="Actualizar Parcialmente CampoEtapa", tags=["CampoEtapa"]),
-    destroy=extend_schema(summary="Eliminar CampoEtapa", tags=["CampoEtapa"]),
+    list=extend_schema(
+        description="Obtiene una lista de todas las CampoEtapa registradas.",
+        summary="Lista de CampoEtapa",
+        tags=["Ventas"],
+    ),
+    retrieve=extend_schema(
+        description="Obtiene los detalles de una CampoEtapa específica por su ID.",
+        summary="Detalle de CampoEtapa",
+        tags=["Ventas"]
+    ),
+    create=extend_schema(
+        description="Crea una nueva CampoEtapa con los datos proporcionados.",
+        summary="Crear CampoEtapa",
+        tags=["Ventas"]
+    ),
+    update=extend_schema(
+        description="Actualiza todos los campos de una CampoEtapa existente.",
+        summary="Actualizar CampoEtapa",
+        tags=["Ventas"]
+    ),
+    partial_update=extend_schema(
+        description="Actualiza parcialmente los campos de una CampoEtapa existente.",
+        summary="Actualizar Parcialmente CampoEtapa",
+        tags=["Ventas"]
+    ),
+    destroy=extend_schema(
+        description="Elimina una CampoEtapa existente por su ID.",
+        summary="Eliminar CampoEtapa",
+        tags=["Ventas"]
+    ),
 )
 class CampoEtapaViewSet(viewsets.ModelViewSet):
     queryset = CampoEtapa.objects.all()
@@ -710,12 +806,36 @@ class CampoEtapaViewSet(viewsets.ModelViewSet):
 
 # --- VALORES ETAPA ---
 @extend_schema_view(
-    list=extend_schema(summary="Lista de Valores Etapas", tags=["ValoresEtapa"]),
-    retrieve=extend_schema(summary="Detalle de ValorEtapa", tags=["ValoresEtapa"]),
-    create=extend_schema(summary="Crear ValorEtapa", tags=["ValoresEtapa"]),
-    update=extend_schema(summary="Actualizar ValorEtapa", tags=["ValoresEtapa"]),
-    partial_update=extend_schema(summary="Actualizar Parcialmente ValorEtapa", tags=["ValoresEtapa"]),
-    destroy=extend_schema(summary="Eliminar ValorEtapa", tags=["ValoresEtapa"]),
+    list=extend_schema(
+        description="Obtiene una lista de todas las ValoresEtapa registradas.",
+        summary="Lista de ValoresEtapa",
+        tags=["Ventas"],
+    ),
+    retrieve=extend_schema(
+        description="Obtiene los detalles de una ValoresEtapa específica por su ID.",
+        summary="Detalle de ValoresEtapa",
+        tags=["Ventas"]
+    ),
+    create=extend_schema(
+        description="Crea una nueva ValoresEtapa con los datos proporcionados.",
+        summary="Crear ValoresEtapa",
+        tags=["Ventas"]
+    ),
+    update=extend_schema(
+        description="Actualiza todos los campos de una ValoresEtapa existente.",
+        summary="Actualizar ValoresEtapa",
+        tags=["Ventas"]
+    ),
+    partial_update=extend_schema(
+        description="Actualiza parcialmente los campos de una ValoresEtapa existente.",
+        summary="Actualizar Parcialmente ValoresEtapa",
+        tags=["Ventas"]
+    ),
+    destroy=extend_schema(
+        description="Elimina una ValoresEtapa existente por su ID.",
+        summary="Eliminar ValoresEtapa",
+        tags=["Ventas"]
+    ),
 )
 class ValoresEtapaViewSet(viewsets.ModelViewSet):
     queryset = ValoresEtapa.objects.all()
