@@ -1,6 +1,6 @@
 # Create your views here.
 import os
-from unittest.mock import right
+# from unittest.mock import right
 from django.views.generic import TemplateView
 from django.views import View
 from django.shortcuts import render, get_object_or_404, redirect
@@ -14,6 +14,17 @@ from gestion_contable.models import Pagos, ValorUf
 from django.template.loader import get_template
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect, redirect
 from datetime import datetime
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema_view, extend_schema
+from .models import Venta, Etapas, VentaEtapa, CampoEtapa, ValoresEtapa
+from .serializers import (
+    VentaSerializer,
+    EtapasSerializer,
+    VentaEtapaSerializer,
+    CampoEtapaSerializer,
+    ValoresEtapaSerializer
+)
 
 fecha_hoy = datetime.now()
 
@@ -633,3 +644,80 @@ class CartaOfertaPdf(View):
         except:
             pass
         return redirect('lista_ventas')
+
+
+# API
+
+# --- VENTA ---
+@extend_schema_view(
+    list=extend_schema(summary="Lista de Ventas", tags=["Ventas"]),
+    retrieve=extend_schema(summary="Detalle de Venta", tags=["Ventas"]),
+    create=extend_schema(summary="Crear Venta", tags=["Ventas"]),
+    update=extend_schema(summary="Actualizar Venta", tags=["Ventas"]),
+    partial_update=extend_schema(summary="Actualizar Parcialmente Venta", tags=["Ventas"]),
+    destroy=extend_schema(summary="Eliminar Venta", tags=["Ventas"]),
+)
+class VentaViewSet(viewsets.ModelViewSet):
+    queryset = Venta.objects.all()
+    serializer_class = VentaSerializer
+    permission_classes = [IsAuthenticated]
+
+
+# --- ETAPAS ---
+@extend_schema_view(
+    list=extend_schema(summary="Lista de Etapas", tags=["Etapas"]),
+    retrieve=extend_schema(summary="Detalle de Etapa", tags=["Etapas"]),
+    create=extend_schema(summary="Crear Etapa", tags=["Etapas"]),
+    update=extend_schema(summary="Actualizar Etapa", tags=["Etapas"]),
+    partial_update=extend_schema(summary="Actualizar Parcialmente Etapa", tags=["Etapas"]),
+    destroy=extend_schema(summary="Eliminar Etapa", tags=["Etapas"]),
+)
+class EtapasViewSet(viewsets.ModelViewSet):
+    queryset = Etapas.objects.all()
+    serializer_class = EtapasSerializer
+    permission_classes = [IsAuthenticated]
+
+
+# --- VENTA ETAPA ---
+@extend_schema_view(
+    list=extend_schema(summary="Lista de Ventas Etapas", tags=["VentaEtapa"]),
+    retrieve=extend_schema(summary="Detalle de VentaEtapa", tags=["VentaEtapa"]),
+    create=extend_schema(summary="Crear VentaEtapa", tags=["VentaEtapa"]),
+    update=extend_schema(summary="Actualizar VentaEtapa", tags=["VentaEtapa"]),
+    partial_update=extend_schema(summary="Actualizar Parcialmente VentaEtapa", tags=["VentaEtapa"]),
+    destroy=extend_schema(summary="Eliminar VentaEtapa", tags=["VentaEtapa"]),
+)
+class VentaEtapaViewSet(viewsets.ModelViewSet):
+    queryset = VentaEtapa.objects.all()
+    serializer_class = VentaEtapaSerializer
+    permission_classes = [IsAuthenticated]
+
+
+# --- CAMPO ETAPA ---
+@extend_schema_view(
+    list=extend_schema(summary="Lista de Campos Etapas", tags=["CampoEtapa"]),
+    retrieve=extend_schema(summary="Detalle de CampoEtapa", tags=["CampoEtapa"]),
+    create=extend_schema(summary="Crear CampoEtapa", tags=["CampoEtapa"]),
+    update=extend_schema(summary="Actualizar CampoEtapa", tags=["CampoEtapa"]),
+    partial_update=extend_schema(summary="Actualizar Parcialmente CampoEtapa", tags=["CampoEtapa"]),
+    destroy=extend_schema(summary="Eliminar CampoEtapa", tags=["CampoEtapa"]),
+)
+class CampoEtapaViewSet(viewsets.ModelViewSet):
+    queryset = CampoEtapa.objects.all()
+    serializer_class = CampoEtapaSerializer
+    permission_classes = [IsAuthenticated]
+
+
+# --- VALORES ETAPA ---
+@extend_schema_view(
+    list=extend_schema(summary="Lista de Valores Etapas", tags=["ValoresEtapa"]),
+    retrieve=extend_schema(summary="Detalle de ValorEtapa", tags=["ValoresEtapa"]),
+    create=extend_schema(summary="Crear ValorEtapa", tags=["ValoresEtapa"]),
+    update=extend_schema(summary="Actualizar ValorEtapa", tags=["ValoresEtapa"]),
+    partial_update=extend_schema(summary="Actualizar Parcialmente ValorEtapa", tags=["ValoresEtapa"]),
+    destroy=extend_schema(summary="Eliminar ValorEtapa", tags=["ValoresEtapa"]),
+)
+class ValoresEtapaViewSet(viewsets.ModelViewSet):
+    queryset = ValoresEtapa.objects.all()
+    serializer_class = ValoresEtapaSerializer
+    permission_classes = [IsAuthenticated]

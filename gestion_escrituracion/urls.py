@@ -1,8 +1,28 @@
 from django.urls import path
 from .views import *
 from django.contrib.auth.decorators import login_required
+from django.urls import path, include
+from rest_framework import routers
+
+from .views import (
+    VentaViewSet,
+    EtapasViewSet,
+    VentaEtapaViewSet,
+    CampoEtapaViewSet,
+    ValoresEtapaViewSet,
+)
+
+router = routers.DefaultRouter()
+
+# --- Registros para DRF ---
+router.register(r'ventas', VentaViewSet)
+router.register(r'etapas', EtapasViewSet)
+router.register(r'venta-etapas', VentaEtapaViewSet)
+router.register(r'campos-etapas', CampoEtapaViewSet)
+router.register(r'valores-etapas', ValoresEtapaViewSet)
 
 urlpatterns = [
+    path('', include(router.urls)),
     path('ventas/', ListaVentasView.as_view(), name='lista_ventas'),
     # El endpoint para modificar etapas lo haremos luego:
     path('ventas/<int:venta_id>/etapas/', EtapasVentaView.as_view(), name='editar_etapas'),
@@ -24,5 +44,4 @@ urlpatterns = [
     path('cartaoferta/<int:id_venta>/', login_required(carta_oferta), name='cartaoferta'),
     path('cartaoferta_print/<int:id_venta>/', login_required(CartaOfertaPdf.as_view()),
          name='cartaoferta_print'),
-
 ]
