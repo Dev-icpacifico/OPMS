@@ -560,11 +560,19 @@ def carta_oferta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
     datos = Pagos.objects.filter(id_venta=id_venta)
     datos_venta = Venta.objects.filter(id_venta=id_venta)
 
+    if datos_venta.exists():
+        venta = datos_venta[0]
+        precio_venta = venta.precio_venta
+        precio_bodega = venta.id_propiedad.valor_bodega
+        precio_estacionamiento = venta.id_propiedad.valor_estacionamiento
+        precio_depto = precio_venta - precio_bodega - precio_estacionamiento
+
     context = {
         'datos': datos,
         'id_venta': id_venta,
         'datos_venta': datos_venta,
         'fecha_hoy': fecha_hoy,
+        'precio_depto': precio_depto,
         **site.each_context(request),
     }
 
@@ -603,10 +611,16 @@ class CartaOfertaPdf(View):
         try:
             datos = Pagos.objects.filter(id_venta=self.kwargs['id_venta'])
             datos_venta = Venta.objects.filter(id_venta=self.kwargs['id_venta'])
+            if datos_venta.exists():
+                venta = datos_venta[0]
+                precio_venta = venta.precio_venta
+                precio_bodega = venta.id_propiedad.valor_bodega
+                precio_estacionamiento = venta.id_propiedad.valor_estacionamiento
+                precio_depto = precio_venta - precio_bodega - precio_estacionamiento
 
             template = get_template('documentos/carta_oferta_pdf.html')
             context = {'datos': datos, 'id_venta': self.kwargs['id_venta'], 'datos_venta': datos_venta,
-                       'fecha_hoy': fecha_hoy,
+                       'fecha_hoy': fecha_hoy, 'precio_depto': precio_depto,
                        'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')

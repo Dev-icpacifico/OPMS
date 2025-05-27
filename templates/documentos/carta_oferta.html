@@ -59,6 +59,10 @@
                                             <td colspan="3">{{ venta.id_propiedad.etapa.nombre_etapa }}</td>
                                         </tr>
                                         <tr>
+                                            <td colspan="3">Torre</td>
+                                            <td colspan="3">{{ venta.id_propiedad.torre.nombre_torre }}</td>
+                                        </tr>
+                                        <tr>
                                             <td colspan="3">Dirección Inmueble</td>
                                             <td colspan="3">{{ venta.id_propiedad.condominio.direccion_proyecto }}</td>
                                         </tr>
@@ -85,7 +89,7 @@
                                             <td>N° Depto o Casa</td>
                                             <td><strong>{{ venta.id_propiedad.numero_propiedad }}</strong></td>
                                             <td>UF Depto o Casa</td>
-                                            <td><strong>{{ venta.id_propiedad.valor_final_propiedad }}</strong></td>
+                                            <td><strong>{{ precio_depto|uf_format }}</strong></td>
                                             <td>ROL Depto o Casa</td>
                                             <td><strong>{{ venta.id_propiedad.rol }}</strong></td>
                                         </tr>
@@ -116,17 +120,17 @@
                                         </tr>
                                         <tr>
                                             <td>Precio Venta</td>
-                                            <td><strong>{{ venta.id_propiedad.valor_final_propiedad }}</strong></td>
+                                            <td><strong>{{ precio_depto|uf_format }}</strong></td>
                                             <td>Recursos Propios (Pie)</td>
-                                            <td>100.0UF</td>
+                                            <td>{{ venta.recursos_propios|uf_format }}</td>
                                             <td>Subsidio</td>
-                                            <td>0.0UF</td>
+                                            <td>{{ venta.subsidio|uf_format }}</td>
                                         </tr>
                                         <tr>
                                             <td>Ahorro Previo</td>
                                             <td>0.0UF</td>
                                             <td>Monto Credito</td>
-                                            <td>0.0UF</td>
+                                            <td>{{ venta.credito_hipotecario|uf_format }}</td>
                                             <td>Vivienda Social</td>
                                             <td>No</td>
                                         </tr>
