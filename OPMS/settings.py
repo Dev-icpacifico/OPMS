@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'gestion_escrituracion',
     'gestion_postventa',
     'gestion_empresa',
+    'rest_framework',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +140,33 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Variables de JAZZMIN desde jazzmin_settings.py
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    # "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',  # Si usas tokens
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Permitir solo usuarios autenticados
+    ],
+
+}
+
+""" 
+Ver la documentación:
+https://drf-spectacular.readthedocs.io/en/latest/settings.html
+"""
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'SARAMS API',
+    'DESCRIPTION': 'Api para SARAMS ',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    "CONTACT": {"name": "Soporte", "email": "soporte@miempresa.com"},
+    "LICENSE": {"name": "MIT", "url": "https://opensource.org/licenses/MIT"},
+    # OTHER SETTINGS
+}
