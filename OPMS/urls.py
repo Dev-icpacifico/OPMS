@@ -25,7 +25,8 @@ urlpatterns = [
     path('ventas/', include('gestion_escrituracion.urls')),
     # path('test_datatables/', views.test_datatables, name='test_datatables'),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/v1/', include('gestion_clientes.urls')),
+    path('api/v1/clientes', include('gestion_clientes.urls')),
+    path('api/v1/empresas', include('gestion_empresa.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path('api/schema/swagger-ui/',
