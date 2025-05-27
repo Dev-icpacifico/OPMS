@@ -7,6 +7,8 @@ class Empresa(models.Model):
     id_empresa = models.AutoField(primary_key=True)
     razon_social = models.CharField(verbose_name="Razon Social", max_length=50)
     rut_empresa = models.CharField(verbose_name="Rut Empresa", max_length=50)
+    representante = models.CharField(verbose_name="Representante", max_length=50)
+    rut_representante = models.CharField(verbose_name="Rut Representante", max_length=50)
     gerente_ventas = models.CharField(verbose_name="Gerente Ventas", max_length=50)
     jefe_operaciones = models.CharField(verbose_name="Jefes Operaciones", max_length=50)
     banco_alzante = models.CharField(verbose_name="Banco Alzante", max_length=50)

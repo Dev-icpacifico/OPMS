@@ -4,143 +4,120 @@
 {% load static %}
 
 {% block content %}
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="row invoice-preview">
-            <!-- Invoice -->
-            <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
-                <div class="card invoice-preview-card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column">
-                            <div class="mb-xl-0 pb-3">
-                                <div class="d-flex svg-illustration align-items-center gap-2 mb-4">
-                                    <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br> {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="my-0">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="card shadow-sm border rounded">
                     <div class="card-body">
                         <div>
-                            <div>
-                                <p style="font-size: large">Estimado (a),
-                                    <br>{{ datos_venta.0.id_cliente.nombres_1 }}
-                                    {{ datos_venta.0.id_cliente.apellidos_1 }}
-                                    - {{ datos_venta.0.id_cliente.rut_cliente }}:
-                                </p>
-                                <hr>
-                                <p style="font-size: large">Presente:
-                                    <br>Junto con saludar, Inmobiliaria Costanera Pacifico S.P.A, tiene el agrado de
-                                    saludarle y hacer entrega de Escritura de Compra Venta, debidamente inscrita en
-                                    Conservador de Bienes Raíces La Serena Sr. Jaime Morande Miranda, certificado de
-                                    Gravámenes y Prohibiciones, y Derecho de Uso y Goce de Estacionamiento y factura de
-                                    venta del departamento.
-                                </p>
-                                <div>
-                                    <h3>Arqueo Fondo a rendir</h3>
-                                </div>
-                                <!-- Documentos-->
-                                {% if datos %}
-                                    <table class="table table-sm table-bordered text-center align-middle">
-                                        <thead class="table-light">
-                                        <tr>
-                                            <th>Ingreso Fondo a Rendir</th>
-                                            <th>Egresos</th>
-                                            <th>N° Boleta</th>
-                                            <th>Monto</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>$0.-</td>
-                                            <td>Estudio de titulo y confección de escritura</td>
-                                            <td>-</td>
-                                            <td>$0.-</td>
-                                        </tr>
-                                        <tr>
-                                            <td>$0.-</td>
-                                            <td>Inscripcción CBR</td>
-                                            <td>-</td>
-                                            <td>$0.-</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Total</td>
-                                            <td style="text-align: center;"> -</td>
-                                            <td> -</td>
-                                            <td>$0.-</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Saldo a Reembolsar</td>
-                                            <td style="text-align: center;"> -</td>
-                                            <td> -</td>
-                                            <td>$0.-</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                {% else %}
-                                    <table class="table" style="min-height:200px">
-                                        <thead class="table-light">
-                                        <tr>
-                                            <th>Banco</th>
-                                            <th>Forma de pago</th>
-                                            <th>N° DOcumento</th>
-                                            <th>Fecha</th>
-                                            <th>Reserva</th>
-                                            <th>Pie</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody class="table-border-bottom-0">
-                                        <tr>
-                                            <td colspan='4' align='center'><span
-                                                    class="border-info me-1"><i
-                                                    class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                {% endif %}
-                                <!-- Fin Detalle Pie-->
-                                <p>Este saldo será reeembolsado en su cuenta corriente
-                                    <br> Agradeciendo su elección se despide cordialmente </p>
-                                <p>Atte.,</p>
-                                <p>{{ datos_venta.0.id_propiedad.condominio.empresa_vende.gerente_ventas }}</p>
-                                <p>Subgerente de Ventas y OO.PP.</p>
-                            </div>
-                            <hr class="my-0">
+                            <h5 style="text-align: center">{{ datos_venta.0.id_propiedad.condominio.empresa_vende.razon_social }}
+                                <br> {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}
+                            </h5>
+                            <!-- Invoice -->
+                            <p style="text-align: center"><strong style="font-size: x-large">Memo Gastos
+                                Operacionales</strong>
+                                <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
                         </div>
+
+                        <p style="font-size: large">Estimado (a),
+                            <br>{{ datos_venta.0.id_cliente.nombres_1 }}
+                            {{ datos_venta.0.id_cliente.apellidos_1 }}
+                            - {{ datos_venta.0.id_cliente.rut_cliente }}:
+                        </p>
+                        <hr>
+                        <p style="font-size: large">Presente:
+                            <br>Junto con saludar, Inmobiliaria Costanera Pacifico S.P.A, tiene el agrado de
+                            saludarle y hacer entrega de Escritura de Compra Venta, debidamente inscrita en
+                            Conservador de Bienes Raíces La Serena Sr. Jaime Morande Miranda, certificado de
+                            Gravámenes y Prohibiciones, y Derecho de Uso y Goce de Estacionamiento y factura de
+                            venta del departamento.
+                        </p>
+                        <div>
+                            <h3>Arqueo Fondo a rendir</h3>
+                        </div>
+                        <!-- Documentos-->
+                        {% if datos %}
+                            <table class="table table-sm table-bordered text-center align-middle">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Ingreso Fondo a Rendir</th>
+                                    <th>Egresos</th>
+                                    <th>N° Boleta</th>
+                                    <th>Monto</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>$0.-</td>
+                                    <td>Estudio de titulo y confección de escritura</td>
+                                    <td>-</td>
+                                    <td>$0.-</td>
+                                </tr>
+                                <tr>
+                                    <td>$0.-</td>
+                                    <td>Inscripcción CBR</td>
+                                    <td>-</td>
+                                    <td>$0.-</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Total</td>
+                                    <td style="text-align: center;"> -</td>
+                                    <td> -</td>
+                                    <td>$0.-</td>
+                                </tr>
+                                <tr>
+                                    <td>Saldo a Reembolsar</td>
+                                    <td style="text-align: center;"> -</td>
+                                    <td> -</td>
+                                    <td>$0.-</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <table class="table" style="min-height:200px">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Banco</th>
+                                    <th>Forma de pago</th>
+                                    <th>N° DOcumento</th>
+                                    <th>Fecha</th>
+                                    <th>Reserva</th>
+                                    <th>Pie</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                <tr>
+                                    <td colspan='4' align='center'><span
+                                            class="border-info me-1"><i
+                                            class="mdi mdi-information-outline"></i>Aún no se han realizado pagos</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        {% endif %}
+                        <!-- Fin Detalle Pie-->
+                        <p>Este saldo será reeembolsado en su cuenta corriente
+                            <br> Agradeciendo su elección se despide cordialmente </p>
+                        <p>Atte.,</p>
+                        <p>{{ datos_venta.0.id_propiedad.condominio.empresa_vende.gerente_ventas }}</p>
+                        <p>Subgerente de Ventas y OO.PP.</p>
+                        <hr class="my-0">
                         <div style="margin-top: 20px; text-align: center;">
                             <p style="font-style: italic; font-size: 14px;">
                                 Gracias por su preferencia. Para consultas, contáctenos a <a
                                     href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
                             </p>
-                        </div>
-                    </div>
-                    <hr class="my-0">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="fw-medium">Note:</span>
-                                <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
-                  projects. Thank You!</span>
+                            <div class="mt-4">
+                                <a class="btn btn-outline-primary" href="{% url 'memoggoo_print' id_venta=id_venta %}"
+                                   target="_blank">
+                                    Descargar PDF
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- /Invoice -->
-            <!-- Invoice Actions -->
-            <div class="col-xl-3 col-md-4 col-12 invoice-actions">
-                <div class="card">
-                    <div class="card-body">
-                        <a class="btn btn-info d-grid w-100 mb-3 waves-effect waves-light" target="_blank"
-                           href="{% url 'memoggoo_print' id_venta=id_venta %}">
-                            DESCARGAR PDF
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- /Invoice Actions -->
         </div>
-        <!-- Offcanvas -->
     </div>
 {% endblock %}

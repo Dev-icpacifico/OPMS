@@ -183,12 +183,19 @@
                                 </tr>
                             </table>
                         </div>
-
-                        <div class="mt-4">
-                            <a class="btn btn-outline-primary" href="{% url 'pagos_invoice_pdf' id_venta=id_venta %}"
-                               target="_blank">
-                                Descargar PDF
-                            </a>
+                        <hr class="my-0">
+                        <div style="margin-top: 20px; text-align: center;">
+                            <p style="font-style: italic; font-size: 14px;">
+                                Gracias por su preferencia. Para consultas, contáctenos a <a
+                                    href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
+                            </p>
+                            <div class="mt-4">
+                                <a class="btn btn-outline-primary"
+                                   href="{% url 'pagos_invoice_pdf' id_venta=id_venta %}"
+                                   target="_blank">
+                                    Descargar PDF
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

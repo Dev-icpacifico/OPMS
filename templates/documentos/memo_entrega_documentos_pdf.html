@@ -44,19 +44,19 @@
 
                 <div>
                     <!-- Encabezado carta -->
-                    <p style="font-size: large">A: Gonzalo Valdes, Depto de Contabilidad
+                    <p style="font-size: 15px">A: Gonzalo Valdes, Depto de Contabilidad
                         <br>De: Marta Olivares Castro
                         <br>Ref: Entrega
                         documentos, {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}
                         <br>Fecha: {{ fecha_hoy|date:"d-M-Y" }} </p>
                     <!-- Fin Encabezado carta -->
 
-                    <p style="font-size: large">Estimado Gonzalo, según referencia le hago entrega de los
+                    <p style="font-size: 15px">Estimado Gonzalo, según referencia le hago entrega de los
                         siguientes documentos:
 
                         {% for venta in datos_venta %}
                             <br>
-                            Sr(a):{{ datos_venta.0.id_cliente.nombres_1 }}
+                            Sr(a): {{ datos_venta.0.id_cliente.nombres_1 }}
                             {{ datos_venta.0.id_cliente.apellidos_1 }}
                             - {{ datos_venta.0.id_cliente.rut_cliente }}
                             Depto: {{ datos_venta.0.id_propiedad.numero_propiedad }}</p>
@@ -120,15 +120,17 @@
                     {% endif %}
                     <!-- Fin Detalle Pie-->
 
-                    <p>Atte.,</p>
-                    <p>Marta Olivares Castro.</p>
-                    <p>Subgerente de Ventas y OO.PP.</p>
+                    <p style="font-size: 15px">Atte.,</p>
+                    <p style="font-size: 15px">{{ datos_venta.0.id_propiedad.condominio.empresa_vende.gerente_ventas }}.</p>
+                    <p style="font-size: 15px">Subgerente de Ventas y OO.PP.</p>
                 </div>
             </div>
         </div>
-        <hr class="my-0">
     </div>
 </div>
 <!-- /Invoice -->
+<p style="text-align: right; font-size: 10px; font-style: italic;">
+    Fecha de impresión: {{ fecha_hoy|date:"d/m/Y h:i:s A" }}
+</p>
 </body>
 </html>

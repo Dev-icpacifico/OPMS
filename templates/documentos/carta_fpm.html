@@ -19,117 +19,88 @@
 
     </style>
 
-    <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="row invoice-preview">
-            <!-- Invoice -->
-            <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
-                <div class="card invoice-preview-card">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="card shadow-sm border rounded">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column">
-                            <div class="mb-xl-0 pb-3">
-                                <div class="d-flex svg-illustration align-items-center gap-2 mb-4">
-                                    {% for venta in datos_venta %}
-                                        <span class="h4 mb-0 app-brand-text fw-semibold">INMOBILIARIA COSTANERA PACIFICO <br> {{ venta.id_propiedad.condominio.nombre_condominio }} {{ venta.id_propiedad.etapa.nombre_etapa }}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
+                        <div>
+                            <h5 style="text-align: center">{{ datos_venta.0.id_propiedad.condominio.empresa_vende.razon_social }}
+                                <br> {{ datos_venta.0.id_propiedad.condominio.nombre_condominio }} {{ datos_venta.0.id_propiedad.etapa.nombre_etapa }}
+                            </h5>
+                            <!-- Invoice -->
+                            <p style="text-align: center"><strong style="font-size: x-large">Carta
+                                Fondo Puesta En Marcha</strong>
+                                <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
                         </div>
-                    </div>
-                    <hr class="my-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between flex-wrap">
-                            <div class="contenido">
-                                <!-- Encabezado carta -->
-                                <p style="text-align: center"><strong style="font-size: x-large">Carta Fondo Puesta en
-                                    Marcha</strong> <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
-                                {% for venta in datos_venta %}
-                                    <p>
-                                        Estimado(a):{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</p>
-                                {% endfor %}
-                                <!-- Fin Encabezado carta -->
-                                <p>Junto con saludar y según lo informado en el Cierre de Negocios firmado por usted
-                                    al momento de promesar su departamento, Ud. debe cancelar por concepto de “Fondo
-                                    de puesta en Marcha” un valor de {{ datos_venta.0.id_propiedad.fpm|clp_format }}
-                                    Dicho monto se debe pagar antes de la
-                                    entrega y está definido según la ley N° 19.537 de Copropiedad Inmobiliaria
-                                    referida en Reglamento de Copropiedad.</p>
+                        <div class="contenido">
+                            {% for venta in datos_venta %}
+                                <p>
+                                    Estimado(a):{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</p>
+                            {% endfor %}
+                            <!-- Fin Encabezado carta -->
+                            <p>Junto con saludar y según lo informado en el Cierre de Negocios firmado por usted
+                                al momento de promesar su departamento, Ud. debe cancelar por concepto de “Fondo
+                                de puesta en Marcha” un valor de {{ datos_venta.0.id_propiedad.fpm|clp_format }}
+                                Dicho monto se debe pagar antes de la
+                                entrega y está definido según la ley N° 19.537 de Copropiedad Inmobiliaria
+                                referida en Reglamento de Copropiedad.</p>
 
-                                <p>Reglamento de Copropiedad indica:</p>
-                                <p>ARTÍCULO VIGÉSIMO PRIMERO: Sin perjuicio de los pagos a que se refieren los
-                                    artículos anteriores, los propietarios erogarán a prorrata de sus cuotas, los
-                                    dineros necesarios para la formación de los siguientes fondos:</p>
+                            <p>Reglamento de Copropiedad indica:</p>
+                            <p>ARTÍCULO VIGÉSIMO PRIMERO: Sin perjuicio de los pagos a que se refieren los
+                                artículos anteriores, los propietarios erogarán a prorrata de sus cuotas, los
+                                dineros necesarios para la formación de los siguientes fondos:</p>
 
-                                <p>A) "Fondo Común de Reserva", que se integrará según se establece en el artículo
-                                    tercero transitorio del presente reglamento y servirá para atender las
-                                    reparaciones de los bienes de dominio común o a gastos comunes urgentes o
-                                    imprevistos, el que se formará e incrementará con el porcentaje de recargo sobre
-                                    los gastos comunes que en sesión extraordinaria fije la asamblea de
-                                    copropietarios, con el producto de las multas e intereses que deben pagar los
-                                    copropietarios. Los recursos de este fondo se mantendrán en depósito en una
-                                    cuenta corriente bancaria o en una cuenta de ahorro, o se invertirán en
-                                    instrumentos financieros que operen en el mercado de capitales, previo acuerdo
-                                    del Comité de Administración.</p>
-                                <p>B) “Fondo de Puesta en Marcha”, que se integrará según se establece en el
-                                    artículo tercero transitorio del presente reglamento y servirá para atender los
-                                    gastos iniciales de habilitación y puesta en marcha de la Comunidad, tales como
-                                    alhajamiento del hall de acceso, compra de activos básicos y capital de trabajo.
-                                    Este aporte, corresponderá y deberá ser pagado por el primer adquirente de la
-                                    Unidad respectiva.</p>
-                                <p>ARTÍCULO TERCERO TRANSITORIO: Mientras la asamblea de copropietarios de la
-                                    Comunidad, en sesión extraordinaria, no determine el porcentaje de recargo sobre
-                                    los gastos comunes para el fondo de reserva establecido en el artículo vigésimo
-                                    tercero del presente Reglamento, dicho porcentaje se fija en el equivalente al
-                                    10 % por ciento del total de los gastos comunes que mensualmente
-                                    corresponda.</p>
+                            <p>A) "Fondo Común de Reserva", que se integrará según se establece en el artículo
+                                tercero transitorio del presente reglamento y servirá para atender las
+                                reparaciones de los bienes de dominio común o a gastos comunes urgentes o
+                                imprevistos, el que se formará e incrementará con el porcentaje de recargo sobre
+                                los gastos comunes que en sesión extraordinaria fije la asamblea de
+                                copropietarios, con el producto de las multas e intereses que deben pagar los
+                                copropietarios. Los recursos de este fondo se mantendrán en depósito en una
+                                cuenta corriente bancaria o en una cuenta de ahorro, o se invertirán en
+                                instrumentos financieros que operen en el mercado de capitales, previo acuerdo
+                                del Comité de Administración.</p>
+                            <p>B) “Fondo de Puesta en Marcha”, que se integrará según se establece en el
+                                artículo tercero transitorio del presente reglamento y servirá para atender los
+                                gastos iniciales de habilitación y puesta en marcha de la Comunidad, tales como
+                                alhajamiento del hall de acceso, compra de activos básicos y capital de trabajo.
+                                Este aporte, corresponderá y deberá ser pagado por el primer adquirente de la
+                                Unidad respectiva.</p>
+                            <p>ARTÍCULO TERCERO TRANSITORIO: Mientras la asamblea de copropietarios de la
+                                Comunidad, en sesión extraordinaria, no determine el porcentaje de recargo sobre
+                                los gastos comunes para el fondo de reserva establecido en el artículo vigésimo
+                                tercero del presente Reglamento, dicho porcentaje se fija en el equivalente al
+                                10 % por ciento del total de los gastos comunes que mensualmente
+                                corresponda.</p>
 
-                                <p>Respecto del Fondo de Puesta en Marcha, este se constituirá mediante el aporte
-                                    por parte del adquirente de la unidad equivalente a 2 gastos comunes mensuales
-                                    del edificio.</p>
-                                <p>Agradeceré tener contemplado este pago en el momento indicado.</p>
-                                <br></br>
+                            <p>Respecto del Fondo de Puesta en Marcha, este se constituirá mediante el aporte
+                                por parte del adquirente de la unidad equivalente a 2 gastos comunes mensuales
+                                del edificio.</p>
+                            <p>Agradeceré tener contemplado este pago en el momento indicado.</p>
+                            <br></br>
 
-                                <p>Atenta a sus consultas,</p>
-                                <p>{{ datos_venta.0.id_propiedad.condominio.empresa_vende.gerente_ventas }}</p>
-                                <p>Subgerente de Ventas y OO.PP.</p>
-                            </div>
-                            <hr class="my-0">
+                            <p>Atenta a sus consultas,</p>
+                            <p>{{ datos_venta.0.id_propiedad.condominio.empresa_vende.gerente_ventas }}</p>
+                            <p>Subgerente de Ventas y OO.PP.</p>
                         </div>
+                        <hr class="my-0">
+
                         <div style="margin-top: 20px; text-align: center;">
                             <p style="font-style: italic; font-size: 14px;">
                                 Gracias por su preferencia. Para consultas, contáctenos a <a
                                     href="mailto:amoya@icpacifico.cl">amoya@icpacifico.cl</a>
                             </p>
-                        </div>
-                    </div>
-
-
-                    <hr class="my-0">
-
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="fw-medium">Note:</span>
-                                <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
-              projects. Thank You!</span>
+                            <div class="mt-4">
+                                <a class="btn btn-outline-primary" href="{% url 'fpm_venta_print' id_venta=id_venta %}"
+                                   target="_blank">
+                                    Descargar PDF
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- /Invoice -->
-
-            <!-- Invoice Actions -->
-            <div class="col-xl-3 col-md-4 col-12 invoice-actions">
-                <div class="card">
-                    <div class="card-body">
-                        <a class="btn btn-info d-grid w-100 mb-3 waves-effect waves-light" target="_blank"
-                           href="{% url 'fpm_venta_print' id_venta=id_venta %}">
-                            DESCARGAR PDF
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- /Invoice Actions -->
         </div>
     </div>
 {% endblock %}
