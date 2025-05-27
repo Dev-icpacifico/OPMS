@@ -28,7 +28,8 @@ urlpatterns = [
     path('api/v1/clientes', include('gestion_clientes.urls')),
     path('api/v1/empresas', include('gestion_empresa.urls')),
     path('api/v1/postventa', include('gestion_postventa.urls')),
-    path('api/v1/ventas', include('gestion_escrituracion.urls')),
+    path('api/v1/gestvent', include('gestion_escrituracion.urls')),
+    path('api/v1/propiedad', include('gestion_propiedad.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path('api/schema/swagger-ui/',
