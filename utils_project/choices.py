@@ -25,7 +25,7 @@ APLICACION_DSCTO_CHOICES = [
 ]
 
 TIPO_VENTA_CHOICES = [
-    ('Credito', 'Credito'),
+    ('Credito', 'Crédito'),
     ('Contado', 'Contado'),
 ]
 

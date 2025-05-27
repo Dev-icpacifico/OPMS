@@ -373,6 +373,16 @@ class EntregaDocumentoPdf(View):
 def carta_cierre_negocios_venta(request, id_venta):  # ESTA VISTA ES PARA GENERAR UN DOCUMENTO
     datos_venta = Venta.objects.filter(id_venta=id_venta)
     datos = Pagos.objects.filter(id_venta=id_venta, estado_pago="Contabilizado")
+    if datos_venta.exists():
+        venta = datos_venta[0]
+        valor_inicial_propiedad = venta.id_propiedad.valor_inicial_propiedad
+        bono_pie = venta.bono_pie
+        precio_final = venta.precio_venta
+        credito_hipotecario = venta.credito_hipotecario
+        total = valor_inicial_propiedad - bono_pie
+    reserva = 10
+    pie_contado = precio_final - credito_hipotecario - reserva
+
     # Valores UF por fecha contable
     valores_uf_por_pago = {}
     for pago in datos:
@@ -391,6 +401,11 @@ def carta_cierre_negocios_venta(request, id_venta):  # ESTA VISTA ES PARA GENERA
         'datos': datos,
         'valores_uf_por_pago': valores_uf_por_pago,
         'fecha_hoy': fecha_hoy,
+        'precio_final': precio_final,
+        'reserva': reserva,
+        'pie_contado': pie_contado,
+        'credito_hipotecario': credito_hipotecario,
+        'total': total,
         **site.each_context(request),
     }
 
@@ -430,6 +445,15 @@ class CierreNegociopdf(View):
             id_venta = self.kwargs['id_venta']
             datos_venta = Venta.objects.filter(id_venta=id_venta)
             datos = Pagos.objects.filter(id_venta=id_venta, estado_pago="Contabilizado")
+            if datos_venta.exists():
+                venta = datos_venta[0]
+                valor_inicial_propiedad = venta.id_propiedad.valor_inicial_propiedad
+                bono_pie = venta.bono_pie
+                precio_final = venta.precio_venta
+                credito_hipotecario = venta.credito_hipotecario
+                total = valor_inicial_propiedad - bono_pie
+            reserva = 10
+            pie_contado = precio_final - credito_hipotecario - reserva
             # Valores UF por fecha contable
             valores_uf_por_pago = {}
             for pago in datos:
@@ -449,6 +473,11 @@ class CierreNegociopdf(View):
                 'datos': datos,
                 'valores_uf_por_pago': valores_uf_por_pago,
                 'fecha_hoy': fecha_hoy,
+                'precio_final': precio_final,
+                'reserva': reserva,
+                'pie_contado': pie_contado,
+                'credito_hipotecario': credito_hipotecario,
+                'total': total,
                 'icon': 'static/assets/img/illustrations/logo-horizontal.gif'}
 
             html = template.render(context)

@@ -27,6 +27,7 @@ class Venta(models.Model):
                                        default='No Aplica')
     precio_venta = models.FloatField(verbose_name="P.Venta", help_text="Precio venta", default=0)
     credito_hipotecario = models.FloatField(verbose_name="Credito Hipotecario", validators=[validar_positivo], null=True, blank=True)
+    saldo_contado = models.FloatField(verbose_name="Saldo Contado", validators=[validar_positivo], null=True, blank=True)
     estado_venta = models.CharField(verbose_name='Estado', help_text="Estado Vent", choices=VENTAS_CHOICES,
                                     max_length=50, default=VENTAS_CHOICES[0][0])
     fecha_promesa = models.DateField(verbose_name='F.Promesa', help_text="Fecha de promesa")

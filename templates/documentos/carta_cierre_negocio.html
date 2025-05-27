@@ -56,7 +56,8 @@
                                                 <div>
                                                     <h3>Forma de pago UF</h3>
                                                 </div>
-                                                <!-- Forma de pago -->
+                                            {% if datos_venta.0.tipo_venta == "Credito" %}
+                                                <!-- Forma de pago Contado -->
                                                 <table class="table table-sm table-bordered text-center align-middle">
                                                     <thead class="table-light">
                                                     <tr>
@@ -67,23 +68,53 @@
                                                     <tbody>
                                                     <tr>
                                                         <td>Reserva</td>
-                                                        <td>aaa</td>
+                                                        <td>{{ reserva|uf_format }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Pie Contado</td>
-                                                        <td>aaa</td>
+                                                        <td>{{ pie_contado|uf_format }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Saldo a pagar Contado</td>
-                                                        <td>aaa</td>
+                                                        <td>{{ credito_hipotecario|uf_format }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Total</td>
-                                                        <td>aaa</td>
+                                                        <td>{{ total|uf_format }}</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
-                                                <!-- Fin Forma de pago -->
+                                                <!-- Fin Forma de pago Contado -->
+                                            {% else %}
+                                                <!-- Forma de pago Crédito -->
+                                                <table class="table table-sm table-bordered text-center align-middle">
+                                                    <thead class="table-light">
+                                                    <tr>
+                                                        <th>Concepto</th>
+                                                        <th>Monto UF</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Reserva</td>
+                                                        <td>{{ reserva|uf_format }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Pie Contado</td>
+                                                        <td>{{ pie_contado|uf_format }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Crédito Hipotecario</td>
+                                                        <td>{{ credito_hipotecario|uf_format }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total</td>
+                                                        <td>{{ total|uf_format }}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <!-- Fin Forma de pago Crédito -->
+                                            {% endif %}
                                                 <hr>
                                                 <div>
                                                     <h3>Cierre de Negocio</h3>

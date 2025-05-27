@@ -84,34 +84,65 @@
                     <div>
                         <h3>Forma de pago UF</h3>
                     </div>
-                    <!-- Forma de pago -->
-                    <table class="tabla1">
-                        <thead class="table-light">
-                        <tr>
-                            <th>Concepto</th>
-                            <th>Monto UF</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Reserva</td>
-                            <td>aaa</td>
-                        </tr>
-                        <tr>
-                            <td>Pie Contado</td>
-                            <td>aaa</td>
-                        </tr>
-                        <tr>
-                            <td>Saldo a pagar Contado</td>
-                            <td>aaa</td>
-                        </tr>
-                        <tr>
-                            <td>Total</td>
-                            <td>aaa</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <!-- Fin Forma de pago -->
+                    {% if datos_venta.0.tipo_venta == "Credito" %}
+                        <!-- Forma de pago Contado -->
+                        <table class="tabla1">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Monto UF</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Reserva</td>
+                                <td>{{ reserva|uf_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Pie Contado</td>
+                                <td>{{ pie_contado|uf_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Saldo a pagar Contado</td>
+                                <td>{{ credito_hipotecario|uf_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>{{ total|uf_format }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- Fin Forma de pago Contado -->
+                    {% else %}
+                        <!-- Forma de pago Crédito -->
+                        <table class="tabla1">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Monto UF</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Reserva</td>
+                                <td>{{ reserva|uf_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Pie Contado</td>
+                                <td>{{ pie_contado|uf_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Crédito Hipotecario</td>
+                                <td>{{ credito_hipotecario|uf_format }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>{{ total|uf_format }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- Fin Forma de pago Crédito -->
+                    {% endif %}
                     <hr>
                     <div>
                         <h3>Cierre de Negocio</h3>
@@ -236,13 +267,13 @@
                         convertidas a Unidades de Fomento según valor de ésta al momento del COBRO EFECTIVO de los
                         documentos entregados por el Promitente Comprador.</p>
                     <p style="font-size: large; text-align: justify">En concordancia con lo anterior, se le informa que
-                    será de su exclusiva
-                    responsabilidad el
-                    cumplimiento y mantención de los requisitos necesarios para materializar la compra de su
-                    Departamento, poseer capacidad financiera suficiente para su adquisición y/o cumplir de modo
-                    adecuado las exigencias para acceder a créditos comerciales, de cualquier naturaleza, que
-                    permitan financiar la compra ofrecida.
-                </p>
+                        será de su exclusiva
+                        responsabilidad el
+                        cumplimiento y mantención de los requisitos necesarios para materializar la compra de su
+                        Departamento, poseer capacidad financiera suficiente para su adquisición y/o cumplir de modo
+                        adecuado las exigencias para acceder a créditos comerciales, de cualquier naturaleza, que
+                        permitan financiar la compra ofrecida.
+                    </p>
                     <p style="font-size: large; text-align: justify">Adicionalmente, se deberá abonar el Fondo de Puesta
                         en Marcha (o de
                         Explotación), el cual cubre
