@@ -69,7 +69,7 @@ class PropiedadeAdmin(admin.ModelAdmin):
     list_display = (
          'numero_propiedad','condominio', 'etapa',
         'estado_propiedad', 'modelo', 'piso', 'format_vip',
-        'format_vfp', 'fpm','estacionamiento', 'bodega',
+        'format_vfp', 'fpm','estacionamiento','valor_estacionamiento', 'bodega','valor_bodega',
         'metros_vivienda', 'metros_terraza_propiedad','metros_total_propiedad'
     )
     search_fields = ('numero_propiedad', 'rol')
