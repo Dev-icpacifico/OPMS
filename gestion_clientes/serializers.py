@@ -12,18 +12,15 @@ class AreaProfesionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AreaProfesion
         fields = '__all__'
-        depth = 1
 
 class ProfesioneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profesione
         fields = '__all__'
-        depth = 1
 
 
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
         fields = '__all__'
-        depth = 1
 

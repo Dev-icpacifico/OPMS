@@ -50,4 +50,3 @@ class RequerimientoPostVentaSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequerimientoPostVenta
         fields = '__all__'
-        depth = 1

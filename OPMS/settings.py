@@ -168,5 +168,9 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': True,
     "CONTACT": {"name": "Soporte", "email": "soporte@miempresa.com"},
     "LICENSE": {"name": "MIT", "url": "https://opensource.org/licenses/MIT"},
+    'ENUM_NAME_OVERRIDES': {
+        'EstadoModeloEnum': 'EstadoModeloEnum',
+        'TipoVentaEnum': 'TipoVentaEnum',
+    },
     # OTHER SETTINGS
 }
