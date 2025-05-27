@@ -47,109 +47,109 @@
                         <br>La Serena, {{ fecha_hoy|date:"d-M-Y" }}</p>
                     <!-- Información Carta Oferta-->
                     {% for venta in datos_venta %}
-                    <table class="tabla1">
-                        <tr>
-                        </tr>
-                        <tbody>
-                        <tr>
-                            <td colspan="3">Nombre Titular</td>
-                            <td colspan="3">{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Rut Titular</td>
-                            <td colspan="3">{{ venta.id_cliente.rut_cliente }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Proyecto</td>
-                            <td colspan="3">{{ venta.id_propiedad.condominio.nombre_condominio}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Etapa</td>
-                            <td colspan="3">{{ venta.id_propiedad.etapa.nombre_etapa }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Dirección Inmueble</td>
-                            <td colspan="3">{{venta.id_propiedad.condominio.direccion_proyecto}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Razón Social Inmobiliaria</td>
-                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.razon_social}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">RUT</td>
-                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.rut_empresa}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Banco Alzante</td>
-                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.banco_alzante}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">De no haber Banco Acreedor informar donde se debe efecturar el
-                                pago de este
-                                crédito
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>N° Depto o Casa</td>
-                            <td><strong>{{venta.id_propiedad.numero_propiedad}}</strong></td>
-                            <td>UF Depto o Casa</td>
-                            <td><strong>{{venta.id_propiedad.valor_final_propiedad}}</strong></td>
-                            <td>ROL Depto o Casa</td>
-                            <td>{{venta.id_propiedad.rol}}</td>
-                        </tr>
-                        <tr>
-                            <td>N° Estacionamiento</td>
-                            <td><strong>{{venta.id_propiedad.estacionamiento}}</strong></td>
-                            <td>UF Estacionamiento</td>
-                            <td><strong>{{venta.id_propiedad.estacionamiento}}</strong></td>
-                            <td>Rol Estacionamiento</td>
-                            <td><strong>{{venta.id_propiedad.estacionamiento}}</strong></td>
-                        </tr>
-                        <tr>
-                            <td>N° Bodega</td>
-                            <td><strong>{{venta.id_propiedad.bodega}}</strong></td>
-                            <td>UF Bodega</td>
-                            <td><strong>{{venta.id_propiedad.bodega}}</strong></td>
-                            <td>Rol Bodega</td>
-                            <td><strong>{{venta.id_propiedad.bodega}}</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"  style="background-color: #f0f0f0;">Precio Venta</td>
-                            <td style="background-color: #f0f0f0;"><strong>{{venta.id_propiedad.valor_final_propiedad}}</strong></td>
-                            <td> - </td>
-                            <td> - </td>
-                        </tr>
-                        <tr>
-                            <td >Precio Venta</td>
-                            <td><strong>{{venta.id_propiedad.valor_final_propiedad}}</strong></td>
-                            <td>Recursos Propios (Pie)</td>
-                            <td>100.0UF</td>
-                            <td>Subsidio</td>
-                            <td>0.0UF</td>
-                        </tr>
-                        <tr>
-                            <td>Ahorro Previo</td>
-                            <td>0.0UF</td>
-                            <td>Monto Credito</td>
-                            <td>0.0UF</td>
-                            <td>Vivienda Social</td>
-                            <td>No</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Quien cancela los Gastos Operacionales</td>
-                            <td colspan="3">{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">En que notaria firma escritura</td>
-                            <td colspan="3">{{venta.id_propiedad.condominio.empresa_vende.notaria}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Observaciones</td>
-                            <td colspan="3">Proyecto Afecto a IVA, incluido en el precio</td>
-                        </tr>
-
-                        </tbody>
-                    </table>
+                        <table class="tabla1">
+                            <tr>
+                            </tr>
+                            <tbody>
+                            <tr>
+                                <td colspan="3">Nombre Titular</td>
+                                <td colspan="3">{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Rut Titular</td>
+                                <td colspan="3">{{ venta.id_cliente.rut_cliente }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Proyecto</td>
+                                <td colspan="3">{{ venta.id_propiedad.condominio.nombre_condominio }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Etapa</td>
+                                <td colspan="3">{{ venta.id_propiedad.etapa.nombre_etapa }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Dirección Inmueble</td>
+                                <td colspan="3">{{ venta.id_propiedad.condominio.direccion_proyecto }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Razón Social Inmobiliaria</td>
+                                <td colspan="3">{{ venta.id_propiedad.condominio.empresa_vende.razon_social }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">RUT</td>
+                                <td colspan="3">{{ venta.id_propiedad.condominio.empresa_vende.rut_empresa }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Banco Alzante</td>
+                                <td colspan="3">{{ venta.id_propiedad.condominio.empresa_vende.banco_alzante }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">De no haber Banco Acreedor informar donde se debe efecturar el
+                                    pago de este
+                                    crédito
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>N° Depto o Casa</td>
+                                <td><strong>{{ venta.id_propiedad.numero_propiedad }}</strong></td>
+                                <td>UF Depto o Casa</td>
+                                <td><strong>{{ venta.id_propiedad.valor_final_propiedad }}</strong></td>
+                                <td>ROL Depto o Casa</td>
+                                <td><strong>{{ venta.id_propiedad.rol }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>N° Estacionamiento</td>
+                                <td><strong>{{ venta.id_propiedad.estacionamiento }}</strong></td>
+                                <td>UF Estacionamiento</td>
+                                <td><strong>{{ venta.id_propiedad.valor_estacionamiento|uf_format }}</strong></td>
+                                <td>Rol Estacionamiento</td>
+                                <td><strong>{{ venta.id_propiedad.rol_estacionamiento }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>N° Bodega</td>
+                                <td><strong>{{ venta.id_propiedad.bodega }}</strong></td>
+                                <td>UF Bodega</td>
+                                <td><strong>{{ venta.id_propiedad.valor_bodega|uf_format }}</strong></td>
+                                <td>Rol Bodega</td>
+                                <td><strong>{{ venta.id_propiedad.rol_bodega }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="background-color: #f0f0f0;">Precio Venta</td>
+                                <td style="background-color: #f0f0f0;">
+                                    <strong>{{ venta.id_propiedad.valor_final_propiedad }}</strong></td>
+                                <td> -</td>
+                                <td> -</td>
+                            </tr>
+                            <tr>
+                                <td>Precio Venta</td>
+                                <td><strong>{{ venta.id_propiedad.valor_final_propiedad }}</strong></td>
+                                <td>Recursos Propios (Pie)</td>
+                                <td>100.0UF</td>
+                                <td>Subsidio</td>
+                                <td>0.0UF</td>
+                            </tr>
+                            <tr>
+                                <td>Ahorro Previo</td>
+                                <td>0.0UF</td>
+                                <td>Monto Credito</td>
+                                <td>0.0UF</td>
+                                <td>Vivienda Social</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Quien cancela los Gastos Operacionales</td>
+                                <td colspan="3">{{ venta.id_cliente.nombres_1 }} {{ venta.id_cliente.apellidos_1 }} {{ venta.id_cliente.apellidos_2 }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">En que notaria firma escritura</td>
+                                <td colspan="3">{{ venta.id_propiedad.condominio.empresa_vende.notaria }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Observaciones</td>
+                                <td colspan="3">Proyecto Afecto a IVA, incluido en el precio</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     {% endfor %}
                 </div>
             </div>
