@@ -200,8 +200,8 @@ RENTA_COTIZACION_CHOICES = [(rank_1, '$0 a $499.999'),
                             (rank_11, 'No definido'), ]
 
 # orientacion_vivienda
-norte = 'Norte'
-sur = 'Sur'
+norte = 'NORTE'
+sur = 'SUR'
 oriente = 'ORIENTE'
 poniente = 'PONIENTE'
 nor_oriente = 'NOR ORIENTE'
@@ -209,8 +209,8 @@ sur_poniente = 'SUR PONIENTE'
 nor_poniente = 'NOR PONIENTE'
 sur_oriente = 'SUR ORIENTE'
 
-ORIENTACION_VIVIENDA = [(norte, 'Norte'),
-                        (sur, 'Sur'),
+ORIENTACION_VIVIENDA = [(norte, 'NORTE'),
+                        (sur, 'SUR'),
                         (oriente, 'ORIENTE'),
                         (poniente, 'PONIENTE'),
                         (nor_oriente, 'NOR ORIENTE'),
