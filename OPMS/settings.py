@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'gestion_empresa',
     'rest_framework',
     'drf_spectacular',
+    'import_export',
 ]
 
 MIDDLEWARE = [
