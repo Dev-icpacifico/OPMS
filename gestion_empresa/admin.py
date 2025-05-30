@@ -24,7 +24,7 @@ class EmpresaAdmin(admin.ModelAdmin):
             'fields': ('razon_social', 'rut_empresa')
         }),
         ('Representantes', {
-            'fields': ('gerente_ventas', 'jefe_operaciones')
+            'fields': ('representante', 'rut_representante','gerente_ventas', 'jefe_operaciones')
         }),
         ('Notaría y Bancos', {
             'fields': ('notaria', 'banco_alzante')
