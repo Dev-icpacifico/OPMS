@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from OPMS.jazzmin_settings import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS
-
+from OPMS.database import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -82,11 +82,17 @@ WSGI_APPLICATION = 'OPMS.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}"""
+
+DATABASES = {
+    'default': DATABASES_POSTGRESQL_DEMO_1
+    # 'default':DATABASES_POSTGRESQL_DEMO_2
+    # 'default': DATABASES_SQLITE
 }
 
 # Password validation
