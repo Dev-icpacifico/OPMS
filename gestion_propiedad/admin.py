@@ -3,7 +3,10 @@ from .models import (
     Condominio, Etapa, SubEtapa, Torre, Modelo, Propiedade
 )
 from django.utils.html import format_html
-
+from django.contrib import admin
+from import_export.admin import ExportMixin, ImportExportModelAdmin
+from import_export import resources
+from django.utils.html import format_html
 
 # Inline: Etapa dentro de Condominio
 class EtapaInline(admin.TabularInline):
@@ -64,13 +67,35 @@ class ModeloAdmin(admin.ModelAdmin):
     ordering = ('id_modelo',)
 
 
+
+# Recurso para import-export
+class PropiedadeResource(resources.ModelResource):
+    class Meta:
+        model = Propiedade
+        skip_unchanged = True
+        report_skipped = True
+        import_id_fields = ['id_propiedad']  # Puedes cambiar a 'numero_propiedad' si lo prefieres
+        fields = (
+            'id_propiedad',
+            'numero_propiedad', 'condominio', 'etapa', 'torre', 'rol',
+            'modelo', 'estado_propiedad', 'ori_propiedad', 'piso',
+            'metros_vivienda', 'metros_terraza_propiedad', 'metros_total_propiedad',
+            'bono_propiedad', 'prorrateo_propiedad',
+            'estacionamiento', 'valor_estacionamiento', 'rol_estacionamiento',
+            'bodega', 'valor_bodega', 'rol_bodega', 'm2_bodega',
+            'valor_inicial_propiedad', 'valor_final_propiedad', 'valor_cchc', 'fpm',
+        )
+
+
 @admin.register(Propiedade)
-class PropiedadeAdmin(admin.ModelAdmin):
+class PropiedadeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = PropiedadeResource
     list_display = (
-         'numero_propiedad','condominio', 'etapa',
+        'numero_propiedad', 'condominio', 'etapa',
         'estado_propiedad', 'modelo', 'piso', 'format_vip',
-        'format_vfp', 'fpm','estacionamiento','valor_estacionamiento', 'bodega','valor_bodega',
-        'metros_vivienda', 'metros_terraza_propiedad','metros_total_propiedad'
+        'format_vfp', 'fpm', 'estacionamiento', 'valor_estacionamiento',
+        'bodega', 'valor_bodega',
+        'metros_vivienda', 'metros_terraza_propiedad', 'metros_total_propiedad'
     )
     search_fields = ('numero_propiedad', 'rol')
     list_filter = ('estado_propiedad', 'condominio', 'etapa', 'modelo')
@@ -84,8 +109,6 @@ class PropiedadeAdmin(admin.ModelAdmin):
     format_vip.short_description = 'Precio Ini'
     format_vip.admin_order_field = 'valor_inicial_propiedad'
 
-
-
     def format_vfp(self, obj):
         if obj.valor_final_propiedad is None:
             return "-"
@@ -93,5 +116,6 @@ class PropiedadeAdmin(admin.ModelAdmin):
 
     format_vfp.short_description = 'Precio Fin'
     format_vfp.admin_order_field = 'valor_final_propiedad'
+
 
 
