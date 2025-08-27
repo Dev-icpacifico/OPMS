@@ -91,9 +91,9 @@ WSGI_APPLICATION = 'OPMS.wsgi.application'
 }"""
 
 DATABASES = {
-    'default': DATABASES_POSTGRESQL_DEMO_1
+    # 'default': DATABASES_POSTGRESQL_DEMO_1
     # 'default':DATABASES_POSTGRESQL_DEMO_2
-    # 'default': DATABASES_SQLITE
+    'default': DATABASES_SQLITE
 }
 
 # Password validation
