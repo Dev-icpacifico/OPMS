@@ -2,85 +2,143 @@ from __future__ import annotations
 
 import json
 from typing import Literal, Dict, Any
+from langchain_core.messages import HumanMessage
 
-from cffi.cffi_opcode import PRIM_INT
+from ai_agent.utils.utils_sql import parse_planner_payload  # ajusta ruta real
+# from ai_agent.graph.types import Command, END  # ajusta al import real
 from langchain_core.messages import AIMessage
 from langgraph.graph import END
 from langgraph.types import Command
 
-from ai_agent.agents.sql_agent import sql_planner_agent, answer_agent
-from ai_agent.agents.retriever_agent import retriever_agent
 from ai_agent.agents.llm import get_llm_by_type
+from ai_agent.agents.retriever_agent import retriever_agent
+from ai_agent.agents.sql_agent import answer_agent
 from ai_agent.config.agents import AGENT_LLM_MAP
 from ai_agent.graph.schema import GlobalState, Router
 from ai_agent.prompts.template import apply_prompt_template
-
 from ai_agent.utils.sql_runner import run_query, get_schema_tables
-from ai_agent.utils.sql_validator import validate_and_rewrite_sql
 from ai_agent.utils.utils_sql import parse_planner_payload
 
 
+def _last_human_text(state) -> str:
+    for m in reversed(state.get("messages", [])):
+        if isinstance(m, HumanMessage):
+            return (m.content or "").strip()
+    return ""
+
 def sarams(state: GlobalState) -> Command[Literal["supervisor", "__end__"]]:
-    print("Este es el mensaje que recibe SaraMS: \n")
-    print(state["messages"])
-    messages = apply_prompt_template("sarams", state)
+    print("Este es el mensaje que recibe SaraMS:\n", state.get("messages"))
+
+    # 1) Refrescar la pregunta del usuario para ESTE turno
+    last_human = _last_human_text(state)
+    local_state = dict(state)
+    if last_human:
+        local_state.update({
+            "human_query": last_human,
+            # limpiar efímeros del turno anterior (opcional pero recomendado)
+            "exec_error": "",
+            "rows": [],
+            "sql_executed": "",
+            # si quieres: "sql_query": "",
+        })
+
+    # 2) Prompt de Sara con el GlobalState ACTUALIZADO
+    messages = apply_prompt_template("sarams", local_state)
     response = get_llm_by_type(AGENT_LLM_MAP["sarams"]).invoke(messages)
+
+    # 3) Intentar interpretar JSON; si no, fallback a supervisor
+    goto = "supervisor"  # por diseño, Sara -> Supervisor en el flujo normal
     try:
         data = json.loads(response.content)
-        goto = data["next"]
+        goto = data.get("next") or "supervisor"
         if goto == "FINISH":
             print("🟢 SaraMS FINALIZA EL FLUJO")
-            # Solo mensajes nuevos
             return Command(
                 goto=END,
                 update={
+                    # agrega la respuesta de Sara al historial
                     "messages": [AIMessage(content=data.get("response", ""))],
                     "task_completed": True,
+                    # propaga el refresh de human_query/limpieza
+                    "human_query": local_state.get("human_query", ""),
+                    "exec_error": local_state.get("exec_error", ""),
+                    "rows": local_state.get("rows", []),
+                    "sql_executed": local_state.get("sql_executed", ""),
                 },
             )
         print(f"🔁 SaraMS DERIVA A: {goto}")
-        # No escribir 'next' en el estado
-        return Command(goto=goto)
     except Exception as e:
         print("❌ ERROR en JSON de SaraMS:", e)
-        return Command(
-            goto=END,
-            update={
-                "messages": [AIMessage(content="Disculpa, no pude procesar tu solicitud.")],
-                "task_completed": True,
-            },
-        )
+        # si no hubo JSON, seguimos al supervisor igual
+        goto = "supervisor"
 
+    # 4) Ruta normal: derivar (típicamente al supervisor) manteniendo contexto
+    return Command(
+        goto=goto,
+        update={
+            # agrega SIEMPRE el mensaje de Sara al historial para contexto
+            "messages": [AIMessage(content=getattr(response, "content", str(response)))],
+            # propaga el refresh de human_query/limpieza efímera
+            "human_query": local_state.get("human_query", ""),
+            "exec_error": local_state.get("exec_error", ""),
+            "rows": local_state.get("rows", []),
+            "sql_executed": local_state.get("sql_executed", ""),
+        },
+    )
+# def supervisor(state: GlobalState) -> Command[Literal["consultas", "sql_planner", "__end__"]]:
+
+def _last_human_text(state) -> str:
+    for m in reversed(state.get("messages", [])):
+        if isinstance(m, HumanMessage):
+            return m.content.strip()
+    return ""
 
 def supervisor(state: GlobalState) -> Command[Literal["consultas", "sql_planner", "__end__"]]:
-    print("Mensaje recibido por el supervisor: \n", state.get("messages"))
-    # Si ya está completado, termina.
-    if state.get("task_completed") is True:
-        return Command(goto=END)
-    print("PASÓ EL IF ")
-    messages = apply_prompt_template("supervisor", state)
-    print("ESTE ES EL MENSAJE:--->: ", messages)
-    try:
-        print("Entra ak try")
-        llm = get_llm_by_type(AGENT_LLM_MAP["supervisor"])
-        print("Obtiene el LLM")
-        decision = llm.with_structured_output(Router).invoke(messages)
-        goto = decision["next"]
-        print("Supervisor dirige a:", goto)
-        if goto == "FINISH":
-            return Command(goto=END)
-        # Solo enruta; no escribir 'next'
-        return Command(goto=goto)
-    except Exception as e:
-        print("Error en la decisión del supervisor:", e)
-        return Command(
-            goto=END,
-            update={
-                "messages": [AIMessage(content="No pude decidir a quién derivar tu solicitud.")],
-                "task_completed": True,
-            },
-        )
+    # 1) Refresca la pregunta del usuario para ESTE turno y limpia ruido del turno anterior
+    last_human = _last_human_text(state)
+    local_state = dict(state)  # no mutamos el original
+    if last_human:
+        local_state.update({
+            "human_query": last_human,
+            # limpiar efímeros para no “contaminar” el siguiente turno
+            "exec_error": "",
+            "rows": [],
+            "sql_executed": "",
+            # opcional:
+            # "sql_query": "",
+            # "final_answer": "",
+        })
 
+    # 2) Construye el prompt del supervisor con el GlobalState ACTUALIZADO
+    messages = apply_prompt_template("supervisor", local_state)
+
+    # 3) Decide la ruta
+    llm = get_llm_by_type(AGENT_LLM_MAP["supervisor"])
+    decision = llm.with_structured_output(Router).invoke(messages)
+    goto = decision["next"]
+
+    # 4) Heurística: si la pregunta menciona entidades/tablas del schema, fuerza sql_planner
+    q = (local_state.get("human_query") or "").lower()
+    schema_lc = (local_state.get("schema_txt") or "").lower()
+    if goto != "sql_planner" and q and schema_lc:
+        for hint in ["pagos", "condominio", "venta", "clientes"]:
+            if hint in q and hint in schema_lc:
+                goto = "sql_planner"
+                break
+
+    if goto == "FINISH":
+        return Command(goto=END)
+
+    # 5) Propaga al grafo el refresh de human_query y la limpieza efímera
+    return Command(goto=goto, update={
+        "human_query": local_state["human_query"],
+        "exec_error": local_state["exec_error"],
+        "rows": local_state["rows"],
+        "sql_executed": local_state["sql_executed"],
+        # opcional:
+        # "sql_query": local_state.get("sql_query",""),
+        # "final_answer": local_state.get("final_answer",""),
+    })
 def retriever(state: GlobalState) -> Command[Literal["supervisor", "__end__"]]:
     # retriever_agent debe devolver SOLO mensajes nuevos en result["messages"]
     result = retriever_agent.invoke(state)
@@ -92,73 +150,39 @@ def retriever(state: GlobalState) -> Command[Literal["supervisor", "__end__"]]:
     )
 
 
-def sql_planner(state: GlobalState) -> Command[Literal["sql_execute"]]:
-    print("Mensaje recibido por el planner: \n", state.get("messages"))
+def sql_planner(state: GlobalState) -> Command[Literal["sql_execute", "__end__"]]:
     """
-    Invoca al planner (Prompt 1) y PARSEA el JSON devuelto para poblar el estado:
-    - sql_query
-    - tables_used
-    - params
-    - planning_reasoning
-    Luego enruta a sql_execute (o a sql_answer si falla).
+    Invoca al planner (Prompt 1) usando el GlobalState del grafo, parsea el JSON devuelto
+    y actualiza el estado con: sql_query, tables_used, params, planning_reasoning.
+    Luego enruta a sql_execute (o termina si falla).
     """
-    print("ESTE ES EL STATE----->: ", state)
-    print("ESTE ES EL PLANNER AGENT---> ", sql_planner_agent)
-    result = sql_planner_agent.invoke(state)
-    print("ESTE ES EL RESULT:--->: ", result)
+    # 1) Renderiza el prompt con TU GlobalState (sí incluye human_query, schema_txt, etc.)
+    messages = apply_prompt_template("sql_planner", state)
 
-    try:
-        last_ai = None
-        # Busca el último AIMessage del planner
-        print("Entra al try")
-        for msg in reversed(result["messages"]):
-            if isinstance(msg, AIMessage):
-                print("SI HAY MSG AIMESSAGES")
-                last_ai = msg
-                print("ESTE ES EL LAST AI --->", last_ai)
-                break
-        print("----------CONTINUACIÓN DEL FOR ------")
-        if last_ai is None:
-            raise ValueError("No se encontró AIMessage del planner.")
+    # 2) Llama al LLM directamente con esos messages
+    llm = get_llm_by_type(AGENT_LLM_MAP["sql_planner_agent"])
+    ai_msg: AIMessage = llm.invoke(messages)
 
+    # 3) Parseo robusto del contenido del planner
+    data = parse_planner_payload(ai_msg.content)
 
-        print("ESTE ES EL JSON---->", parse_planner_payload(last_ai.content))
-        data = parse_planner_payload(last_ai.content)
-        print("ESTA ES LA DATA----->", data)
+    # 4) Construye el update
+    update = {
+        # Sólo añadimos el nuevo mensaje del planner; add_messages en el state hará el merge
+        "messages": [ai_msg],
+        "sql_query": (data.get("sql_query") or "").strip(),
+        "tables_used": data.get("tables_used") or [],
+        "params": data.get("params") or {},
+        "planning_reasoning": data.get("reasoning"),
+    }
 
-        next_step = "sql_execute"
+    # 5) Control de error si no hay SQL
+    if not update["sql_query"]:
+        update["exec_error"] = "El planner no devolvió 'sql_query'."
+        return Command(goto=END, update=update)
 
-
-        update = {
-            # SOLO lo que vino nuevo del agent
-            "messages": result["messages"],
-            "sql_query": data.get("sql_query", "").strip(),
-            "tables_used": data.get("tables_used", []) or [],
-            "params": data.get("params", {}) or {},
-            "planning_reasoning": data.get("reasoning", None),
-        }
-        print("ESTE ES EL UPDATE------>", update)
-
-        if not update["sql_query"]:
-            # Falla temprana: no hay SQL.
-            update["exec_error"] = "El planner no devolvió 'sql_query'."
-            next_step = END
-
-        return Command(goto=next_step, update=update)
-
-    except Exception as e:
-        # No se pudo parsear JSON del planner
-        return Command(
-            goto=END,
-            update={
-                "messages": [AIMessage(content=f"No pude interpretar el plan SQL: {e}")],
-                # "exec_error": f"No pude interpretar el plan SQL: {e}",
-                "sql_query": "",
-                "params": {},
-                "tables_used": [],
-            },
-        )
-
+    # 6) Enrutar a la ejecución SQL
+    return Command(goto="sql_execute", update=update)
 
 def sql_execute(state: GlobalState) -> Command[Literal["sql_answer", "__end__"]]:
     """
@@ -221,18 +245,33 @@ def sql_execute(state: GlobalState) -> Command[Literal["sql_answer", "__end__"]]
 
 def answer(state: GlobalState) -> Command[Literal["__end__"]]:
     """
-    Redacta la respuesta final (Prompt 2)
+    Redacta la respuesta final (Prompt 2) usando el GlobalState del grafo.
     """
     print("INGRESÓ AL SQL ANSWER")
-    print("ESTE ES EL STATE----->", state)
+    print("DBG rows_len:", len(state.get("rows", [])))
 
-    result = answer_agent.invoke(state)
+    # 1) Renderiza el prompt del answer con TU GlobalState (incluye filas/preview)
+    messages = apply_prompt_template("sql_answer", state)
 
-    #payload = build_ctx_from_state(state)  # arma HUMAN_QUERY, SQL_QUERY, SQL_ROWS_JSON
-    #result = answer_agent.invoke(payload)  # el prompt template rellenará variables
+    # (debug opcional) verifica que el prompt renderizado trae tus filas
+    try:
+        rendered = messages[0].content if hasattr(messages[0], "content") else str(messages[0])
+        print("DBG prompt contiene 'id_pago':", "id_pago" in rendered)
+    except Exception:
+        pass
 
-    print("ESTE ES EL RESULT------> ", result)
-    # Devolvemos solo los nuevos mensajes del agent
-    return Command(goto=END, update={"messages": result["messages"]})
-    # Si quieres terminar aquí:
-    # return Command(goto=END, update={"messages": result["messages"], "task_completed": True})
+    # 2) Invoca al LLM directamente con esos messages
+    llm = get_llm_by_type(AGENT_LLM_MAP["answer_agent"])
+    ai = llm.invoke(messages)
+
+    # 3) Normaliza salida a AIMessage
+    ai_msg = ai if isinstance(ai, AIMessage) else AIMessage(content=str(ai))
+
+    # 4) Actualiza estado y termina
+    return Command(
+        goto=END,
+        update={
+            "messages": [ai_msg],                 # add_messages hará el merge con historial
+            "final_answer": ai_msg.content,       # opcional: útil para API
+        },
+    )

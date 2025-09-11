@@ -22,7 +22,7 @@ Evita tecnicismos innecesarios.
 ```
 
 <human query>
-<<human_query>>
+<<HUMAN_QUERY>>
 </human query>
 
 ```
@@ -31,7 +31,7 @@ Evita tecnicismos innecesarios.
 ```
 
 <sql rows json>
-<<rows>
+<<SQL_ROWS_JSON>>
 </sql rows json>
 
 ```
@@ -39,6 +39,9 @@ Evita tecnicismos innecesarios.
 - (Opcional) SQL ejecutado:  
 ```
 
+<sql query>
+<<SQL_QUERY>>
+</sql query>
 
 ```
 
