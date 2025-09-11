@@ -35,7 +35,7 @@ builder.add_edge("sql_execute", "sql_answer")
 
 # --- Edges desde 'sql_answer' ---
 
-builder.add_edge("sql_answer", "supervisor")
+builder.add_edge("sql_answer", END)
 graph = builder.compile(checkpointer=checkpointer)
 
 with open("assets/graph.png", "wb") as f:

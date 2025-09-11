@@ -62,6 +62,7 @@ def run_query(sql: str, params: Optional[Dict[str, Any]] = None) -> List[Dict[st
     Nota: SQLite no soporta timeout a nivel servidor. Mantén LIMIT bajo.
     """
     eng = get_engine()
+    print("ESTE ES EL ENGINE------>", eng)
     with eng.connect() as conn:
         result = conn.execute(text(sql), params or {})
         rows = [dict(r._mapping) for r in result.fetchall()]

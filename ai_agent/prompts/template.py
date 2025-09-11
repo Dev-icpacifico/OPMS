@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 from datetime import datetime, timezone
@@ -19,16 +20,23 @@ def get_prompt_template(prompt_name: str) -> str:
     return template
 
 def apply_prompt_template(prompt_name: str, state) -> list:
+    print("[apply_prompt_template] llamado con:", prompt_name)  # ⬅️ aquí
+    print("[apply_prompt_template] keys:", list(state.keys()))
     template_str = get_prompt_template(prompt_name)
     pt = PromptTemplate.from_template(template_str)  # autodetecta variables
 
     # Contexto para el template (defaults seguros)
+    rows = state.get("rows", [])
+    print("[apply_prompt_template] rows_len:", len(rows))
     ctx = {
         "CURRENT_TIME": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %z"),
         "human_query": state.get("human_query", ""),
         "schema_txt": state.get("schema_txt", ""),
         "dialect": state.get("dialect", "sqlite"),
         "default_limit": state.get("default_limit", 200),
+        #"HUMAN_QUERY": state.get("human_query") or state.get("original_query") or state.get("input", ""),
+        #"sql_query": state.get("sql_executed", state.get("sql_query", "")) or "",
+        #"sql_rows_json": json.dumps(rows[:20], ensure_ascii=False),  # preview para no explotar tokens
         # según cómo lo espere tu prompt:
         "allowed_prefixes": ", ".join(state.get("allowed_prefixes", [])),
     }

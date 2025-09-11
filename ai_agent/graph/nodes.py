@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from typing import Literal, Dict, Any
 
+from cffi.cffi_opcode import PRIM_INT
 from langchain_core.messages import AIMessage
 from langgraph.graph import END
 from langgraph.types import Command
@@ -16,6 +17,7 @@ from ai_agent.prompts.template import apply_prompt_template
 
 from ai_agent.utils.sql_runner import run_query, get_schema_tables
 from ai_agent.utils.sql_validator import validate_and_rewrite_sql
+from ai_agent.utils.utils_sql import parse_planner_payload
 
 
 def sarams(state: GlobalState) -> Command[Literal["supervisor", "__end__"]]:
@@ -90,7 +92,7 @@ def retriever(state: GlobalState) -> Command[Literal["supervisor", "__end__"]]:
     )
 
 
-def sql_planner(state: GlobalState) -> Command[Literal["supervisor","sql_execute"]]:
+def sql_planner(state: GlobalState) -> Command[Literal["sql_execute"]]:
     print("Mensaje recibido por el planner: \n", state.get("messages"))
     """
     Invoca al planner (Prompt 1) y PARSEA el JSON devuelto para poblar el estado:
@@ -108,16 +110,24 @@ def sql_planner(state: GlobalState) -> Command[Literal["supervisor","sql_execute
     try:
         last_ai = None
         # Busca el último AIMessage del planner
+        print("Entra al try")
         for msg in reversed(result["messages"]):
             if isinstance(msg, AIMessage):
+                print("SI HAY MSG AIMESSAGES")
                 last_ai = msg
+                print("ESTE ES EL LAST AI --->", last_ai)
                 break
+        print("----------CONTINUACIÓN DEL FOR ------")
         if last_ai is None:
             raise ValueError("No se encontró AIMessage del planner.")
 
-        data = json.loads(last_ai.content)
 
-        next_step: Literal["sql_execute", "sql_answer"] = "sql_execute"
+        print("ESTE ES EL JSON---->", parse_planner_payload(last_ai.content))
+        data = parse_planner_payload(last_ai.content)
+        print("ESTA ES LA DATA----->", data)
+
+        next_step = "sql_execute"
+
 
         update = {
             # SOLO lo que vino nuevo del agent
@@ -127,18 +137,19 @@ def sql_planner(state: GlobalState) -> Command[Literal["supervisor","sql_execute
             "params": data.get("params", {}) or {},
             "planning_reasoning": data.get("reasoning", None),
         }
+        print("ESTE ES EL UPDATE------>", update)
 
         if not update["sql_query"]:
             # Falla temprana: no hay SQL.
             update["exec_error"] = "El planner no devolvió 'sql_query'."
-            next_step = "sql_answer"
+            next_step = END
 
         return Command(goto=next_step, update=update)
 
     except Exception as e:
         # No se pudo parsear JSON del planner
         return Command(
-            goto="sql_answer",
+            goto=END,
             update={
                 "messages": [AIMessage(content=f"No pude interpretar el plan SQL: {e}")],
                 # "exec_error": f"No pude interpretar el plan SQL: {e}",
@@ -149,17 +160,20 @@ def sql_planner(state: GlobalState) -> Command[Literal["supervisor","sql_execute
         )
 
 
-def sql_execute(state: Dict[str, Any]) -> Command[Literal["sql_answer", "__end__"]]:
+def sql_execute(state: GlobalState) -> Command[Literal["sql_answer", "__end__"]]:
     """
     Valida el SQL del planner, inyecta LIMIT, ejecuta y actualiza:
     rows / sql_executed / exec_error
     Luego enruta a sql_answer.
     """
+    print("INGRESÓ AL SQL EXECUTE")
     sql_query: str = state.get("sql_query", "") or ""
+    print("ESTA ES LA QUERY 1 ----> ", sql_query)
     params: Dict[str, Any] = state.get("params", {}) or {}
     allowed_prefixes = state.get("allowed_prefixes", ["vw_", "dim_", "fact_"])
     default_limit = int(state.get("default_limit", 200))
     dialect = (state.get("dialect") or "sqlite").lower()
+    print("ESTA ES LA QUERY 2 ----> ", sql_query)
 
     if not sql_query:
         update = {
@@ -170,7 +184,7 @@ def sql_execute(state: Dict[str, Any]) -> Command[Literal["sql_answer", "__end__
 
     schema_tables = get_schema_tables()
 
-    try:
+    """try:
         safe_sql = validate_and_rewrite_sql(
             sql_query,
             schema_tables=schema_tables,
@@ -184,23 +198,24 @@ def sql_execute(state: Dict[str, Any]) -> Command[Literal["sql_answer", "__end__
             "rows": [],
             "sql_executed": "",
         }
-        return Command(goto="sql_answer", update=update)
-
+        return Command(goto="sql_answer", update=update)"""
+    print("ESTA ES LA QUERY 3 ----> ", sql_query)
     try:
-        rows = run_query(safe_sql, params=params)
+        rows = run_query(sql_query, params=params)
     except Exception as e:
         update = {
             "exec_error": f"Error al ejecutar SQL: {e}",
             "rows": [],
-            "sql_executed": safe_sql,
+            "sql_executed": sql_query,
         }
         return Command(goto="sql_answer", update=update)
 
     update = {
         "exec_error": "",
         "rows": rows,
-        "sql_executed": safe_sql,
+        "sql_executed": sql_query,
     }
+    print("ESTE ES EL UPDATE FINAL------------->", update)
     return Command(goto="sql_answer", update=update)
 
 
@@ -208,8 +223,16 @@ def answer(state: GlobalState) -> Command[Literal["__end__"]]:
     """
     Redacta la respuesta final (Prompt 2)
     """
+    print("INGRESÓ AL SQL ANSWER")
+    print("ESTE ES EL STATE----->", state)
+
     result = answer_agent.invoke(state)
+
+    #payload = build_ctx_from_state(state)  # arma HUMAN_QUERY, SQL_QUERY, SQL_ROWS_JSON
+    #result = answer_agent.invoke(payload)  # el prompt template rellenará variables
+
+    print("ESTE ES EL RESULT------> ", result)
     # Devolvemos solo los nuevos mensajes del agent
-    return Command(goto="supervisor", update={"messages": result["messages"]})
+    return Command(goto=END, update={"messages": result["messages"]})
     # Si quieres terminar aquí:
     # return Command(goto=END, update={"messages": result["messages"], "task_completed": True})

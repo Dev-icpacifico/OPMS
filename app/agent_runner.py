@@ -13,31 +13,6 @@ SCHEMA_PATH = Path(r"C:\Users\Luis Pizarro\PycharmProjects\OPMS\utils_project\sc
 schema_text = SCHEMA_PATH.read_text(encoding="utf-8")
 
 # --------- util: esquema (SQLite de Django/OPMS) ---------
-"""@lru_cache(maxsize=1)
-def get_schema_txt() -> str:"""
-
-"""
-Serializa el esquema de la BD SQLite a texto para inyectarlo al planner.
-Usa PRAGMA para introspección; no depende de SQLAlchemy.
-"""
-"""    path = DB_PATH_CHECKPOINTER if os.path.isabs(DB_PATH_CHECKPOINTER) else os.path.abspath(DB_PATH_CHECKPOINTER)
-    conn = sqlite3.connect(path, check_same_thread=False)
-    try:
-        cur = conn.cursor()
-        # listar tablas (excluimos sqlite interna)
-        cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;")
-        tables = [r[0] for r in cur.fetchall()]
-        lines: List[str] = []
-        for t in tables:
-            cur.execute(f"PRAGMA table_info('{t}');")
-            cols = []
-            for cid, name, ctype, notnull, dflt, pk in cur.fetchall():
-                ctype = ctype or "TEXT"
-                cols.append(f"{name}:{ctype}")
-            lines.append(f"- {t}(" + ", ".join(cols) + ")")
-        return "\n".join(lines)
-    finally:
-        conn.close()"""
 
 # --------- parámetros por defecto del planner/ejecutor ---------
 DEFAULT_LIMIT = int(os.getenv("SQL_DEFAULT_LIMIT", "200"))
