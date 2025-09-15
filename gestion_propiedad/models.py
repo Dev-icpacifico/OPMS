@@ -110,7 +110,7 @@ class Propiedade(models.Model):
     numero_propiedad = models.CharField(verbose_name="N°", help_text="N° Depto", max_length=3)
     modelo = models.ForeignKey(Modelo, verbose_name="Modelo", help_text="Modelo Depto", on_delete=models.CASCADE)
 
-    ori_propiedad = models.CharField(verbose_name="Ori", help_text="Orientación Depto", max_length=30, choices=ORIENTACION_VIVIENDA,
+    ori_propiedad = models.CharField(verbose_name="Orientación", help_text="Orientación Depto", max_length=30, choices=ORIENTACION_VIVIENDA,
                                     default=norte)
     piso = models.CharField(verbose_name="Piso", max_length=30, choices=PISO, default=uno)
     metros_vivienda = models.FloatField(verbose_name="Mtrs", help_text="Metros^2 Depto", validators=[validar_positivo])

@@ -59,6 +59,9 @@ JAZZMIN_SETTINGS = {
         # external url that opens in a new window (Permissions can be added)
         {"name": "Soporte", "url": "https://forms.office.com/r/rg5n4wi09f?origin=lprLink", "new_window": True},
 
+        # external url that opens in a new window (Permissions can be added)
+        {"name": "IA-SARAMS", "url": "http://192.168.1.109:8000/chat/", "new_window": True},
+
         # model admin to link to (Permissions checked against model)
         {"model": "auth.User"},
     ],

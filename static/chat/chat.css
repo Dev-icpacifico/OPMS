@@ -1,0 +1,19 @@
+:root {
+  --bg: #0f1115; --panel: #161a22; --text: #e5e7eb; --muted: #9ca3af;
+  --user: #1f2937; --assistant: #111827;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial}
+.chat-header{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #222;background:var(--panel)}
+.chat-header h1{font-size:16px;margin:0;flex:1}
+.chat-main{max-width:900px;margin:0 auto;height:calc(100vh - 54px);display:flex;flex-direction:column;padding:8px}
+.messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:14px}
+.message{padding:12px 14px;border-radius:12px;max-width:80%;white-space:pre-wrap}
+.msg-user{background:var(--user);align-self:flex-end}
+.msg-assistant{background:var(--assistant);align-self:flex-start}
+.msg-meta{font-size:11px;color:var(--muted);margin-bottom:6px}
+.msg-content{line-height:1.5}
+.msg-typing{opacity:.6}
+.composer{padding:10px;border-top:1px solid #222;background:var(--panel)}
+#composer-input{width:100%;resize:vertical;min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid #2a2a2a;background:#0c0f14;color:var(--text)}
+.banner.error{position:sticky;top:0;width:100%;padding:10px 16px;background:#2a0909;color:#fca5a5;border-bottom:1px solid #3b0a0a;z-index:50}

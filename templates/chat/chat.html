@@ -1,0 +1,36 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>Chat de Agentes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <link rel="stylesheet" href="{% static 'chat/chat.css' %}">
+</head>
+<body>
+<header class="chat-header">
+  <a href="/" class="btn-back">← Volver</a>
+  <h1>Chat de Agentes</h1>
+</header>
+
+<main class="chat-main" data-session-id="{{ session_id }}">
+  <section id="messages" class="messages"></section>
+
+  <form id="composer" class="composer">
+    {% csrf_token %}
+    <textarea id="composer-input" rows="2" placeholder="Escribe tu consulta y presiona Enter…"></textarea>
+    <small>Enter = enviar · Shift+Enter = nueva línea</small>
+  </form>
+</main>
+
+<script src="{% static 'chat/chat.js' %}"></script>
+<script>
+  window.CHAT_BOOT && window.CHAT_BOOT({
+    historyUrl: "{{ history_url }}",
+    postUrl: "{{ post_url }}",
+    csrfToken: "{{ csrf_token }}",
+  });
+</script>
+</body>
+</html>

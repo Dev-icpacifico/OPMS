@@ -91,7 +91,7 @@ class PropiedadeResource(resources.ModelResource):
 class PropiedadeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = PropiedadeResource
     list_display = (
-        'numero_propiedad', 'condominio', 'etapa',
+        'numero_propiedad','ori_propiedad', 'condominio', 'etapa','torre',
         'estado_propiedad', 'modelo', 'piso', 'format_vip',
         'format_vfp', 'fpm', 'estacionamiento', 'valor_estacionamiento',
         'bodega', 'valor_bodega',
